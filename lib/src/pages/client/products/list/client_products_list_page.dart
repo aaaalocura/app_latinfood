@@ -1,0 +1,83 @@
+import 'package:app_latin_food/src/pages/client/products/prod/cart_detail.dart';
+import 'package:app_latin_food/src/pages/client/products/prod/client_products_list_page.dart';
+import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
+import 'package:app_latin_food/src/pages/envios/envios_page.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_page.dart';
+import 'package:app_latin_food/src/utils/custom_animated_bottom_bar.dart';
+import 'client_products_list_controller.dart';
+
+class ClientProductsListPage extends StatelessWidget {
+  final ClientProductsListController con =
+      Get.put(ClientProductsListController());
+
+  final ClientProfileInfoController con1 =
+      Get.put(ClientProfileInfoController());
+
+  // ignore: use_key_in_widget_constructors
+  ClientProductsListPage({Key? key});
+
+  @override
+  Widget build(BuildContext context) {
+    final int? userId =
+        con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
+
+    return Scaffold(
+      bottomNavigationBar: _bottomBar(),
+      body: Obx(
+        () => IndexedStack(
+          index: con.indexTab.value,
+          children: [
+           if (userId != null) ProductsListPage(customerId: userId),
+            CartPage(),
+            
+            if (userId != null) ClientOrdersPage(customerId: userId),
+            if (userId != null) ClientProfileInfoPage(customerId: userId),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _bottomBar() {
+    return Obx(
+      () => CustomAnimatedBottomBar(
+        containerHeight: 70,
+        backgroundColor: const Color(0xE5FF5100),
+        showElevation: true,
+        itemCornerRadius: 30,
+        curve: Curves.ease,
+        selectedIndex: con.indexTab.value,
+        onItemSelected: (index) => con.changeTab(index),
+        items: [
+          BottomNavyBarItem(
+            icon: const Icon(Icons.home),
+            title: const Text('Products'),
+            activeColor: Colors.white,
+            inactiveColor: Colors.white,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(Icons.shopping_cart),
+            title: const Text('My Cart'),
+            activeColor: Colors.white,
+            inactiveColor: Colors.white,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(Icons.delivery_dining),
+            title: const Text('My orders'),
+            activeColor: Colors.white,
+            inactiveColor: Colors.white,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(Icons.person),
+            title: const Text('My Profile'),
+            activeColor: Colors.white,
+            inactiveColor: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
+}
