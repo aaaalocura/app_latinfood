@@ -66,12 +66,66 @@ class _FavoriteprodState extends State<Favoriteprod> {
                   ),
                 );
           } else if (snapshot.hasError) {
-            return const Center(
-                child: Text('Error al obtener productos favoritos'));
+             return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    AnimatedOpacity(
+                      opacity: 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: Icon(
+                        Icons
+                            .wifi_tethering_off_sharp, // Cambiar por el icono deseado
+                        size: 100,
+                        color: Color(0xE5FF5100),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    AnimatedOpacity(
+                      opacity: 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: Text(
+                        'No tienes conexion a internet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xE5FF5100),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
           } else if (!snapshot.hasData) {
             return const Center(child: Text('Cargando datos...'));
           } else if (snapshot.data!.isEmpty) {
-            return const Center(child: Text('No tienes productos favoritos'));
+            return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    AnimatedOpacity(
+                      opacity: 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: Icon(
+                        Icons.hourglass_empty_outlined, // Cambiar por el icono deseado
+                        size: 100,
+                        color: Color(0xE5FF5100),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    AnimatedOpacity(
+                      opacity: 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: Text(
+                        'Sin Productos en favoritos',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xE5FF5100),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
           } else {
             List<ProductFavorite> favoriteProducts = snapshot.data!;
             return ScrollConfiguration(

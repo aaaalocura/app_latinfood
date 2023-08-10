@@ -68,7 +68,35 @@ class ClientProfileInfoPage extends StatelessWidget {
                 );
               } else if (snapshot.hasError) {
                 // Muestra un mensaje de error si ocurre un error al obtener los datos
-                return const Text('Error getting customer data');
+                 return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    AnimatedOpacity(
+                      opacity: 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: Icon(
+                        Icons
+                            .wifi_tethering_off_sharp, // Cambiar por el icono deseado
+                        size: 100,
+                        color: Color(0xE5FF5100),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    AnimatedOpacity(
+                      opacity: 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: Text(
+                        'No tienes conexion a internet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xE5FF5100),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
               } else {
                 // Si se obtuvieron los datos exitosamente, muestra la información del cliente
                 final customer = snapshot.data!;

@@ -127,11 +127,12 @@ class ProductsListPage extends StatelessWidget {
                   child: Row(
                     children: categories.map((category) {
                       return GestureDetector(
-                        onTap: () async {
-                  selectedCategoryController.setSelectedCategory(category.id);
-                  con.getProductsByCategory(category.name);
-                  await refreshCategories();
-                },
+                          onTap: () async {
+                            selectedCategoryController
+                                .setSelectedCategory(category.id);
+                            con.getProductsByCategory(category.name);
+                            await refreshCategories();
+                          },
                           child: SizedBox(
                             width: 80, // Ajusta el ancho según tu preferencia
                             height: 130,
@@ -434,21 +435,92 @@ class ProductSearchDelegate extends SearchDelegate<Product> {
             Get.put(ClientProfileInfoController());
         final int? userId =
             con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
-        return ListTile(
-          title: Text(product.name),
-          subtitle: Text('\$${product.price}'),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ProductDetailsPage(
-                  product: product,
-                  customerId: userId,
+       return Container(
+  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(10),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.withOpacity(0.3),
+        spreadRadius: 2,
+        blurRadius: 5,
+        offset: const Offset(0, 3),
+      ),
+    ],
+  ),
+  child: CupertinoScrollbar(
+    child: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            product.name,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Price: ${product.price}',
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Category: ${product.categoryId}',
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailsPage(
+                        product: product,
+                        customerId: userId,
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xE5FF5100),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                  child: Text(
+                    'See Details',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            );
-          },
-        );
+            ],
+          ),
+        ],
+      ),
+    ),
+  ),
+);
+
       },
     );
   }
@@ -461,7 +533,8 @@ class SelectedCategoryController extends GetxController {
     selectedCategoryId.value = categoryId;
   }
 }
+
 Future<void> refreshCategories() async {
   final newCategories = await CategoryController.fetchCategories();
- // categories.assignAll(newCategories);
+  // categories.assignAll(newCategories);
 }

@@ -58,7 +58,35 @@ class PaymentMethodsPage extends StatelessWidget {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return const Text('Error al obtener los datos del cliente');
+                 return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    AnimatedOpacity(
+                      opacity: 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: Icon(
+                        Icons
+                            .wifi_tethering_off_sharp, // Cambiar por el icono deseado
+                        size: 100,
+                        color: Color(0xE5FF5100),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    AnimatedOpacity(
+                      opacity: 1.0,
+                      duration: Duration(milliseconds: 500),
+                      child: Text(
+                        'No tienes conexion a internet',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Color(0xE5FF5100),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
               } else {
                 final customer = snapshot.data!;
                 return Align(
