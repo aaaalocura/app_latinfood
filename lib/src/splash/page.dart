@@ -1,15 +1,11 @@
 import 'dart:async';
-import 'package:animations/animations.dart';
+import 'package:app_latin_food/src/pages/admin/botonbar.dart';
 import 'package:app_latin_food/src/pages/client/products/list/client_products_list_page.dart';
-import 'package:app_latin_food/src/pages/client/products/prod/client_products_list_page.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
 import 'package:app_latin_food/src/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-
-
-
+import 'package:get_storage/get_storage.dart';
 
 class SecondClass extends StatefulWidget {
   const SecondClass({super.key});
@@ -24,14 +20,29 @@ class _SecondClassState extends State<SecondClass>
   late AnimationController scaleController;
   late Animation<double> scaleAnimation;
 
+  // ignore: unused_field
   double _opacity = 0;
+  // ignore: unused_field
   bool _value = true;
+
+  bool isControllerActive =
+      true; // Variable de estado para verificar si el controlador está activo
+
+  @override
+  void dispose() {
+    // Asegúrate de desactivar el controlador antes de liberar recursos
+    isControllerActive = false;
+    scaleController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-  final ClientProfileInfoController con1 = Get.put(ClientProfileInfoController());
-    final int? userId = con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
+    final ClientProfileInfoController con1 =
+        Get.put(ClientProfileInfoController());
+    final int? userId =
+        con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
     scaleController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -39,16 +50,26 @@ class _SecondClassState extends State<SecondClass>
         (status) {
           if (status == AnimationStatus.completed) {
             Navigator.of(context).pushReplacement(
-        ThisIsFadeRoute(
-                page: userId != null ? ClientProductsListPage() : LoginPage(),
-                route: Text(userId != null ? '/home' : '/login'), // Provide the correct route here
+              ThisIsFadeRoute(
+                page: userId != null
+                    ? (GetStorage().read('isAdmin') == true
+                        ? ClientProductsListPageAdmin()
+                        : ClientProductsListPage())
+                    : LoginPage(), // Redirige al inicio de sesión si userId es null
+                route: Text(userId != null
+                    ? (GetStorage().read('isAdmin') == true
+                        ? '/homeadmin'
+                        : '/home')
+                    : '/login'),
               ),
-
             );
             Timer(
               const Duration(milliseconds: 300),
               () {
-                scaleController.reset();
+                // Verifica si el controlador todavía está activo antes de llamar a reset
+                if (isControllerActive) {
+                  scaleController.reset();
+                }
               },
             );
           }
@@ -59,95 +80,27 @@ class _SecondClassState extends State<SecondClass>
         Tween<double>(begin: 0.0, end: 12).animate(scaleController);
 
     Timer(const Duration(milliseconds: 600), () {
-      setState(() {
-        _opacity = 1.0;
-        _value = false;
-      });
+      if (mounted) {
+        setState(() {
+          _opacity = 1.0;
+          _value = false;
+        });
+      }
     });
     Timer(const Duration(milliseconds: 2000), () {
-      setState(() {
-        scaleController.forward();
-      });
+      if (mounted) {
+        setState(() {
+          scaleController.forward();
+        });
+      }
     });
-  }
-
-  @override
-  void dispose() {
-    scaleController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(top: 80),
-                child: Text(
-                  'Welcome to KD Latinfood',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Center(
-            child: AnimatedOpacity(
-              curve: Curves.fastLinearToSlowEaseIn,
-              duration: const Duration(seconds: 6),
-              opacity: _opacity,
-              child: AnimatedContainer(
-                curve: Curves.fastLinearToSlowEaseIn,
-                duration: const Duration(seconds: 2),
-                height: _value ? 50 : 200,
-                width: _value ? 50 : 200,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xE5FF5100).withOpacity(.2),
-                      blurRadius: 100,
-                      spreadRadius: 10,
-                    ),
-                  ],
-                  color: const Color(0xE5FF5100),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                 child: Container(
-  width: 100,
-  height: 100,
-  child: AnimatedBuilder(
-    animation: scaleAnimation,
-    builder: (context, child) => Transform.scale(
-      scale: scaleAnimation.value,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.orange,
-        ),
-        child: ClipOval(
-          child: Image.asset(
-            'assets/img/Login.jpg', // Reemplaza esto con la ruta de tu imagen en los assets
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    ),
-  ),
-),
-
-                ),
-              ),
-            ),
-          ),
-        ],
+      body: Center(
+        child: Image.asset('assets/splash.gif'), // Ruta de tu archivo GIF
       ),
     );
   }

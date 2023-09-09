@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'dart:developer' as developer;
 
 class LoginController extends GetxController {
 
@@ -15,48 +16,87 @@ UsersProviders usersProviders = UsersProviders();
   void goToRegisterPage() {
     Get.toNamed('/register');
   }
+   void goToAdmin() {
+    Get.toNamed('/loginAdmin');
+  }
 
-  void login() async {
-    String email = emailController.text.trim();
-    String password = passwordController.text.trim();
+ void login() async {
+  String email = emailController.text.trim();
+  String password = passwordController.text.trim();
 
-    if (kDebugMode) {
-      print('Email:  $email');
-    }
-    if (kDebugMode) {
-      print('Password: $password');
-    }
-
-if (isValidForm(email, password)){
-  ResponseApi responseApi=await usersProviders.login(email, password);
   if (kDebugMode) {
-    print(responseApi.toJson());
+    print('Email:  $email');
   }
-  if(responseApi.success==true){
-    GetStorage ().write('user', responseApi.data);
-goToHomePage();
-      Get.snackbar('WELCOME', email
-     ,
-    barBlur: 100,
-    animationDuration: const Duration(seconds: 1),
-     ); 
+  if (kDebugMode) {
+    print('Password: $password');
   }
-    if(responseApi.success==false){
-   
 
-      Get.snackbar('Usuario o contraseña incorrecta', 'intenta otra vez'
-     ,
-    barBlur: 100,
-    animationDuration: const Duration(seconds: 1),
-     ); 
+  if (isValidForm(email, password)) {
+    ResponseApi responseApi = await usersProviders.login(email, password);
+    if (kDebugMode) {
+      print(responseApi.toJson());
+    }
+    if (responseApi.success == true) {
+      GetStorage().write('user', responseApi.data);
+       GetStorage().write('isAdmin', false);
+      
+      goToHomePage(userId: responseApi.data['id']); // Pasa el userId a la página principal
+      Get.snackbar('WELCOME', email,
+          barBlur: 100,
+          animationDuration: const Duration(seconds: 1),
+      );
+    }
+    if (responseApi.success == false) {
+      Get.snackbar('Usuario o contraseña incorrecta', 'intenta otra vez',
+          barBlur: 100,
+          animationDuration: const Duration(seconds: 1),
+      );
+    }
   }
-   
+}
+ void loginAdmin() async {
+  String email = emailController.text.trim();
+  String password = passwordController.text.trim();
+
+  if (kDebugMode) {
+    print('Email:  $email');
+  }
+  if (kDebugMode) {
+    print('Password: $password');
+  }
+
+  if (isValidForm(email, password)) {
+    ResponseApi responseApi = await usersProviders.loginAdmin(email, password);
+    if (kDebugMode) {
+      print(responseApi.toJson());
+    }
+    if (responseApi.success == true) {
+      GetStorage().write('user', responseApi.data);
+       GetStorage().write('isAdmin', true);
+
+      goToAdminPedidos(); // Pasa el userId a la página principal
+      Get.snackbar('WELCOME', email,
+          barBlur: 100,
+          animationDuration: const Duration(seconds: 1),
+      );
+    }
+    if (responseApi.success == false) {
+      Get.snackbar('Usuario o contraseña incorrecta', 'intenta otra vez',
+          barBlur: 100,
+          animationDuration: const Duration(seconds: 1),
+      );
+    }
+  }
+}
+void goToHomePage({int? userId}) {
+  // Pasa el userId a la página principal
+  Get.offNamedUntil('/home', (route) => false, arguments: userId);
 }
 
-}
-void goToHomePage() {
- Get.offNamedUntil('/home', (route) => false);
-}
+   void goToAdminPedidos() {
+    Get.toNamed('/homeadmin');
+  }
+
 
   bool isValidForm(String email, String password){
   if(!GetUtils.isEmail(email)){

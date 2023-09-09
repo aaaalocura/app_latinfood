@@ -26,4 +26,18 @@ class UsersProviders extends GetConnect {
     ResponseApi responseApi = ResponseApi.fromJson(response.body);
     return responseApi;
   }
+
+    Future<ResponseApi> loginAdmin(String email, String password) async {
+    Response response = await post(
+       'http://51.161.35.133:6501/intranet/public/backend/api/users/login/admin/',
+        {'email': email, 'password': password},
+        headers: {'Content-Type': 'application/json'});
+
+    if (response.body == null) {
+      Get.snackbar('Error', 'Hubo un error');
+      return ResponseApi();
+    }
+    ResponseApi responseApi = ResponseApi.fromJson(response.body);
+    return responseApi;
+  }
 }

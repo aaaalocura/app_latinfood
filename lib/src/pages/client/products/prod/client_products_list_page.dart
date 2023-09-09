@@ -7,7 +7,6 @@ import 'package:app_latin_food/src/models/product.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/favorite_controller.dart';
-import 'package:app_latin_food/src/pages/client/products/prod/prod_con_categoria.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/prod_detail.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,8 +30,7 @@ class ProductsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     final _favoriteController = Get.put(FavoritesController());
-    final int? userId =
-        con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
+    final int? userId = int.tryParse('${con1.user.id}') ;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor:
           Colors.white, // Cambia el color de fondo de la barra de estado
@@ -535,6 +533,7 @@ class SelectedCategoryController extends GetxController {
 }
 
 Future<void> refreshCategories() async {
+  // ignore: unused_local_variable
   final newCategories = await CategoryController.fetchCategories();
   // categories.assignAll(newCategories);
 }

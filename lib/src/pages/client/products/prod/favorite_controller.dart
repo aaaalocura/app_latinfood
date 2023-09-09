@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:app_latin_food/src/models/favoritos.dart';
 import 'package:app_latin_food/src/models/user.dart';
 import 'package:get/get.dart';
@@ -35,6 +37,7 @@ class FavoritesController extends GetxController {
     );
 
     if (response.statusCode == 201) {
+      // ignore: avoid_print
       print('Producto agregado a favoritos');
     } else {
       throw Exception('Error al agregar el producto a favoritos');
@@ -52,6 +55,7 @@ class FavoritesController extends GetxController {
     );
 
     if (response.statusCode == 200) {
+      // ignore: avoid_print
       print('Producto eliminado de favoritos');
     } else {
       throw Exception('Error al eliminar el producto de favoritos');

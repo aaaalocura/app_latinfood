@@ -4,14 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
-class LoginPage extends StatelessWidget {
+class LoginPageAdmin extends StatelessWidget {
   LoginController conex = Get.put(LoginController());
 
-  LoginPage({super.key});
+  LoginPageAdmin({super.key});
 
   @override
   Widget build(BuildContext context) {
 return Scaffold(
+    appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).textTheme.bodyLarge!.color,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+       
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+       
+      ),
   bottomNavigationBar: SizedBox(
     height: 100,
     child: _textOyarce(),
@@ -28,8 +42,7 @@ return Scaffold(
             const SizedBox(height: 20),
             _boxForm(context),
             const SizedBox(height: 20),
-            _textDontHaveAccount(),
-            _LoginAdmin(),
+           
           ],
         ),
       ),
@@ -66,7 +79,7 @@ Widget _imageCover() {
 
 Widget _textInfo() {
   return const Text(
-    'Welcome',
+    'Welcome To Intranet',
     style: TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.bold,
@@ -179,7 +192,7 @@ Widget _buttonLogin() {
       ),
     ),
     child: ElevatedButton(
-      onPressed: () => con.login(),
+      onPressed: () => con.loginAdmin(),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -197,55 +210,9 @@ Widget _buttonLogin() {
   );
 }
 
-Widget _textDontHaveAccount() {
-  LoginController conex = Get.put(LoginController());
-  return Container(
-    color: Colors.white,
-    width: double.infinity,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text('Don\'t have account?'),
-        const SizedBox(width: 7),
-        GestureDetector(
-          onTap: () => conex.goToRegisterPage(),
-          child: const Text(
-            'create a new account',
-            style: TextStyle(
-              color: Color(0xE5FF5100),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
+
 // ignore: non_constant_identifier_names
-Widget _LoginAdmin() {
-  LoginController conex = Get.put(LoginController());
-  return Container(
-    color: Colors.white,
-    width: double.infinity,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text('Are you and Admin?'),
-        const SizedBox(width: 7),
-        GestureDetector(
-          onTap: () => conex.goToAdmin(),
-          child: const Text(
-            'Login Here',
-            style: TextStyle(
-              color: Color(0xE5FF5100),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
+
 
 Widget _textOyarce() {
   return Container(

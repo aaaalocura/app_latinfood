@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:app_latin_food/src/pages/categorias/categorias_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/favorite_controller.dart';
-import 'package:app_latin_food/src/pages/client/products/prod/prod_detail.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +21,7 @@ class ProdCategoria extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: no_leading_underscores_for_local_identifiers
     final _favoriteController = Get.put(FavoritesController());
       final int? userId =
         con1.user.id != null ? int.tryParse('${con1.user.id}') : null;

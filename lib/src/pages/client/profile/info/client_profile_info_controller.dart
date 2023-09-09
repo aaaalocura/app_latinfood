@@ -23,4 +23,10 @@ class ClientProfileInfoController extends GetxController {
       throw Exception('Failed to load customer data');
     }
   }
+
+  void singOut() {
+    GetStorage().remove('user');
+    Get.snackbar('Saliste ', '');
+    Get.offNamedUntil('/login', (route) => false);
+  }
 }

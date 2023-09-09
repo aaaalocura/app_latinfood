@@ -1,7 +1,8 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:app_latin_food/src/models/favoritos.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/favorite_controller.dart';
-import 'package:app_latin_food/src/pages/client/products/prod/prod_detail.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

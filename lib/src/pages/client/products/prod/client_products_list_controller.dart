@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_type_check
+
 import 'dart:convert';
 
 import 'package:app_latin_food/src/models/category.dart';
@@ -41,16 +43,20 @@ class ProductsListController extends GetxController {
         products.value = data.map((item) => Product.fromJson(item)).toList();
         
         // Filtrar los productos por categoría
+        // ignore: invalid_use_of_protected_member
         filteredProducts.value = products.value.where((product) {
           return product.categoryId == categoryName;
         }).toList();
       } else {
+        // ignore: avoid_print
         print('Error en la estructura de la respuesta: $data');
       }
     } else {
+       // ignore: avoid_print
       print('Error en la solicitud: ${response.statusCode}');
     }
   } catch (e) {
+     // ignore: avoid_print
     print('Error: $e');
   }
 }
@@ -58,7 +64,7 @@ class ProductsListController extends GetxController {
 
 Future<List<Product>> getProductsWithSameCategory(String categoryId) async {
   try {
-    final apiUrl = 'https://kdlatinfood.com/intranet/public/api/products';
+    const apiUrl = 'https://kdlatinfood.com/intranet/public/api/products';
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
@@ -98,10 +104,10 @@ Future<List<Product>> getProductsWithSameCategory(String categoryId) async {
       final url =
           Uri.parse('https://kdlatinfood.com/intranet/public/api/products');
       final response = await http.get(url);
+      // ignore: duplicate_ignore
       if (response.statusCode == 200) {
         // La solicitud fue exitosa
         final List<dynamic> data = json.decode(response.body);
-        // ignore: unnecessary_type_check
         if (data is List) {
           products.value = data.map((item) => Product.fromJson(item)).toList();
           // ignore: invalid_use_of_protected_member

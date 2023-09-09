@@ -1,5 +1,7 @@
 import 'package:app_latin_food/src/models/category.dart';
 import 'package:app_latin_food/src/models/user.dart';
+import 'package:app_latin_food/src/pages/admin/botonbar.dart';
+import 'package:app_latin_food/src/pages/admin/pedidos_admin.dart';
 import 'package:app_latin_food/src/pages/client/delivery/list/client_delivery_page.dart';
 import 'package:app_latin_food/src/pages/client/products/list/client_products_list_page.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
@@ -7,6 +9,7 @@ import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info
 import 'package:app_latin_food/src/pages/envios/envios_page.dart';
 //import 'package:app_latin_food/src/pages/home/home_page.dart';
 import 'package:app_latin_food/src/pages/login/login_page.dart';
+import 'package:app_latin_food/src/pages/login/login_page_admin.dart';
 import 'package:app_latin_food/src/pages/register/register_page.dart';
 import 'package:app_latin_food/src/providers/category_provider.dart';
 import 'package:app_latin_food/src/splash/page.dart';
@@ -28,13 +31,11 @@ void getCategories() async {
   var categoriesProviders2 = categoriesProviders;
   // ignore: unused_local_variable
   var result = await categoriesProviders2.getAll();
-
   // Imprimir el contenido de result por consola
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -54,19 +55,22 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       title: 'LatinFood',
       // Configura el tema claro por defecto
-
       debugShowCheckedModeBanner: false,
-        initialRoute: '/',
+      initialRoute: '/',
       getPages: [
-         GetPage(name: '/', page: () => const SecondClass()),
+        GetPage(name: '/', page: () => const SecondClass()),
         GetPage(name: '/login', page: () => LoginPage()),
+        GetPage(name: '/loginAdmin', page: () => LoginPageAdmin()),
         GetPage(name: '/register', page: () => const RegisterPage()),
+        GetPage(name: '/PedidosAdmin', page: () => const PedidosAdmin()),
         //GetPage(name: '/home', page: () =>  HomePage()),
         GetPage(
+          name: '/homeadmin',
+          page: () => ClientProductsListPageAdmin(),
+        ),
+        GetPage(
           name: '/home',
-          page: () => GetBuilder<CartController>(
-            builder: (controller) => ClientProductsListPage(),
-          ),
+          page: () => ClientProductsListPage(),
         ),
         // GetPage(name: '/home/info', page: () =>  ClientProfileInfoPage()),
         if (userId != null)
@@ -79,22 +83,21 @@ class _MyAppState extends State<MyApp> {
           page: () => const ClientDeliveryListPage(),
         ),
       ],
-
       theme: ThemeData(
           primaryColor: const Color(0xE5FF5100),
-           fontFamily: '.SF UI Text',
+          fontFamily: '.SF UI Text',
           colorScheme: const ColorScheme(
             secondary: Color(0xE5FF5100),
             primary: Color(0xE5FF5100),
             brightness: Brightness.light,
-            onBackground: Colors.grey,
+            onBackground: Colors.white,
             onPrimary: Color.fromARGB(255, 16, 16, 16),
-            surface: Colors.grey,
-            onSurface: Colors.grey,
+            surface: Colors.white,
+            onSurface: Colors.white,
             error: Colors.red,
-            onError: Colors.grey,
-            background: Colors.grey,
-            onSecondary: Colors.grey,
+            onError: Colors.white,
+            background: Colors.white,
+            onSecondary: Colors.white,
           )),
 
       navigatorKey: Get.key,
