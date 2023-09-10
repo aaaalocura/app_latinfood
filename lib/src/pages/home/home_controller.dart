@@ -12,7 +12,7 @@ void goToAddress() {
   }
   HomeController(){
     if (kDebugMode) {
-      print('Usuario en Sesion: ${user.toJson()}');
+      print('Usuario en Sesion: ${user.id}');
     }
   }
   void singOut (){

@@ -50,8 +50,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final int? userId =
-        con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
+    User user = User.fromJson(GetStorage().read('user') ?? {});
+    final int? userId = user.id;
+
     return GetMaterialApp(
       title: 'LatinFood',
       // Configura el tema claro por defecto

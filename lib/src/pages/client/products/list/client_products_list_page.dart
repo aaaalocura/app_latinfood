@@ -1,3 +1,4 @@
+import 'package:app_latin_food/src/models/user.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_detail.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/client_products_list_page.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_page.dart';
 import 'package:app_latin_food/src/utils/custom_animated_bottom_bar.dart';
+import 'package:get_storage/get_storage.dart';
 import 'client_products_list_controller.dart';
 
 class ClientProductsListPage extends StatelessWidget {
@@ -15,14 +17,14 @@ class ClientProductsListPage extends StatelessWidget {
 
   final ClientProfileInfoController con1 =
       Get.put(ClientProfileInfoController());
-
+ User user = User.fromJson(GetStorage().read('user') ?? {});
   // ignore: use_key_in_widget_constructors
   ClientProductsListPage({Key? key});
   
 
   @override
   Widget build(BuildContext context) {
-    final int? userId =con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
+    final int? userId =user.id;
 
     return Scaffold(
       bottomNavigationBar: _bottomBar(),
