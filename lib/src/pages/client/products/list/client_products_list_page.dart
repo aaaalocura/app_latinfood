@@ -11,20 +11,20 @@ import 'package:app_latin_food/src/utils/custom_animated_bottom_bar.dart';
 import 'package:get_storage/get_storage.dart';
 import 'client_products_list_controller.dart';
 
+// ignore: must_be_immutable
 class ClientProductsListPage extends StatelessWidget {
   final ClientProductsListController con =
       Get.put(ClientProductsListController());
 
   final ClientProfileInfoController con1 =
       Get.put(ClientProfileInfoController());
- User user = User.fromJson(GetStorage().read('user') ?? {});
+  User user = User.fromJson(GetStorage().read('user') ?? {});
   // ignore: use_key_in_widget_constructors
   ClientProductsListPage({Key? key});
-  
 
   @override
   Widget build(BuildContext context) {
-    final int? userId =user.id;
+    final int? userId = user.id;
 
     return Scaffold(
       bottomNavigationBar: _bottomBar(),
@@ -34,7 +34,6 @@ class ClientProductsListPage extends StatelessWidget {
           children: [
             if (userId != null) ProductsListPage(customerId: userId),
             if (userId != null) CartPage(),
-            
             if (userId != null) ClientOrdersPage(customerId: userId),
             if (userId != null) ClientProfileInfoPage(customerId: userId),
           ],
