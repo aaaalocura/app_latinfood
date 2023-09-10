@@ -30,11 +30,21 @@ class ProductsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     final _favoriteController = Get.put(FavoritesController());
+    // ignore: unused_local_variable
+    final categoryIcons = {
+      "04-Tequeños": Icons.abc_sharp,
+      "03-Cachitos": Icons.access_alarm,
+      "02-Pastelitos": Icons.add_home,
+      "01-Empanadas": Icons.accessibility,
+      "05-Mini Pan": Icons.account_box,
+    };
+
     final int? userId = int.tryParse('${con1.user.id}');
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor:
           Colors.white, // Cambia el color de fondo de la barra de estado
-      statusBarIconBrightness: Brightness.dark, // Cambia el color de los iconos en la barra de estado a oscuro
+      statusBarIconBrightness: Brightness
+          .dark, // Cambia el color de los iconos en la barra de estado a oscuro
     ));
     return Scaffold(
       appBar: AppBar(
@@ -118,62 +128,62 @@ class ProductsListPage extends StatelessWidget {
                 final categories = snapshot.data!;
 
                 return SingleChildScrollView(
-                  physics:
-                      const BouncingScrollPhysics(), // Agrega BouncingScrollPhysics aquí
+                  physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: categories.map((category) {
+                      final icon = categoryIcons[
+                          category.name]; // Obtén el icono para esta categoría
+
                       return GestureDetector(
-                          onTap: () async {
-                            selectedCategoryController
-                                .setSelectedCategory(category.id);
-                            con.getProductsByCategory(category.name);
-                            await refreshCategories();
-                          },
-                          child: SizedBox(
-                            width: 80, // Ajusta el ancho según tu preferencia
-                            height: 130,
-                            child: Column(
-                              children: [
-                                Card(
-                                  color: selectedCategoryController
-                                              .selectedCategoryId.value ==
-                                          category.id
-                                      ? const Color(
-                                          0xE5FF5100) // Cambiar el color a naranja si está seleccionado
-                                      : const Color.fromARGB(
-                                          255, 223, 222, 222),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    side: const BorderSide(
-                                      color: Color.fromARGB(255, 223, 222, 222),
-                                    ),
-                                  ),
-                                  child: Container(
-                                    width: 80,
-                                    height: 80,
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 2, 8, 8),
-                                    child: const Icon(
-                                      Icons
-                                          .local_pizza_outlined, // Cambia este ícono por el de una fruta
-                                      size: 40,
-                                    ),
+                        onTap: () async {
+                          selectedCategoryController
+                              .setSelectedCategory(category.id);
+                          con.getProductsByCategory(category.name);
+                          await refreshCategories();
+                        },
+                        child: SizedBox(
+                          width: 80,
+                          height: 130,
+                          child: Column(
+                            children: [
+                              Card(
+                                color: selectedCategoryController
+                                            .selectedCategoryId.value ==
+                                        category.id
+                                    ? const Color(0xE5FF5100)
+                                    : const Color.fromARGB(255, 223, 222, 222),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  side: const BorderSide(
+                                    color: Color.fromARGB(255, 223, 222, 222),
                                   ),
                                 ),
-                                const SizedBox(
-                                    height:
-                                        10), // Espacio entre el icono y el nombre
-                                Text(
-                                  category.name,
-                                  style: const TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.bold,
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 2, 8, 8),
+                                  child: Icon(
+                                    icon ??
+                                        Icons
+                                            .abc_outlined, // Usa un icono por defecto si no se encuentra el icono
+                                    size: 40,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ));
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                category.name,
+                                style: const TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
                     }).toList(),
                   ),
                 );
