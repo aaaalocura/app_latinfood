@@ -8,6 +8,7 @@ class SalesListPage extends StatefulWidget {
   const SalesListPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SalesListPageState createState() => _SalesListPageState();
 }
 

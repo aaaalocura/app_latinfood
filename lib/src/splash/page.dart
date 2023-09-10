@@ -64,7 +64,7 @@ class _SecondClassState extends State<SecondClass>
               ),
             );
             Timer(
-              const Duration(milliseconds: 300),
+              const Duration(milliseconds: 500),
               () {
                 // Verifica si el controlador todavía está activo antes de llamar a reset
                 if (isControllerActive) {
@@ -82,7 +82,7 @@ class _SecondClassState extends State<SecondClass>
     Timer(const Duration(milliseconds: 600), () {
       if (mounted) {
         setState(() {
-          _opacity = 1.0;
+          _opacity = 0;
           _value = false;
         });
       }
