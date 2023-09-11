@@ -74,32 +74,42 @@ class _MyAppState extends State<MyApp> {
           page: () => ClientProductsListPage(),
         ),
         // GetPage(name: '/home/info', page: () =>  ClientProfileInfoPage()),
-        if (userId != null)
-          GetPage(
-            name: '/home/delyvery',
-            page: () => ClientOrdersPage(customerId: userId),
-          ),
+
+        GetPage(
+          name: '/home/delyvery',
+          page: () => ClientOrdersPage(customerId: userId!),
+        ),
         GetPage(
           name: '/home/profile/address',
           page: () => const ClientDeliveryListPage(),
         ),
       ],
       theme: ThemeData(
-          primaryColor: const Color(0xE5FF5100),
-          fontFamily: '.SF UI Text',
-          colorScheme: const ColorScheme(
-            secondary: Color(0xE5FF5100),
-            primary: Color(0xE5FF5100),
-            brightness: Brightness.light,
-            onBackground: Colors.white,
-            onPrimary: Color.fromARGB(255, 16, 16, 16),
-            surface: Colors.white,
-            onSurface: Colors.white,
-            error: Colors.red,
-            onError: Colors.white,
-            background: Colors.white,
-            onSecondary: Colors.white,
-          )),
+        primaryColor: const Color(0xE5FF5100),
+        fontFamily: '.SF UI Text',
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xE5FF5100),
+          onPrimary: Colors.black,
+          background: Colors.white,
+          onBackground: Colors.black,
+          surface: Colors.white,
+          onSurface: Colors.black,
+        ),
+        brightness: Brightness.light,
+      ),
+      darkTheme: ThemeData(
+        primaryColor: const Color(0xE5FF5100),
+        fontFamily: '.SF UI Text',
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xE5FF5100),
+          onPrimary: Colors.black,
+          background: Colors.black,
+          onBackground: Colors.black,
+          surface: Colors.black,
+          onSurface: Colors.black,
+        ),
+        brightness: Brightness.dark,
+      ),
 
       navigatorKey: Get.key,
     );

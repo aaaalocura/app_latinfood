@@ -19,6 +19,7 @@ class PerfilAdmin extends StatelessWidget {
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0.5,
+          automaticallyImplyLeading: false,
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
@@ -50,6 +51,7 @@ class PerfilAdmin extends StatelessWidget {
               child: const Text('Sign off'),
             ),
           ),
-        ));
+        )
+        );
   }
 }

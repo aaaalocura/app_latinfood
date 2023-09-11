@@ -10,7 +10,7 @@ class SaleDetailPage extends StatefulWidget {
   const SaleDetailPage({super.key, required this.sale});
 
   @override
-  
+
   // ignore: library_private_types_in_public_api
   _SaleDetailPageState createState() => _SaleDetailPageState();
 }
@@ -19,7 +19,8 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
   var getResult = 'QR Code Result';
 
   Future<void> sendQRCodeToAPI(String qrCode, int ventaId) async {
-    final apiUrl = Uri.parse('https://kdlatinfood.com/intranet/public/api/verify-qrcode');
+    final apiUrl =
+        Uri.parse('https://kdlatinfood.com/intranet/public/api/verify-qrcode');
 
     try {
       final response = await http.post(
@@ -64,24 +65,51 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalle de la Venta #${widget.sale.id}'),
+        title: Text(
+          'Detail Sale #${widget.sale.id}',
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge!.color,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0.5,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: Image.network(
+              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+              width: 50,
+              height: 50,
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID del Pedido: ${widget.sale.id}', style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-            Text('Total: \$${widget.sale.total}', style: const TextStyle(fontSize: 16.0)),
-            Text('Total de Items: ${widget.sale.items}', style: const TextStyle(fontSize: 16.0)),
-            Text('Estado: ${widget.sale.status}', style: const TextStyle(fontSize: 16.0)),
-            Text('Estado de Envío: ${widget.sale.statusEnvio}', style: const TextStyle(fontSize: 16.0)),
-            const SizedBox(height: 16.0), // Espacio entre detalles y lista de productos
-            const Text('Productos en el Pedido', style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+            Text('ID del Pedido: ${widget.sale.id}',
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.bold)),
+            Text('Total: \$${widget.sale.total}',
+                style: const TextStyle(fontSize: 16.0)),
+            Text('Total de Items: ${widget.sale.items}',
+                style: const TextStyle(fontSize: 16.0)),
+            Text('Estado: ${widget.sale.status}',
+                style: const TextStyle(fontSize: 16.0)),
+            Text('Estado de Envío: ${widget.sale.statusEnvio}',
+                style: const TextStyle(fontSize: 16.0)),
+            const SizedBox(
+                height: 16.0), // Espacio entre detalles y lista de productos
+            const Text('Productos en el Pedido',
+                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
             Expanded(
               child: ListView.builder(
-                itemCount: widget.sale.salesDetails.length, // La lista de detalles de ventas
+                itemCount: widget
+                    .sale.salesDetails.length, // La lista de detalles de ventas
                 itemBuilder: (context, index) {
                   final detail = widget.sale.salesDetails[index];
                   final product = detail.product;
@@ -96,7 +124,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                         children: [
                           Text('Precio: \$${detail.price}'),
                           Text('Cantidad: ${detail.quantity}'),
-                          
+
                           // Agrega más detalles del producto si es necesario.
                         ],
                       ),
@@ -109,7 +137,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
         ),
       ),
       floatingActionButton: CupertinoButton(
-        onPressed:()=>scanQr(),
+        onPressed: () => scanQr(),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
@@ -127,6 +155,4 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
       ),
     );
   }
-
-
 }

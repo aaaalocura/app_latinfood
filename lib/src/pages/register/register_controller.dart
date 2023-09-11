@@ -8,7 +8,7 @@ class RegisterController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController lastName2Controller = TextEditingController();
+  
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -23,7 +23,7 @@ class RegisterController extends GetxController {
     String password = passwordController.text.trim();
     String name = nameController.text.trim();
     String lastName = lastNameController.text.trim();
-    String lastName2 = lastName2Controller.text.trim();
+    
     String phone = phoneController.text.trim();
     String address = addressController.text.trim();
     String passwordConfirmation = passwordConfirm.text.trim();
@@ -35,12 +35,12 @@ class RegisterController extends GetxController {
       print('Password: $password');
     }
 
-    if (isValidForm(email, password, name, phone, address, lastName2, lastName,
+    if (isValidForm(email, password, name, phone, address, lastName,
         passwordConfirmation)) {
       User user = User(
         name: name,
         lastName: lastName,
-        lastName2: lastName2,
+       
         email: email,
         password: password,
         address: address,
@@ -60,7 +60,7 @@ class RegisterController extends GetxController {
       String phone,
       String address,
       String lastName,
-      String lastName2,
+      
       String passwordConfirmation) {
     if (!GetUtils.isEmail(email)) {
       Get.snackbar('Correo no válido', 'Ingresa un correo válido');
@@ -87,10 +87,7 @@ class RegisterController extends GetxController {
       return false;
     }
 
-    if (lastName2.isEmpty) {
-      Get.snackbar('Error', 'Ingresa tu segundo apellido');
-      return false;
-    }
+
 
     if (phone.isEmpty) {
       Get.snackbar('Error', 'Ingresa tu número de teléfono');

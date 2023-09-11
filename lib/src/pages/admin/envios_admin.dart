@@ -19,29 +19,34 @@ class _SalesListPageState extends State<SalesListPage> {
   bool _isLoading = false;
 
   // Agrega una función para cargar las ventas desde la API
-  Future<void> _loadSales() async {
-    if (_isLoading) {
-      return; // Evitar consultas repetitivas
-    }
-    setState(() {
-      _isLoading = true;
-    });
+Future<void> _loadSales() async {
+  if (_isLoading || !mounted) {
+    return; // Evitar consultas repetitivas o si el widget ya no está montado
+  }
+  setState(() {
+    _isLoading = true;
+  });
 
-    try {
-      final salesData = await fetchSales();
+  try {
+    final salesData = await fetchSales();
+    if (mounted) {
       setState(() {
         sales = salesData;
         _isLoading = false;
       });
-    } catch (error) {
+    }
+  } catch (error) {
+    if (mounted) {
       setState(() {
         _isLoading = false;
       });
-      // Manejar errores si es necesario
-      // ignore: avoid_print
-      print('Error fetching sales: $error');
     }
+    // Manejar errores si es necesario
+    // ignore: avoid_print
+    print('Error fetching sales: $error');
   }
+}
+
 
   @override
   void didChangeDependencies() {
@@ -62,10 +67,12 @@ class _SalesListPageState extends State<SalesListPage> {
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
+          
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0.5,
+        automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10.0),

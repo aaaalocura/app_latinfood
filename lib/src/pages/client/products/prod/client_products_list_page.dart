@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:app_latin_food/src/models/category.dart';
 import 'package:app_latin_food/src/models/product.dart';
+import 'package:app_latin_food/src/models/user.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/favorite_controller.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ProductsListPage extends StatelessWidget {
   final RxList<Category> categories = RxList<Category>();
@@ -39,7 +41,8 @@ class ProductsListPage extends StatelessWidget {
       "05-Mini Pan": Icons.account_box,
     };
 
-    final int? userId = int.tryParse('${con1.user.id}');
+    User user = User.fromJson(GetStorage().read('user') ?? {});
+    final int? userId = user.id;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor:
           Colors.white, // Cambia el color de fondo de la barra de estado
@@ -126,7 +129,6 @@ class ProductsListPage extends StatelessWidget {
                 );
               } else {
                 final categories = snapshot.data!;
-
                 return SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
@@ -134,7 +136,6 @@ class ProductsListPage extends StatelessWidget {
                     children: categories.map((category) {
                       final icon = categoryIcons[
                           category.name]; // Obtén el icono para esta categoría
-
                       return GestureDetector(
                         onTap: () async {
                           selectedCategoryController
@@ -355,7 +356,7 @@ String _getBarcodeDescription(String barcode) {
     case '03':
       return 'Chico';
     default:
-      return '';
+      return 'sin tamaño';
   }
 }
 

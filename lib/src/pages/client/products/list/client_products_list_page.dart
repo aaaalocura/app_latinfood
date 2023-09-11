@@ -32,10 +32,10 @@ class ClientProductsListPage extends StatelessWidget {
         () => IndexedStack(
           index: con.indexTab.value,
           children: [
-            if (userId != null) ProductsListPage(customerId: userId),
-            if (userId != null) CartPage(),
-            if (userId != null) ClientOrdersPage(customerId: userId),
-            if (userId != null) ClientProfileInfoPage(customerId: userId),
+            ProductsListPage(customerId: userId!),
+            CartPage(),
+            ClientOrdersPage(customerId: userId),
+            ClientProfileInfoPage(customerId: userId),
           ],
         ),
       ),

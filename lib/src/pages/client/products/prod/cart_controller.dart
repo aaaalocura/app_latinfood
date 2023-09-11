@@ -7,11 +7,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CartController extends GetxController {
-  final cartItems = <CartItem>[].obs;
   User user = User.fromJson(GetStorage().read('user') ?? {});
+
+  final cartItems = <CartItem>[].obs;
+
   int get cartItemCount => cartItems.length;
   bool saleSuccessful = false;
-  void addToCart(Product product,int  userId, int quantity) {
+  void addToCart(Product product, int userId, int quantity) {
     final existingItemIndex =
         cartItems.indexWhere((item) => item.product.id == product.id);
     if (existingItemIndex != -1) {
@@ -20,9 +22,11 @@ class CartController extends GetxController {
       cartItems.add(CartItem(product: product, quantity: quantity));
     }
   }
+
   void removeFromCart(CartItem cartItem) {
     cartItems.remove(cartItem);
   }
+
   double get totalAmount {
     double total = 0.0;
     for (var cartItem in cartItems) {
@@ -41,8 +45,6 @@ class CartController extends GetxController {
     cartItem.quantity++;
   }
 
-
-
   // Método para realizar la venta usando la API
   Future<void> makeSale() async {
     if (cartItems.isEmpty) {
@@ -55,11 +57,11 @@ class CartController extends GetxController {
     List<Item> itemsList = cartItems
         .map((item) => Item(id: item.product.id, quantity: item.quantity))
         .toList();
-
+    final int? userId = user.id;
     // Crear el objeto PosApiModel con los datos del carrito y el usuario
     PosApiModel posApiModel = PosApiModel(
-      cliente: user.id ??
-          0, // O utiliza el ID del cliente si está disponible en el modelo User
+      cliente:
+          userId!, // O utiliza el ID del cliente si está disponible en el modelo User
       total: totalAmount,
       efectivo: 0.0, // Puedes cambiar esto según el pago real del cliente
       change: 0.0, // Puedes cambiar esto según el pago real del cliente

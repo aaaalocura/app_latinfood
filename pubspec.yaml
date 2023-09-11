@@ -49,6 +49,7 @@ dependencies:
   signature: ^5.4.0
   timer_builder: ^2.0.0
   shared_preferences: ^2.2.1
+  food_icons: ^0.0.6
   
   
   

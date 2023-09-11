@@ -12,7 +12,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(
+      appBar: AppBar(
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -24,7 +24,7 @@ class RegisterPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
-         flexibleSpace: FlexibleSpaceBar(
+        flexibleSpace: FlexibleSpaceBar(
           background: Stack(
             fit: StackFit.expand,
             children: [
@@ -41,16 +41,17 @@ class RegisterPage extends StatelessWidget {
             ],
           ),
         ),
-          actions: [
-    Padding(
-      padding: const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
-      child: Image.network(
-        'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-        width: 50, // Ajusta el ancho de la imagen según tus necesidades
-        height: 50, // Ajusta el alto de la imagen según tus necesidades
-      ),
-    ),
-  ],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+                right: 10.0), // Ajusta el valor según tu preferencia
+            child: Image.network(
+              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+              width: 50, // Ajusta el ancho de la imagen según tus necesidades
+              height: 50, // Ajusta el alto de la imagen según tus necesidades
+            ),
+          ),
+        ],
       ),
       backgroundColor: Colors.white,
       body: ScrollConfiguration(
@@ -96,8 +97,6 @@ Widget _boxForm(BuildContext context) {
           const SizedBox(height: 10),
           _textFieldLastName(),
           const SizedBox(height: 10),
-          _textFielLastdName2(),
-          const SizedBox(height: 10),
           _textFieldEmail(),
           const SizedBox(height: 10),
           _textFieldPhone(),
@@ -115,7 +114,6 @@ Widget _boxForm(BuildContext context) {
     ),
   );
 }
-
 
 Widget _textOyarce() {
   return Container(
@@ -190,40 +188,11 @@ Widget _textFieldName() {
 
 Widget _textFieldLastName() {
   RegisterController con = Get.put(RegisterController());
-   return TextFormField(
+  return TextFormField(
     controller: con.lastNameController,
     decoration: InputDecoration(
       labelText: 'Last Name',
       prefixIcon: const Icon(Icons.person_pin),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(
-          color: Color(0xE5FF5100),
-        ),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(
-          color: Color(0xE5FF5100),
-        ),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(
-          color: Color(0xE5FF5100),
-        ),
-      ),
-    ),
-  );
-}
-
-Widget _textFielLastdName2() {
-  RegisterController con = Get.put(RegisterController());
-  return TextFormField(
-    controller: con.lastName2Controller,
-    decoration: InputDecoration(
-      labelText: 'Last  Name 2 (optional)',
-      prefixIcon: const Icon(Icons.person_pin_outlined),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: const BorderSide(
@@ -279,7 +248,7 @@ Widget _textFieldEmail() {
 //phone input
 Widget _textFieldPhone() {
   RegisterController con = Get.put(RegisterController());
-    return TextFormField(
+  return TextFormField(
     controller: con.phoneController,
     decoration: InputDecoration(
       labelText: 'phone',

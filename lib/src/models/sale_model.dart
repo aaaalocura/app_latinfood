@@ -81,7 +81,8 @@ class SaleDetail {
   factory SaleDetail.fromJson(Map<String, dynamic> json) {
     return SaleDetail(
       id: json['id'],
-         price: double.parse(json['price'].toString()), // Corregir el tipo a double
+      price:
+          double.parse(json['price'].toString()), // Corregir el tipo a double
       quantity: json['quantity'],
       productID: json['product_id'],
       saleID: json['sale_id'],
@@ -100,7 +101,7 @@ class Product {
   final String name;
   final String barcode;
   final int saborID;
-    final double cost; // Quita los paréntesis ()
+  final double cost; // Quita los paréntesis ()
   final double price; // Quita los paréntesis ()
 
   final int stock;
@@ -134,15 +135,16 @@ class Product {
       name: json['name'],
       barcode: json['barcode'],
       saborID: json['sabor_id'],
-       cost: double.parse(json['cost'].toString()), // Corregir el tipo a double
-      price: double.parse(json['price'].toString()), // Corregir el tipo a double
+      cost: double.parse(json['cost'].toString()), // Corregir el tipo a double
+      price:
+          double.parse(json['price'].toString()), // Corregir el tipo a double
       stock: json['stock'],
       alerts: json['alerts'],
       image: json['image'],
       categoryID: json['category_id'],
       descripcion: json['descripcion'],
       estado: json['estado'],
-     
+
       keyProduct: json['keyProduct'],
       userID: json['user_id'],
     );
@@ -153,7 +155,7 @@ class Customer {
   final int id;
   final String name;
   final String lastName;
-  final String lastName2;
+  final String? lastName2;
   final String email;
   final String password;
   final String address;
@@ -161,7 +163,7 @@ class Customer {
   final double saldo;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final String image;
+  final String? image;
   final dynamic woocommerceClienteID;
 
   Customer({
