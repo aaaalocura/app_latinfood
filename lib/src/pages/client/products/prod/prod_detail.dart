@@ -62,9 +62,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           background: Stack(
             fit: StackFit.expand,
             children: [
-              // Coloca aquí la imagen o cualquier otro contenido que desees tener detrás del AppBar
 
-              // BackdropFilter para aplicar el efecto de difuminado
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                 child: Container(
@@ -80,16 +78,16 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             children: [
               IconButton(
                   onPressed: () {
-                    // Abre el carrito cuando se presiona el icono
+                  
                   },
                   icon: Stack(
                     children: [
                       const Positioned(
-                        left: 0, // Cambiar la posición horizontal (izquierda)
-                        top: 4, // Cambiar la posición vertical (arriba)
+                        left: 0, 
+                        top: 4, 
                         child: Icon(
                           Icons.shopping_cart,
-                          size: 32, // Tamaño deseado del icono
+                          size: 32,
                         ),
                       ),
                       if (cartController.cartItemCount > 0)
@@ -100,14 +98,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             padding: const EdgeInsets.all(4),
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors
-                                  .red, // Color de fondo del número de productos
+                              color: Colors.red, 
                             ),
                             child: Text(
                               '${cartController.cartItemCount}',
                               style: const TextStyle(
-                                color: Colors
-                                    .white, // Color del texto del número de productos
+                                color: Colors.white, 
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
