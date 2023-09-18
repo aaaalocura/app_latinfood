@@ -26,7 +26,7 @@ class ProductDetailsPage extends StatefulWidget {
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int quantity = 1;
-  
+
   final cartController = Get.find<CartController>();
   // ignore: unused_element
   double _generateRandomRating() {
@@ -41,8 +41,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
     final int? userId =
         con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
-        // ignore: non_constant_identifier_names
-        final int id_prod=widget.product.id;
+    // ignore: non_constant_identifier_names
+    final int id_prod = widget.product.id;
     // ignore: unused_local_variable
     final RxBool isFavorite = false.obs;
     return Scaffold(
@@ -76,21 +76,61 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
         ),
         actions: [
-          IconButton(
-  onPressed: () {
-    _favoriteController.toggleFavorite(id_prod, userId!);
-  },
-  icon: Obx(() => Stack(
-        children: [
-          Icon(
-            _favoriteController.isFavorite.value
-                ? Icons.favorite
-                : Icons.favorite_border_sharp,
+          Stack(
+            children: [
+              IconButton(
+                  onPressed: () {
+                    // Abre el carrito cuando se presiona el icono
+                  },
+                  icon: Stack(
+                    children: [
+                      const Positioned(
+                        left: 0, // Cambiar la posición horizontal (izquierda)
+                        top: 4, // Cambiar la posición vertical (arriba)
+                        child: Icon(
+                          Icons.shopping_cart,
+                          size: 32, // Tamaño deseado del icono
+                        ),
+                      ),
+                      if (cartController.cartItemCount > 0)
+                        Positioned(
+                          right: -1,
+                          top: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors
+                                  .red, // Color de fondo del número de productos
+                            ),
+                            child: Text(
+                              '${cartController.cartItemCount}',
+                              style: const TextStyle(
+                                color: Colors
+                                    .white, // Color del texto del número de productos
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  )),
+            ],
           ),
-        ],
-      )),
-),
-
+          IconButton(
+            onPressed: () {
+              _favoriteController.toggleFavorite(id_prod, userId!);
+            },
+            icon: Obx(() => Stack(
+                  children: [
+                    Icon(
+                      _favoriteController.isFavorite.value
+                          ? Icons.favorite
+                          : Icons.favorite_border_sharp,
+                    ),
+                  ],
+                )),
+          ),
         ],
       ),
       backgroundColor: Colors.white,
@@ -140,7 +180,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           children: const [
                             Icon(Icons.star, color: Colors.amber),
                             Text(
-                             '5',
+                              '5',
                               style: TextStyle(fontSize: 14),
                             ),
                           ],
@@ -250,7 +290,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ElevatedButton.icon(
                           onPressed: () {
                             // Lógica para agregar al carrito
-                            cartController.addToCart(widget.product,userId!, quantity);
+                            cartController.addToCart(
+                                widget.product, userId!, quantity);
 
                             // Actualizar el contador del carrito
                             cartController.update();
@@ -341,7 +382,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                           onPressed: () {
                                             // Lógica para añadir al carrito
                                             cartController.addToCart(
-                                                relatedProduct,userId!, 1);
+                                                relatedProduct, userId!, 1);
                                             Navigator.pop(context);
                                           },
                                           child: const Text('Add to Cart'),
@@ -374,8 +415,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                         children: [
                                           Text(
                                               'Category: ${relatedProduct.categoryId}\n'),
-                                          Text(
-                                              'Stock: ${relatedProduct.stock} \n'),
+
                                           Text(
                                               'Status: ${relatedProduct.estado}'),
                                           // Otros datos adicionales del producto
@@ -424,5 +464,4 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       throw Exception('Failed to get related products: $e');
     }
   }
-  
 }

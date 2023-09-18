@@ -54,7 +54,11 @@ class ClientProductsListPage extends StatelessWidget {
         onItemSelected: (index) => con.changeTab(index),
         items: [
           BottomNavyBarItem(
-            icon: const Icon(Icons.home),
+            icon: Image.network(
+              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+              width: 33, 
+              height: 33,
+            ),
             title: const Text('Products'),
             activeColor: Colors.white,
             inactiveColor: Colors.white,

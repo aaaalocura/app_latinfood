@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:http/http.dart' as http;
 import '../../models/sale_model.dart';
@@ -17,8 +20,26 @@ class SaleDetailPage extends StatefulWidget {
 
 class _SaleDetailPageState extends State<SaleDetailPage> {
   var getResult = 'QR Code Result';
+  void goToAdminPedidos() {
+    Get.toNamed('/homeadmin');
+  }
 
   Future<void> sendQRCodeToAPI(String qrCode, int ventaId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              CircularProgressIndicator(), 
+              SizedBox(height: 16), 
+              Text('Cargando...'), 
+            ],
+          ),
+        );
+      },
+    );
     final apiUrl =
         Uri.parse('https://kdlatinfood.com/intranet/public/api/verify-qrcode');
 
@@ -32,21 +53,121 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
       );
 
       if (response.statusCode == 200) {
-        // Manejar la respuesta exitosa aquí
+        final jsonResponse = json.decode(response.body);
+
+        if (jsonResponse.containsKey('message')) {
+          final message = jsonResponse['message'];
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              if (message == 'Codigo QR incorrecto para esta venta.') {
+                return CupertinoAlertDialog(
+                  title: const Text('Código QR incorrecto'),
+                  content:
+                      const Text('El código QR no es válido para esta venta.'),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pop(); // Cierra el cuadro de diálogo
+                        goToAdminPedidos();
+                      },
+                    ),
+                  ],
+                );
+              } else if (message == 'Pase al siguiente producto.') {
+                return CupertinoAlertDialog(
+                  title: const Text('Siga escaneando'),
+                  content: const Text('Scanee el siguiente producto.'),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              } else if (message ==
+                  'Todos los codigos QR han sido escaneados.') {
+                return CupertinoAlertDialog(
+                  title: const Text('Felicitaciones'),
+                  content:
+                      const Text('Todos los códigos QR han sido escaneados.'),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              } else {
+                return CupertinoAlertDialog(
+                  title: const Text('Mensaje de la API'),
+                  content: Text(message),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
+          );
+        }
+
         // ignore: avoid_print
         print('Respuesta de la API: ${response.body}');
-        // Puedes realizar acciones adicionales si la respuesta es exitosa
       } else {
-        // Manejar errores de solicitud aquí
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+              title: const Text('Felicitaciones'),
+              content: const Text('Todos los códigos QR han sido escaneados.'),
+              actions: [
+                CupertinoDialogAction(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Cierra el cuadro de diálogo
+                    goToAdminPedidos();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+
         // ignore: avoid_print
         print('Error en la solicitud a la API: ${response.statusCode}');
-        // Puedes mostrar un mensaje de error al usuario si lo deseas
       }
     } catch (e) {
-      // Manejar errores de conexión aquí
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: const Text('Error'),
+            content: Text('Error de conexión: $e'),
+            actions: [
+              CupertinoDialogAction(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
       // ignore: avoid_print
       print('Error de conexión: $e');
-      // Puedes mostrar un mensaje de error al usuario si lo deseas
     }
   }
 
@@ -54,7 +175,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
     String? cameraResult = await scanner.scan();
     setState(() {
       getResult = cameraResult!;
-      // Llamar a la función para enviar el resultado del escaneo y el ID de la venta a la API
+
       // ignore: avoid_print
       print('valor del qr: $getResult');
       sendQRCodeToAPI(getResult, widget.sale.id);
@@ -108,8 +229,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
             const SizedBox(height: 8.0),
             Expanded(
               child: ListView.builder(
-                itemCount: widget
-                    .sale.salesDetails.length, // La lista de detalles de ventas
+                itemCount: widget.sale.salesDetails.length,
                 itemBuilder: (context, index) {
                   final detail = widget.sale.salesDetails[index];
                   final product = detail.product;
@@ -124,8 +244,6 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                         children: [
                           Text('Precio: \$${detail.price}'),
                           Text('Cantidad: ${detail.quantity}'),
-
-                          // Agrega más detalles del producto si es necesario.
                         ],
                       ),
                     ),
@@ -141,14 +259,13 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
-            color: Colors.blue, // Cambia el color según tu preferencia
+            color: Colors.blue,
           ),
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: const Text(
             'Open Scan',
             style: TextStyle(
-              color: Colors
-                  .white, // Cambia el color del texto según tu preferencia
+              color: Colors.white,
             ),
           ),
         ),

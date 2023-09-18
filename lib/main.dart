@@ -1,6 +1,7 @@
 import 'package:app_latin_food/src/models/category.dart';
 import 'package:app_latin_food/src/models/user.dart';
 import 'package:app_latin_food/src/pages/admin/botonbar.dart';
+import 'package:app_latin_food/src/pages/admin/envios_admin.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos_admin.dart';
 import 'package:app_latin_food/src/pages/client/delivery/list/client_delivery_page.dart';
 import 'package:app_latin_food/src/pages/client/products/list/client_products_list_page.dart';
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
         GetPage(name: '/loginAdmin', page: () => LoginPageAdmin()),
         GetPage(name: '/register', page: () => const RegisterPage()),
         GetPage(name: '/PedidosAdmin', page: () => const PedidosAdmin()),
+        GetPage(name: '/SalesListPage', page: () => const SalesListPage()),
         //GetPage(name: '/home', page: () =>  HomePage()),
         GetPage(
           name: '/homeadmin',
@@ -97,19 +99,7 @@ class _MyAppState extends State<MyApp> {
         ),
         brightness: Brightness.light,
       ),
-      darkTheme: ThemeData(
-        primaryColor: const Color(0xE5FF5100),
-        fontFamily: '.SF UI Text',
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xE5FF5100),
-          onPrimary: Colors.black,
-          background: Colors.black,
-          onBackground: Colors.black,
-          surface: Colors.black,
-          onSurface: Colors.black,
-        ),
-        brightness: Brightness.dark,
-      ),
+     
 
       navigatorKey: Get.key,
     );

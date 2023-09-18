@@ -1,7 +1,6 @@
-// ignore_for_file: must_be_immutable
-
 import 'dart:ui';
 
+import 'package:app_latin_food/main.dart';
 import 'package:app_latin_food/src/models/category.dart';
 import 'package:app_latin_food/src/models/product.dart';
 import 'package:app_latin_food/src/models/user.dart';
@@ -17,21 +16,25 @@ import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get_storage/get_storage.dart';
 
+// ignore: must_be_immutable
 class ProductsListPage extends StatelessWidget {
   final RxList<Category> categories = RxList<Category>();
   final SelectedCategoryController selectedCategoryController =
       Get.put(SelectedCategoryController());
+
   final ClientProfileInfoController con1 =
       Get.put(ClientProfileInfoController());
   final ProductsListController con = Get.put(ProductsListController());
   final CartController cartController = Get.find();
   bool isFavorite = false;
+
   ProductsListPage({super.key, required int customerId});
 
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     final _favoriteController = Get.put(FavoritesController());
+
     // ignore: unused_local_variable
     final categoryIcons = {
       "04-Tequeños": Icons.abc_sharp,
@@ -44,11 +47,10 @@ class ProductsListPage extends StatelessWidget {
     User user = User.fromJson(GetStorage().read('user') ?? {});
     final int? userId = user.id;
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor:
-          Colors.white, // Cambia el color de fondo de la barra de estado
-      statusBarIconBrightness: Brightness
-          .dark, // Cambia el color de los iconos en la barra de estado a oscuro
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
     ));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),
@@ -63,8 +65,8 @@ class ProductsListPage extends StatelessWidget {
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 25, sigmaY: 10),
                 child: Container(
-                  color: const Color.fromARGB(255, 255, 255, 255)
-                      .withOpacity(0.1), // Color de difuminado
+                  color:
+                      const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1),
                 ),
               ),
             ],
@@ -77,9 +79,8 @@ class ProductsListPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 223, 222, 222),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                    color: const Color.fromARGB(
-                        255, 223, 222, 222)), // Agregar el borde gris
+                border:
+                    Border.all(color: const Color.fromARGB(255, 223, 222, 222)),
               ),
               child: TextFormField(
                 decoration: const InputDecoration(
@@ -88,109 +89,27 @@ class ProductsListPage extends StatelessWidget {
                   contentPadding: EdgeInsets.symmetric(horizontal: 18),
                 ),
                 onFieldSubmitted: (value) {
-                  // Aquí llamamos a showSearch para mostrar los resultados de búsqueda.
                   showSearch(
                     context: context,
                     delegate: ProductSearchDelegate(con.products),
-                    query:
-                        value, // Pasamos el valor ingresado como consulta de búsqueda.
+                    query: value,
                   );
                 },
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                right: 10.0), // Ajusta el valor según tu preferencia
+            padding: const EdgeInsets.only(right: 10.0),
             child: Image.network(
               'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-              width: 50, // Ajusta el ancho de la imagen según tus necesidades
-              height: 50, // Ajusta el alto de la imagen según tus necesidades
+              width: 50,
+              height: 50,
             ),
           ),
         ],
         bottom: PreferredSize(
-          preferredSize:
-              const Size.fromHeight(130), // Altura de la lista de categorías
-          child: FutureBuilder<List<Category>>(
-            future: CategoryController.fetchCategories(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CupertinoAlertDialog(
-                  content: Column(
-                    children: const [
-                      CupertinoActivityIndicator(),
-                    ],
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Text('Error al obtener las categorías'),
-                );
-              } else {
-                final categories = snapshot.data!;
-                return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: categories.map((category) {
-                      final icon = categoryIcons[
-                          category.name]; // Obtén el icono para esta categoría
-                      return GestureDetector(
-                        onTap: () async {
-                          selectedCategoryController
-                              .setSelectedCategory(category.id);
-                          con.getProductsByCategory(category.name);
-                          await refreshCategories();
-                        },
-                        child: SizedBox(
-                          width: 80,
-                          height: 130,
-                          child: Column(
-                            children: [
-                              Card(
-                                color: selectedCategoryController
-                                            .selectedCategoryId.value ==
-                                        category.id
-                                    ? const Color(0xE5FF5100)
-                                    : const Color.fromARGB(255, 223, 222, 222),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  side: const BorderSide(
-                                    color: Color.fromARGB(255, 223, 222, 222),
-                                  ),
-                                ),
-                                child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  padding:
-                                      const EdgeInsets.fromLTRB(8, 2, 8, 8),
-                                  child: Icon(
-                                    icon ??
-                                        Icons
-                                            .abc_outlined, // Usa un icono por defecto si no se encuentra el icono
-                                    size: 40,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                category.name,
-                                style: const TextStyle(
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                );
-              }
-            },
-          ),
+          preferredSize: const Size.fromHeight(130),
+          child: buildCategoriesList(),
         ),
       ),
       backgroundColor: Colors.white,
@@ -280,8 +199,7 @@ class ProductsListPage extends StatelessWidget {
                             padding:
                                 const EdgeInsets.fromLTRB(16.0, 0.0, 2.0, 1.0),
                             child: SizedBox(
-                              width: double
-                                  .infinity, // O ajusta un valor específico
+                              width: double.infinity,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -291,7 +209,7 @@ class ProductsListPage extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
-                                    maxLines: 1,
+                                    maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     softWrap: false,
                                   ),
@@ -336,27 +254,107 @@ class ProductsListPage extends StatelessWidget {
                 },
               ),
             ),
-            // ClientProfileInfoPage(customerId: null,),
           ],
         ),
       ),
     );
   }
-}
 
-String _getBarcodeDescription(String barcode) {
-  String secondSet =
-      barcode.substring(2, 4); // Obtener el segundo conjunto de números
+  Widget buildCategoriesList() {
+    final categoryIcons = {
+      "04-Tequeños": Icons.abc_sharp,
+      "03-Cachitos": Icons.access_alarm,
+      "02-Pastelitos": Icons.add_home,
+      "01-Empanadas": Icons.accessibility,
+      "05-Mini Pan": Icons.account_box,
+    };
+    return FutureBuilder<List<Category>>(
+      future: CategoryController.fetchCategories(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CupertinoActivityIndicator(
+            radius: 20.0,
+          );
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text('Error al obtener las categorías'),
+          );
+        } else {
+          final categories = snapshot.data!;
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: categories.map((category) {
+                final icon = categoryIcons[category.name];
+                final isSelected =
+                    selectedCategoryController.selectedCategoryId.value ==
+                        category.id;
 
-  switch (secondSet) {
-    case '01':
-      return 'Grande';
-    case '02':
-      return 'Mediano';
-    case '03':
-      return 'Chico';
-    default:
-      return 'sin tamaño';
+                return GestureDetector(
+                  onTap: () async {
+                    selectedCategoryController.setSelectedCategory(category.id);
+                    await refreshCategories(); // Recarga las categorías
+                    con.getProductsByCategory(category.name);
+                  },
+                  child: SizedBox(
+                    width: 80,
+                    height: 130,
+                    child: Column(
+                      children: [
+                        Card(
+                          color: isSelected
+                              ? const Color(0xE5FF5100)
+                              : const Color.fromARGB(255, 223, 222, 222),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: const BorderSide(
+                              color: Color.fromARGB(255, 223, 222, 222),
+                            ),
+                          ),
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
+                            child: Icon(
+                              icon ?? Icons.abc_outlined,
+                              size: 40,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          category.name,
+                          style: const TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  String _getBarcodeDescription(String barcode) {
+    String secondSet = barcode.substring(2, 4);
+
+    switch (secondSet) {
+      case '01':
+        return 'Grande';
+      case '02':
+        return 'Mediano';
+      case '03':
+        return 'Chico';
+      default:
+        return 'sin tamaño';
+    }
   }
 }
 
@@ -388,7 +386,7 @@ class ProductSearchDelegate extends SearchDelegate<Product> {
         color: Theme.of(context).textTheme.bodyLarge!.color,
       ),
       onPressed: () => Navigator.of(context).pop(),
-    ); // Deja el widget vacío, sin botón de regresar
+    );
   }
 
   @override
@@ -470,6 +468,8 @@ class ProductSearchDelegate extends SearchDelegate<Product> {
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 5),
                   Text(
@@ -543,7 +543,11 @@ class SelectedCategoryController extends GetxController {
 }
 
 Future<void> refreshCategories() async {
-  // ignore: unused_local_variable
-  final newCategories = await CategoryController.fetchCategories();
-  // categories.assignAll(newCategories);
+  try {
+    final newCategories = await CategoryController.fetchCategories();
+    categories.assignAll(newCategories);
+  } catch (e) {
+    // ignore: avoid_print
+    print('Error al recargar las categorías: $e');
+  }
 }

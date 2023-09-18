@@ -33,11 +33,11 @@ class Sale {
   factory Sale.fromJson(Map<String, dynamic> json) {
     return Sale(
       id: json['id'],
-      total: json['total'].toString(), // Corregir el tipo a String
+      total: json['total'].toString(), 
       items: json['items'],
-      cash: double.parse(json['cash'].toString()), // Corregir el tipo a double
+      cash: double.parse(json['cash'].toString()), 
       change:
-          double.parse(json['change'].toString()), // Corregir el tipo a double
+          double.parse(json['change'].toString()), 
       status: json['status'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),

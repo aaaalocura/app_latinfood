@@ -161,7 +161,7 @@ class BottomNavyBarItem {
     required this.title,
     this.activeColor = Colors.blue,
     this.textAlign,
-    this.inactiveColor = const Color(0xE5FF5100),
+    this.inactiveColor =Colors.blue,
   });
 
   final Widget icon;

@@ -7,11 +7,15 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CartController extends GetxController {
-  User user = User.fromJson(GetStorage().read('user') ?? {});
-
   final cartItems = <CartItem>[].obs;
-
+  final Map<int, int> productQuantities = {};
+  // ignore: prefer_final_fields
+  int _cartItemCount = 0;
+// ignore: unused_field
+  int _cartItemCount2 = 0;
   int get cartItemCount => cartItems.length;
+
+  int get cartItemCount2 => _cartItemCount;
   bool saleSuccessful = false;
   void addToCart(Product product, int userId, int quantity) {
     final existingItemIndex =
@@ -20,11 +24,28 @@ class CartController extends GetxController {
       cartItems[existingItemIndex].quantity += quantity;
     } else {
       cartItems.add(CartItem(product: product, quantity: quantity));
+      Get.snackbar('Producto Agregado al Carrito', 'listo');
     }
+    _updateProductQuantity(product.id, quantity);
   }
 
   void removeFromCart(CartItem cartItem) {
     cartItems.remove(cartItem);
+    _updateProductQuantity(cartItem.product.id, -cartItem.quantity);
+  }
+
+  void _updateProductQuantity(int productId, int quantity) {
+    if (productQuantities.containsKey(productId)) {
+      productQuantities[productId] = quantity + 1;
+    } else {
+      productQuantities[productId] = quantity;
+    }
+    _updateCartItemCount();
+  }
+
+  void _updateCartItemCount() {
+    _cartItemCount2 =
+        productQuantities.values.fold(0, (total, quantity) => total + quantity);
   }
 
   double get totalAmount {
@@ -37,34 +58,34 @@ class CartController extends GetxController {
 
   void decrementQuantity(CartItem cartItem) {
     if (cartItem.quantity > 1) {
+      _updateCartItemCount();
       cartItem.quantity--;
+      _updateCartItemCount();
     }
   }
 
   void incrementQuantity(CartItem cartItem) {
+    _updateCartItemCount();
     cartItem.quantity++;
+    _updateCartItemCount();
   }
 
-  // Método para realizar la venta usando la API
   Future<void> makeSale() async {
     if (cartItems.isEmpty) {
-      // Verificar si el carrito está vacío
       Get.snackbar('Error', 'El carrito está vacío');
       return;
     }
-
-    // Crear una lista de objetos Item para el modelo PosApiModel
     List<Item> itemsList = cartItems
         .map((item) => Item(id: item.product.id, quantity: item.quantity))
         .toList();
+    User user = User.fromJson(GetStorage().read('user') ?? {});
     final int? userId = user.id;
     // Crear el objeto PosApiModel con los datos del carrito y el usuario
     PosApiModel posApiModel = PosApiModel(
-      cliente:
-          userId!, // O utiliza el ID del cliente si está disponible en el modelo User
+      cliente: userId!,
       total: totalAmount,
-      efectivo: 0.0, // Puedes cambiar esto según el pago real del cliente
-      change: 0.0, // Puedes cambiar esto según el pago real del cliente
+      efectivo: 0.0,
+      change: 0.0,
       items: itemsList,
     );
 

@@ -1,6 +1,7 @@
 import 'package:app_latin_food/src/pages/admin/firma_sale.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
-import 'package:app_latin_food/src/pages/admin/sale_detail_page.dart';
+import 'package:app_latin_food/src/pages/admin/sale_detail_fin.dart';
+import 'package:app_latin_food/src/pages/admin/sale_detail_qe.dart';
 import 'package:flutter/material.dart';
 import '../../models/sale_model.dart';
 
@@ -94,9 +95,9 @@ Future<void> _loadSales() async {
             title1: 'EN RECORRIDO',
             sales1: sales.where((sale) => sale.statusEnvio == 'ACTUAL').toList(),
           ),
-          SalesSection(
-            title: 'COMPLETADOS',
-            sales: sales.where((sale) => sale.statusEnvio == 'FIN').toList(),
+          SalesSection2(
+            title2: 'COMPLETADOS',
+            sales2: sales.where((sale) => sale.statusEnvio == 'FIN').toList(),
           ),
         ],
       ),
@@ -181,6 +182,50 @@ class SalesSection extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => SaleDetailPage(
                         sale: sale,
+                      ), // Pasa la venta seleccionada
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+      ],
+    );
+  }
+}
+class SalesSection2 extends StatelessWidget {
+  final String title2;
+  final List<Sale> sales2;
+
+  // ignore: prefer_const_constructors_in_immutables
+  SalesSection2({super.key, required this.title2, required this.sales2});
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      title: Text(title2),
+      children: [
+        if (sales2.isEmpty)
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text('Sin información'),
+          )
+        else
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: sales2.length,
+            itemBuilder: (context, index) {
+              final sale = sales2[index];
+              return ListTile(
+                title: Text('Venta #${sale.id}'),
+                subtitle: Text('Total: \$${sale.total}'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SaleDetailPageFin(
+                        sale: sale,
+                        saleDetails: const [],
                       ), // Pasa la venta seleccionada
                     ),
                   );

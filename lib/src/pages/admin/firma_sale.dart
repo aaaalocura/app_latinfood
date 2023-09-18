@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:signature/signature.dart'; // Importa el paquete de firma
 
@@ -27,6 +28,10 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
 
   @override
   Widget build(BuildContext context) {
+    void goToAdminPedidos() {
+      Get.toNamed('/homeadmin');
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -106,40 +111,104 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
             // Mostrar el Signature Pad y los botones solo si showSignaturePad es verdadero
             if (showSignaturePad)
               Column(
+                mainAxisAlignment: MainAxisAlignment
+                    .start, // Alinea el contenido en la parte superior
+
                 children: [
-                  Signature(
-                    controller: _controller,
+                  Container(
+                    margin: const EdgeInsets.only(
+                        bottom:
+                            20.0), // Espacio opcional en la parte inferior del Container
+
                     width: 300,
                     height: 200,
-                    backgroundColor: Colors.white,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Colors.black,
+                          width: 2.0), // Cambia el color de los bordes
+                      borderRadius: BorderRadius.circular(
+                          10.0), // Opcional: agrega esquinas redondeadas
+                    ),
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Signature(
+                            controller: _controller,
+                            width:
+                                290, // Ajusta el tamaño de Signature para que quepa dentro del borde
+                            height: 190,
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            color: Colors.white, // Fondo blanco para el texto
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: const Text(
+                              'Firme aquí',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                         onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const Center(
+                                child:
+                                    CircularProgressIndicator(), // Muestra un indicador de carga
+                              );
+                            },
+                          );
+
                           // Realizar la petición API cuando se confirma la entrega
                           final apiUrl = Uri.parse(
                               'https://kdlatinfood.com/intranet/public/api/sales/FIN/${widget.sale.id}');
                           // ignore: avoid_print
                           print(widget.sale.id);
                           try {
+                            // ignore: unused_local_variable
                             final response = await http.put(apiUrl);
 
-                            if (response.statusCode == 200) {
-                              // La solicitud a la API fue exitosa
-                              // Muestra un mensaje de éxito
-                              // ignore: avoid_print
-                              print('pedido finalizado');
+                            Navigator.of(context)
+                                .pop(); // Cierra el cuadro de diálogo de carga
 
-                              // Cierra la página actual y regresa a la página anterior
-                            } else {
-                              // Manejar errores de solicitud aquí
-                              // ignore: avoid_print
-                              print(
-                                  'Error en la solicitud a la API: ${response.statusCode}');
-                              // Muestra un mensaje de error al usuario si lo deseas
-                            }
+                            // Muestra un cuadro de diálogo de "Completado" si la respuesta es 200
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CupertinoAlertDialog(
+                                  title: const Text('Completado'),
+                                  content: const Text(
+                                      'Pedido finalizado exitosamente'),
+                                  actions: [
+                                    CupertinoDialogAction(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        goToAdminPedidos();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+
+                            // ignore: avoid_print
+                            print('Pedido finalizado');
                           } catch (e) {
                             // Manejar errores de conexión aquí
                             // ignore: avoid_print
@@ -149,6 +218,7 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                         },
                         child: const Text('Confirmar'),
                       ),
+
                       const SizedBox(width: 20), // Espacio entre botones
                     ],
                   ),

@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-
 import '../../models/sale_model.dart';
 
 class SaleDetailPage extends StatelessWidget {
   final Sale sale;
   final List<SaleDetail> saleDetails;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  const SaleDetailPage(
-      {super.key, required this.sale, required this.saleDetails});
+  SaleDetailPage({super.key, required this.sale, required this.saleDetails});
   void goToAdminPedidos() {
     Get.toNamed('/homeadmin');
   }
@@ -19,6 +18,7 @@ class SaleDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
@@ -53,10 +53,10 @@ class SaleDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID del Pedido: ${sale.id}',
+            Text('ID del Pedido: ${sale.cash}',
                 style: const TextStyle(
                     fontSize: 18.0, fontWeight: FontWeight.bold)),
-            Text('Total: \$${sale.total}',
+            Text('Total: ${sale.customer.id}',
                 style: const TextStyle(fontSize: 16.0)),
             Text('Total de Items: ${sale.items}',
                 style: const TextStyle(fontSize: 16.0)),
@@ -100,7 +100,7 @@ class SaleDetailPage extends StatelessWidget {
       floatingActionButton: CupertinoButton(
         onPressed: () {
           // Mostrar el diálogo de confirmación estilo Cupertino
-          showCupertinoDialog(
+          showDialog(
             context: context,
             builder: (BuildContext context) {
               return CupertinoAlertDialog(
@@ -117,33 +117,75 @@ class SaleDetailPage extends StatelessWidget {
                     child: const Text('Sí'),
                     onPressed: () async {
                       Navigator.of(context).pop(); // Cierra el diálogo
-
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                CircularProgressIndicator(), // Indicador de carga
+                                SizedBox(
+                                    height:
+                                        16), // Espacio entre el indicador y el texto
+                                Text('Cargando...'), // Mensaje de carga
+                              ],
+                            ),
+                          );
+                        },
+                      );
                       final apiUrl = Uri.parse(
-                          'https://kdlatinfood.com/intranet/public/api/sales/cargar/${sale.id}');
+                        'https://kdlatinfood.com/intranet/public/api/sales/cargar/${sale.id}',
+                      );
                       // ignore: avoid_print
                       print(sale.id);
                       try {
                         final response = await http.put(apiUrl);
 
-                        if (response.statusCode == 200) {
-                          // La solicitud a la API fue exitosa
-                          // Navegar a ClientProductsListPageAdmin
-                          goToAdminPedidos();
-                        } else {
-                          // Manejar errores de solicitud aquí
-                          // Muestra un SnackBar de error
-                          // ignore: avoid_print
-                          print(
-                              'Error en la solicitud a la API: ${response.statusCode}');
-                        }
+                        
+                          // Si la respuesta es 200, muestra un cuadro de diálogo de confirmación
+                          showDialog(
+                            context: _scaffoldKey.currentContext!,
+                            builder: (BuildContext context) {
+                              return CupertinoAlertDialog(
+                                title: const Text('Completado'),
+                                content:
+                                    const Text('Pedido cargado exitosamente'),
+                                actions: [
+                                  CupertinoDialogAction(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      goToAdminPedidos();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        
                       } catch (e) {
-                        // Manejar errores de conexión aquí
-                        // Muestra un SnackBar de error
+                        // Si hay un error de conexión, muestra un cuadro de diálogo de error
+                        showDialog(
+                          context: _scaffoldKey.currentContext!,
+                          builder: (BuildContext context) {
+                            return CupertinoAlertDialog(
+                              title: const Text('Error'),
+                              content: Text('Error de conexión: $e'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
                         // ignore: avoid_print
                         print('Error de conexión: $e');
                       }
-
-                      // Regresar a la ventana anterior
                     },
                   ),
                 ],
@@ -169,4 +211,3 @@ class SaleDetailPage extends StatelessWidget {
     );
   }
 }
-

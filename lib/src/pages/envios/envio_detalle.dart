@@ -27,44 +27,78 @@ class EnvioDetallePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0.5,
-          actions: [
-    Padding(
-      padding: const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
-      child: Image.network(
-        'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-        width: 50, // Ajusta el ancho de la imagen según tus necesidades
-        height: 50, // Ajusta el alto de la imagen según tus necesidades
-      ),
-    ),
-  ],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+                right: 10.0), // Ajusta el valor según tu preferencia
+            child: Image.network(
+              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+              width: 50, // Ajusta el ancho de la imagen según tus necesidades
+              height: 50, // Ajusta el alto de la imagen según tus necesidades
+            ),
+          ),
+        ],
       ),
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(28.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Circles and Line representing status
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _StatusCircle(
-                  isCompleted:
-                      order.status == "PENDING" || order.status == "PAID",
-                ),
-                const Expanded(child: Divider(color: Colors.black)),
-                _StatusCircle(isCompleted: order.status == "PAID"),
-                const Expanded(child: Divider(color: Colors.black)),
-                _StatusCircle(
-                  isCompleted: order.statusEnvio == "ACTUAL" ||
-                      order.statusEnvio == "FIN",
-                ),
-                const Expanded(child: Divider(color: Colors.black)),
-                _StatusCircle(
-                  isCompleted: order.statusEnvio == "FIN",
-                ),
-              ],
-            ),
+Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Column(
+      children: [
+        _StatusCircle(
+          isCompleted: order.status == "PENDING" || order.status == "PAID",
+        ),
+        const SizedBox(height: 8.0), // Espacio entre el círculo y el texto
+        const _StatusText(
+          text: 'Ordered',
+        ), // Texto debajo del primer círculo
+      ],
+    ),
+    _CustomLine(), // Línea personalizada
+    Column(
+      children: [
+        _StatusCircle(isCompleted: order.status == "PAID"),
+        const SizedBox(height: 8.0),
+        const _StatusText(
+          text: 'Confirmed',
+        ),
+      ],
+    ),
+    _CustomLine(),
+    Column(
+      children: [
+        _StatusCircle(
+          isCompleted: order.statusEnvio == "ACTUAL" ||
+              order.statusEnvio == "FIN",
+        ),
+        const SizedBox(height: 8.0),
+        const _StatusText(
+          text: 'On Transit',
+        ),
+      ],
+    ),
+    _CustomLine(),
+    Column(
+      children: [
+        _StatusCircle(
+          isCompleted: order.statusEnvio == "FIN",
+        ),
+        const SizedBox(height: 8.0),
+        const _StatusText(
+          text: 'Complete',
+        ),
+      ],
+    ),
+  ],
+),
+
+
             const SizedBox(height: 20),
 
             // Text 'Delivery Details'
@@ -250,6 +284,64 @@ class EnvioDetallePage extends StatelessWidget {
                 ),
               ],
             )));
+  }
+}
+class _CustomLine extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 20.0, // Ancho de la línea (ajusta según sea necesario)
+      child: CustomPaint(
+        painter: LinePainter(), // CustomPainter que dibuja la línea
+      ),
+    );
+  }
+}
+
+// CustomPainter para dibujar la línea
+class LinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint = Paint()
+      ..color = Colors.black // Color de la línea (ajusta según sea necesario)
+      ..strokeWidth = 2.0; // Ancho de la línea (ajusta según sea necesario)
+
+    final Offset start = Offset(size.width / 2, 0); // Comienza en la parte superior
+    final Offset end = Offset(size.width / 2, size.height); // Termina en la parte inferior
+
+    canvas.drawLine(start, end, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+
+
+
+
+
+class _StatusText extends StatelessWidget {
+  final String text;
+
+  const _StatusText({Key? key, required this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+          top:
+              10.0), // Ajusta el espacio entre el círculo y el texto según sea necesario
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 10, // Ajusta el tamaño de fuente según sea necesario
+          color: Colors.green, // Ajusta el color de texto según sea necesario
+        ),
+      ),
+    );
   }
 }
 

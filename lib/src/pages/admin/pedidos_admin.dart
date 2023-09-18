@@ -1,5 +1,5 @@
 import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
-import 'package:app_latin_food/src/pages/admin/sale_detail_admin.dart';
+import 'package:app_latin_food/src/pages/admin/sale_detail_cargar.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/sale_model.dart';
