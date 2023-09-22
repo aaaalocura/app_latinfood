@@ -1,5 +1,6 @@
 import 'package:app_latin_food/src/models/find_user.dart';
 import 'package:app_latin_food/src/models/user.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'dart:convert';
@@ -11,6 +12,8 @@ class ClientProfileInfoController extends GetxController {
   User user = User.fromJson(GetStorage().read('user') ?? {});
   int inactivityTime =
       10; // Tiempo en minutos de inactividad antes de cerrar sesión
+  int warningTime =
+      4; // Tiempo en minutos para mostrar el Snackbar de advertencia
   Timer? _timer; // Temporizador para verificar la inactividad
 
   @override
@@ -45,9 +48,19 @@ class ClientProfileInfoController extends GetxController {
     final currentTime = DateTime.now().millisecondsSinceEpoch;
     final elapsedMinutes = (currentTime - lastActivityTime) ~/ (1000 * 60);
 
+    if (elapsedMinutes == warningTime) {
+      // Mostrar Snackbar de advertencia cuando falte 1 minuto
+      Get.snackbar('Advertencia', 'La sesión se cerrará en 1 minuto',
+          backgroundColor: Colors.yellow);
+    }
+
     if (elapsedMinutes >= inactivityTime) {
-      Get.snackbar('Tiempo de sesion agotdado', '');
-      singOut(); // Cerrar sesión si ha pasado el tiempo de inactividad
+      // Verificar si no hay interacción del usuario en los últimos 5 minutos
+      if (!Get.isSnackbarOpen) {
+        // Si no hay una notificación Snackbar abierta (usuario interactuando), entonces cerrar sesión
+        Get.snackbar('Tiempo de sesión agotado', '');
+        singOut(); // Cerrar sesión
+      }
     }
   }
 

@@ -8,7 +8,6 @@ class SaleDetailPageFin extends StatelessWidget {
   final List<SaleDetail> saleDetails;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
   SaleDetailPageFin({super.key, required this.sale, required this.saleDetails});
   void goToAdminPedidos() {
     Get.toNamed('/homeadmin');
@@ -27,7 +26,7 @@ class SaleDetailPageFin extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Detalle del pedido finalizado',
+          'Detalle del pedido',
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
@@ -52,14 +51,14 @@ class SaleDetailPageFin extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID del Pedido: ${sale.cash}',
+            Text('ID del Pedido: ${sale.id}',
                 style: const TextStyle(
                     fontSize: 18.0, fontWeight: FontWeight.bold)),
-            Text('Total: ${sale.customer.id}',
+            Text('Total: ${sale.total}',
                 style: const TextStyle(fontSize: 16.0)),
             Text('Total de Items: ${sale.items}',
                 style: const TextStyle(fontSize: 16.0)),
-            Text('Estado: ${sale.status}',
+            Text('Estado de la Compra: ${sale.status}',
                 style: const TextStyle(fontSize: 16.0)),
             Text('Estado de Envío: ${sale.statusEnvio}',
                 style: const TextStyle(fontSize: 16.0)),
@@ -96,7 +95,7 @@ class SaleDetailPageFin extends StatelessWidget {
           ],
         ),
       ),
-     
+
     );
   }
 }

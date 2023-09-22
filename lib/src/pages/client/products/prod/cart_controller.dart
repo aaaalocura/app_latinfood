@@ -8,6 +8,7 @@ import 'dart:convert';
 
 class CartController extends GetxController {
   final cartItems = <CartItem>[].obs;
+  
   final Map<int, int> productQuantities = {};
   // ignore: prefer_final_fields
   int _cartItemCount = 0;
@@ -56,19 +57,17 @@ class CartController extends GetxController {
     return total;
   }
 
-  void decrementQuantity(CartItem cartItem) {
-    if (cartItem.quantity > 1) {
-      _updateCartItemCount();
-      cartItem.quantity--;
-      _updateCartItemCount();
-    }
+void decrementQuantity(CartItem cartItem) {
+  if (cartItem.quantity > 1) {
+    cartItem.quantity--;
+    _updateCartItemCount(); // Llama a _updateCartItemCount una vez aquí
   }
+}
 
-  void incrementQuantity(CartItem cartItem) {
-    _updateCartItemCount();
-    cartItem.quantity++;
-    _updateCartItemCount();
-  }
+void incrementQuantity(CartItem cartItem) {
+  cartItem.quantity++;
+  _updateCartItemCount(); // Llama a _updateCartItemCount una vez aquí
+}
 
   Future<void> makeSale() async {
     if (cartItems.isEmpty) {

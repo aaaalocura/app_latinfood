@@ -53,20 +53,19 @@ class SaleDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID del Pedido: ${sale.cash}',
+            Text('Order ID: ${sale.id}',
                 style: const TextStyle(
                     fontSize: 18.0, fontWeight: FontWeight.bold)),
-            Text('Total: ${sale.customer.id}',
+            Text('Total: ${sale.total}',
                 style: const TextStyle(fontSize: 16.0)),
-            Text('Total de Items: ${sale.items}',
+            Text('Total Items: ${sale.items}',
                 style: const TextStyle(fontSize: 16.0)),
-            Text('Estado: ${sale.status}',
-                style: const TextStyle(fontSize: 16.0)),
-            Text('Estado de Envío: ${sale.statusEnvio}',
+
+            Text('Shipment Status: ${sale.statusEnvio}',
                 style: const TextStyle(fontSize: 16.0)),
             const SizedBox(
-                height: 16.0), // Espacio entre detalles y lista de productos
-            const Text('Productos en el Pedido',
+                height: 16.0), // Space between details and product list
+            const Text('Products in Order',
                 style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
             Expanded(
@@ -84,8 +83,8 @@ class SaleDetailPage extends StatelessWidget {
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Precio: \$${detail.price}'),
-                          Text('Cantidad: ${detail.quantity}'),
+                          Text('Price: \$${detail.price}'),
+                          Text('Quantity of Items: ${detail.quantity}'),
                           // Agrega más detalles del producto si es necesario.
                         ],
                       ),
@@ -104,8 +103,8 @@ class SaleDetailPage extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return CupertinoAlertDialog(
-                title: const Text('Cargar Pedido'),
-                content: const Text('¿Estás seguro de cargar este pedido?'),
+                title: const Text('Load Order'),
+                content: const Text('Are you sure to upload this order?'),
                 actions: [
                   CupertinoDialogAction(
                     child: const Text('No'),
@@ -128,7 +127,7 @@ class SaleDetailPage extends StatelessWidget {
                                 SizedBox(
                                     height:
                                         16), // Espacio entre el indicador y el texto
-                                Text('Cargando...'), // Mensaje de carga
+                                Text('Loading data...'), // Mensaje de carga
                               ],
                             ),
                           );
@@ -140,30 +139,29 @@ class SaleDetailPage extends StatelessWidget {
                       // ignore: avoid_print
                       print(sale.id);
                       try {
+                        // ignore: unused_local_variable
                         final response = await http.put(apiUrl);
 
-                        
-                          // Si la respuesta es 200, muestra un cuadro de diálogo de confirmación
-                          showDialog(
-                            context: _scaffoldKey.currentContext!,
-                            builder: (BuildContext context) {
-                              return CupertinoAlertDialog(
-                                title: const Text('Completado'),
-                                content:
-                                    const Text('Pedido cargado exitosamente'),
-                                actions: [
-                                  CupertinoDialogAction(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      goToAdminPedidos();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        
+                        // Si la respuesta es 200, muestra un cuadro de diálogo de confirmación
+                        showDialog(
+                          context: _scaffoldKey.currentContext!,
+                          builder: (BuildContext context) {
+                            return CupertinoAlertDialog(
+                              title: const Text('Complete'),
+                              content:
+                                  const Text('Order uploaded successfully'),
+                              actions: [
+                                CupertinoDialogAction(
+                                  child: const Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    goToAdminPedidos();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       } catch (e) {
                         // Si hay un error de conexión, muestra un cuadro de diálogo de error
                         showDialog(
@@ -200,7 +198,7 @@ class SaleDetailPage extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: const Text(
-            'Cargar Pedido',
+            'Load Delivery',
             style: TextStyle(
               color: Colors
                   .white, // Cambia el color del texto según tu preferencia

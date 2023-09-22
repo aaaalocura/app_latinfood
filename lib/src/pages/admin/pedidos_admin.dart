@@ -51,68 +51,66 @@ class PedidosAdmin extends StatelessWidget {
                   child: Text('No se encontraron ventas pendientes a cargar.'));
             }
 
-           return ListView.builder(
-  itemCount: pendingSales.length,
-  itemBuilder: (context, index) {
-    final sale = pendingSales[index];
-    return Card(
-      elevation: 2.0,
-      margin: const EdgeInsets.all(8.0),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('ID del Pedido: ${sale.id}',
-                    style: const TextStyle(fontSize: 16.0)),
-                Text('Total: \$${sale.total}',
-                    style: const TextStyle(fontSize: 16.0)),
-                Text('Total de Items: ${sale.items}',
-                    style: const TextStyle(fontSize: 16.0)),
-                Text('Estado: ${sale.status}',
-                    style: const TextStyle(fontSize: 16.0)),
-                Text('Estado de Envío: ${sale.statusEnvio}',
-                    style: const TextStyle(fontSize: 16.0)),
-                // Agrega más detalles de la venta según tus necesidades.
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 8.0,
-            right: 8.0,
-            child: InkWell(
-              onTap: () {
-                // Cuando se hace clic en el botón "Ver Detalles", navega a la página de detalles.
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => SaleDetailPage(
-                      sale: sale,
-                      saleDetails: sale.salesDetails,
-                    ),
+            return ListView.builder(
+              itemCount: pendingSales.length,
+              itemBuilder: (context, index) {
+                final sale = pendingSales[index];
+                return Card(
+                  elevation: 2.0,
+                  margin: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('ID del Pedido: ${sale.id}',
+                                style: const TextStyle(fontSize: 16.0)),
+                            Text('Total: \$${sale.total}',
+                                style: const TextStyle(fontSize: 16.0)),
+                            Text('Total de Items: ${sale.items}',
+                                style: const TextStyle(fontSize: 16.0)),
+                            
+                            Text('Estado de Envío: ${sale.statusEnvio}',
+                                style: const TextStyle(fontSize: 16.0)),
+                            // Agrega más detalles de la venta según tus necesidades.
+                          ],
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 8.0,
+                        right: 8.0,
+                        child: InkWell(
+                          onTap: () {
+                            // Cuando se hace clic en el botón "Ver Detalles", navega a la página de detalles.
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => SaleDetailPage(
+                                  sale: sale,
+                                  saleDetails: sale.salesDetails,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: const Text(
+                              'Ver Detalles',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               },
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                child: const Text(
-                  'Ver Detalles',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  },
-);
-
+            );
           }
         },
       ),

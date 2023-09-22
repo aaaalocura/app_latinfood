@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
         ),
         GetPage(
           name: '/home/profile/address',
-          page: () => const ClientDeliveryListPage(),
+          page: () => const ClientDeliveryListPage()  ,
         ),
       ],
       theme: ThemeData(
@@ -99,7 +99,6 @@ class _MyAppState extends State<MyApp> {
         ),
         brightness: Brightness.light,
       ),
-     
 
       navigatorKey: Get.key,
     );

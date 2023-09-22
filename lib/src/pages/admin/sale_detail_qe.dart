@@ -10,7 +10,7 @@ import '../../models/sale_model.dart';
 class SaleDetailPage extends StatefulWidget {
   final Sale sale;
 
-  const SaleDetailPage({super.key, required this.sale});
+  const SaleDetailPage({super.key, required this.sale, required List<SaleDetail> saleDetails});
 
   @override
 
@@ -218,7 +218,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                 style: const TextStyle(fontSize: 16.0)),
             Text('Total de Items: ${widget.sale.items}',
                 style: const TextStyle(fontSize: 16.0)),
-            Text('Estado: ${widget.sale.status}',
+            Text('Estado de la Compra: ${widget.sale.status}',
                 style: const TextStyle(fontSize: 16.0)),
             Text('Estado de Envío: ${widget.sale.statusEnvio}',
                 style: const TextStyle(fontSize: 16.0)),

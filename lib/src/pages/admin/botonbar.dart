@@ -51,13 +51,13 @@ class ClientProductsListPageAdmin extends StatelessWidget {
         items: [
           BottomNavyBarItem(
             icon: const Icon(Icons.home),
-            title: const Text('Inicio'),
+            title: const Text('Deliveries'),
             activeColor: Colors.white,
             inactiveColor: Colors.white,
           ),
           BottomNavyBarItem(
             icon: const Icon(Icons.delivery_dining),
-            title: const Text('Envios'),
+            title: const Text('Shipping'),
             activeColor: Colors.white,
             inactiveColor: Colors.white,
           ),

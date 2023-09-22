@@ -4,6 +4,7 @@ import 'package:app_latin_food/main.dart';
 import 'package:app_latin_food/src/models/category.dart';
 import 'package:app_latin_food/src/models/product.dart';
 import 'package:app_latin_food/src/models/user.dart';
+import 'package:app_latin_food/src/pages/client/products/list/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/favorite_controller.dart';
@@ -25,6 +26,9 @@ class ProductsListPage extends StatelessWidget {
   final ClientProfileInfoController con1 =
       Get.put(ClientProfileInfoController());
   final ProductsListController con = Get.put(ProductsListController());
+
+  final ClientProductsListController con5 =
+      Get.put(ClientProductsListController());
   final CartController cartController = Get.find();
   bool isFavorite = false;
 
@@ -73,6 +77,40 @@ class ProductsListPage extends StatelessWidget {
           ),
         ),
         actions: [
+          Obx(() {
+            return IconButton(
+              icon: Stack(
+                children: [
+                  const Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 32,
+                  ),
+                  if (cartController.cartItemCount > 0)
+                    Positioned(
+                      right: -1,
+                      top: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                        child: Text(
+                          '${cartController.cartItemCount}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              onPressed: () {
+                con5.changeTab(1);
+              },
+            );
+          }),
           Expanded(
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
@@ -261,6 +299,9 @@ class ProductsListPage extends StatelessWidget {
   }
 
   Widget buildCategoriesList() {
+    final selectedCategoryId =
+        selectedCategoryController.selectedCategoryId.obs;
+
     final categoryIcons = {
       "04-Tequeños": Icons.abc_sharp,
       "03-Cachitos": Icons.access_alarm,
@@ -294,44 +335,50 @@ class ProductsListPage extends StatelessWidget {
                 return GestureDetector(
                   onTap: () async {
                     selectedCategoryController.setSelectedCategory(category.id);
-                    await refreshCategories(); // Recarga las categorías
-                    con.getProductsByCategory(category.name);
+                    con.getProductsByCategory(category
+                        .name); // Llama a la función para obtener productos por categoría
                   },
                   child: SizedBox(
                     width: 80,
                     height: 130,
-                    child: Column(
-                      children: [
-                        Card(
-                          color: isSelected
-                              ? const Color(0xE5FF5100)
-                              : const Color.fromARGB(255, 223, 222, 222),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: const BorderSide(
-                              color: Color.fromARGB(255, 223, 222, 222),
+                    child: Obx(() {
+                      final isSelected =
+                          selectedCategoryId.value == category.id;
+                      final icon = categoryIcons[category.name];
+
+                      return Column(
+                        children: [
+                          Card(
+                            color: isSelected
+                                ? const Color(0xE5FF5100)
+                                : const Color.fromARGB(255, 223, 222, 222),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(
+                                color: Color.fromARGB(255, 223, 222, 222),
+                              ),
+                            ),
+                            child: Container(
+                              width: 80,
+                              height: 80,
+                              padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
+                              child: Icon(
+                                icon ?? Icons.abc_outlined,
+                                size: 40,
+                              ),
                             ),
                           ),
-                          child: Container(
-                            width: 80,
-                            height: 80,
-                            padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
-                            child: Icon(
-                              icon ?? Icons.abc_outlined,
-                              size: 40,
+                          const SizedBox(height: 10),
+                          Text(
+                            category.name,
+                            style: const TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          category.name,
-                          style: const TextStyle(
-                            fontSize: 9,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      );
+                    }),
                   ),
                 );
               }).toList(),

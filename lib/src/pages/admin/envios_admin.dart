@@ -89,7 +89,7 @@ Future<void> _loadSales() async {
         children: [
           SalesSection(
             title: 'PENDING TO SEND',
-            sales: sales.where((sale) => sale.statusEnvio == 'PENDIENTE').toList(),
+            sales: sales.where((sale) => sale.status == 'PAID').toList(),
           ),
           SalesSection1(
             title1: 'EN RECORRIDO',
@@ -137,7 +137,7 @@ class SalesSection1 extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => SaleDetailPageFirma(
                         sale: sale,
-                        saleDetails: const [],
+                         saleDetails: sale.salesDetails,
                       ), // Pasa la venta seleccionada
                     ),
                   );
@@ -182,6 +182,7 @@ class SalesSection extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => SaleDetailPage(
                         sale: sale,
+                         saleDetails: sale.salesDetails,
                       ), // Pasa la venta seleccionada
                     ),
                   );

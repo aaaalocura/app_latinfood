@@ -62,7 +62,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           background: Stack(
             fit: StackFit.expand,
             children: [
-
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                 child: Container(
@@ -77,14 +76,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           Stack(
             children: [
               IconButton(
-                  onPressed: () {
-                  
-                  },
+                  onPressed: () {},
                   icon: Stack(
                     children: [
                       const Positioned(
-                        left: 0, 
-                        top: 4, 
+                        left: 0,
+                        top: 4,
                         child: Icon(
                           Icons.shopping_cart,
                           size: 32,
@@ -98,12 +95,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             padding: const EdgeInsets.all(4),
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.red, 
+                              color: Colors.red,
                             ),
                             child: Text(
                               '${cartController.cartItemCount}',
                               style: const TextStyle(
-                                color: Colors.white, 
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -288,9 +285,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             // Lógica para agregar al carrito
                             cartController.addToCart(
                                 widget.product, userId!, quantity);
-
-                            // Actualizar el contador del carrito
+                            // Actualizar el contador del carrito|
                             cartController.update();
+                            if (Navigator.canPop(context)) {
+                              Navigator.pop(context);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
