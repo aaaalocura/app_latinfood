@@ -88,15 +88,15 @@ Future<void> _loadSales() async {
       body: ListView(
         children: [
           SalesSection(
-            title: 'PENDING TO SEND',
-            sales: sales.where((sale) => sale.status == 'PAID').toList(),
+            title: 'Pending To Send',
+            sales: sales.where((sale) => sale.status == 'PAID' && sale.statusEnvio == 'PENDIENTE').toList(),
           ),
           SalesSection1(
-            title1: 'EN RECORRIDO',
+            title1: 'On Transit',
             sales1: sales.where((sale) => sale.statusEnvio == 'ACTUAL').toList(),
           ),
           SalesSection2(
-            title2: 'COMPLETADOS',
+            title2: 'Received',
             sales2: sales.where((sale) => sale.statusEnvio == 'FIN').toList(),
           ),
         ],

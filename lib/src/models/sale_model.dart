@@ -10,7 +10,7 @@ class Sale {
   final String statusEnvio;
   // ignore: non_constant_identifier_names
   final int? CustomerID;
-  final int? woocommerceOrderID;
+  
   final List<SaleDetail> salesDetails;
   final Customer customer;
 
@@ -26,7 +26,7 @@ class Sale {
     required this.statusEnvio,
     // ignore: non_constant_identifier_names
     required this.CustomerID,
-    required this.woocommerceOrderID,
+   
     required this.salesDetails,
     required this.customer,
   });
@@ -43,7 +43,7 @@ class Sale {
       updatedAt: DateTime.parse(json['updated_at']),
       statusEnvio: json['status_envio'],
       CustomerID: json['customer_id'],
-      woocommerceOrderID: json['woocommerce_order_id'],
+    
       salesDetails: (json['sales_details'] as List<dynamic>)
           .map((detail) => SaleDetail.fromJson(detail))
           .toList(),
@@ -164,7 +164,6 @@ class Customer {
   final DateTime createdAt;
   final DateTime updatedAt;
   final String? image;
-  final dynamic woocommerceClienteID;
 
   Customer({
     required this.id,
@@ -179,7 +178,7 @@ class Customer {
     required this.createdAt,
     required this.updatedAt,
     required this.image,
-    required this.woocommerceClienteID,
+    
   });
   factory Customer.fromJson(Map<String, dynamic> json) {
     return Customer(
@@ -195,7 +194,7 @@ class Customer {
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       image: json['image'],
-      woocommerceClienteID: json['woocommerce_cliente_id'],
+     
     );
   }
 }
