@@ -12,7 +12,7 @@ class PedidosAdmin extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Pedidos Pendientes a Cargar',
+          'Pending shipments',
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
@@ -56,57 +56,100 @@ class PedidosAdmin extends StatelessWidget {
               itemBuilder: (context, index) {
                 final sale = pendingSales[index];
                 return Card(
-                  elevation: 2.0,
-                  margin: const EdgeInsets.all(8.0),
-                  child: Stack(
-                    children: [
-                      Padding(
+                  elevation: 4.0,
+                  margin: const EdgeInsets.all(16.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16.0),
+                    child: InkWell(
+                      onTap: () {
+                        // Navega a la página de detalles cuando se hace clic.
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SaleDetailPage(
+                              sale: sale,
+                              saleDetails: sale.salesDetails,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
                         padding: const EdgeInsets.all(16.0),
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Colors.orange, Colors.deepOrange],
+                          ),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('ID del Pedido: ${sale.id}',
-                                style: const TextStyle(fontSize: 16.0)),
-                            Text('Total: \$${sale.total}',
-                                style: const TextStyle(fontSize: 16.0)),
-                            Text('Total de Items: ${sale.items}',
-                                style: const TextStyle(fontSize: 16.0)),
-                            
-                            Text('Estado de Envío: ${sale.statusEnvio}',
-                                style: const TextStyle(fontSize: 16.0)),
-                            // Agrega más detalles de la venta según tus necesidades.
+                            Text(
+                              'ID del Pedido: ${sale.id}',
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Total: \$${sale.total}',
+                              style: const TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                           
+                            Text(
+                              'Estado de Envío: ${sale.statusEnvio}',
+                              style: const TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Client: ${sale.customer.name} ${sale.customer.lastName}',
+                              style: const TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Address Client: ${sale.customer.address} ',
+                              style: const TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(
+                                height: 16.0), // Espacio entre detalles y botón
+                            Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(32.0),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8.0,
+                                  horizontal: 24.0,
+                                ),
+                                child: Text(
+                                  'Ver Detalles',
+                                  style: TextStyle(
+                                    color: Colors.deepOrange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                      Positioned(
-                        bottom: 8.0,
-                        right: 8.0,
-                        child: InkWell(
-                          onTap: () {
-                            // Cuando se hace clic en el botón "Ver Detalles", navega a la página de detalles.
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => SaleDetailPage(
-                                  sale: sale,
-                                  saleDetails: sale.salesDetails,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: const Text(
-                              'Ver Detalles',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 );
               },

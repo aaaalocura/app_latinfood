@@ -48,54 +48,116 @@ class SaleDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Order ID: ${sale.id}',
+body: Padding(
+  padding: const EdgeInsets.all(16.0),
+  child: Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12.0),
+    ),
+    elevation: 2.0,
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Order ID: ${sale.id}',
                 style: const TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.bold)),
-            Text('Total: ${sale.total}',
-                style: const TextStyle(fontSize: 16.0)),
-            Text('Total Items: ${sale.items}',
-                style: const TextStyle(fontSize: 16.0)),
-
-            Text('Shipment Status: ${sale.statusEnvio}',
-                style: const TextStyle(fontSize: 16.0)),
-            const SizedBox(
-                height: 16.0), // Space between details and product list
-            const Text('Products in Order',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: saleDetails.length,
-                itemBuilder: (context, index) {
-                  final detail = saleDetails[index];
-                  final product = detail.product;
-
-                  return Card(
-                    elevation: 2.0,
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListTile(
-                      title: Text(product.name),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Price: \$${detail.price}'),
-                          Text('Quantity of Items: ${detail.quantity}'),
-                          // Agrega más detalles del producto si es necesario.
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              const Icon(
+                Icons.receipt, // Icono para resaltar el número de pedido
+                size: 32.0,
+                color: Color(0xE5FF5100), // Color de la aplicación
+              ),
+            ],
+          ),
+          const SizedBox(height: 16.0),
+          Text(
+            'Total: \$${sale.total}',
+            style: const TextStyle(fontSize: 18.0),
+          ),
+          Text(
+            'Total Items: ${sale.items}',
+            style: const TextStyle(fontSize: 18.0),
+          ),
+          const SizedBox(height: 16.0),
+          Text(
+            'Shipment Status: ${sale.statusEnvio}',
+            style: const TextStyle(fontSize: 18.0),
+          ),
+          const SizedBox(height: 16.0),
+          const Text(
+            'Products in Order',
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16.0),
+          Expanded(
+            child: ListView.builder(
+              itemCount: saleDetails.length,
+              itemBuilder: (context, index) {
+                final detail = saleDetails[index];
+                final product = detail.product;
+
+                return Card(
+                  elevation: 2.0,
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      product.name,
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Price: \$${detail.price}',
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        Text(
+                          'Quantity of Items: ${detail.quantity}',
+                          style: const TextStyle(fontSize: 16.0),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Icon(
+                              Icons.check_circle_outline_outlined,
+                              size: 24.0,
+                              color: Colors.green, // Icono de verificación en verde
+                            ),
+                            Text(
+                              'Compra Verificada', // Texto de detalles adicionales
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+    ),
+  ),
+),
+
+
       floatingActionButton: CupertinoButton(
         onPressed: () {
           // Mostrar el diálogo de confirmación estilo Cupertino
@@ -194,7 +256,7 @@ class SaleDetailPage extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
-            color: Colors.blue, // Cambia el color según tu preferencia
+            color: const Color(0xE5FF5100), // Cambia el color según tu preferencia
           ),
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: const Text(
