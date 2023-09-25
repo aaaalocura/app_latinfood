@@ -71,7 +71,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                       onPressed: () {
                         Navigator.of(context)
                             .pop(); // Cierra el cuadro de diálogo
-                        goToAdminPedidos();
+                       
                       },
                     ),
                   ],
@@ -89,8 +89,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                     ),
                   ],
                 );
-              } else if (message ==
-                  'Todos los codigos QR han sido escaneados.') {
+              } else if (message =='Todos los codigos QR han sido escaneados.') {
                 return CupertinoAlertDialog(
                   title: const Text('Felicitaciones'),
                   content:
@@ -99,7 +98,9 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                     CupertinoDialogAction(
                       child: const Text('OK'),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        goToAdminPedidos();
+                       
+                         
                       },
                     ),
                   ],

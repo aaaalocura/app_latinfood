@@ -190,7 +190,7 @@ class Customer {
       password: json['password'],
       address: json['address'],
       phone: json['phone'],
-      saldo: json['saldo'].toDouble(),
+      saldo: json['saldo'].toDouble(),  
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       image: json['image'],

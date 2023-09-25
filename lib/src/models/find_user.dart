@@ -8,7 +8,7 @@ class FindCustomer {
   final String? password;
   final int? saldo;
   final String? image;
-  final String? woocommerceClienteId;
+
 
   FindCustomer({
     required this.name,
@@ -20,7 +20,7 @@ class FindCustomer {
     required this.password,
     required this.saldo,
     required this.image,
-    required this.woocommerceClienteId,
+   
   });
 
 factory FindCustomer.fromJson(Map<String, dynamic> json) {
@@ -41,7 +41,8 @@ factory FindCustomer.fromJson(Map<String, dynamic> json) {
     password: json['password'],
     saldo: json['saldo'],
     image: imageUrl,
-    woocommerceClienteId: json['woocommerce_cliente_id'],
+   
+   
   );
 }
 
