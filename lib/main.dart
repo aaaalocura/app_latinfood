@@ -41,12 +41,42 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+// Esta función se llama cuando la aplicación se cierra
+void singOut() {
+  GetStorage().remove('user');
+  Get.snackbar('Saliste', '');
+  Get.offNamedUntil('/login', (route) => false);
+}
+
+void onAppExit() {
+  // Llama a tu función de cerrar sesión
+  singOut();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool isDarkTheme = false;
   @override
   void initState() {
     //  getCategories();
     super.initState();
+    WidgetsBinding.instance?.addObserver(
+        this); // Registra esta instancia como observador de ciclo de vida
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance
+        ?.removeObserver(this); // Elimina el observador cuando se dispose
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      // La aplicación pasó al estado pausado (por ejemplo, cuando el usuario sale de la aplicación)
+      // Aquí puedes llamar a tu función de cierre de sesión
+      singOut();
+    }
   }
 
   @override
@@ -83,7 +113,7 @@ class _MyAppState extends State<MyApp> {
         ),
         GetPage(
           name: '/home/profile/address',
-          page: () => const ClientDeliveryListPage()  ,
+          page: () => const ClientDeliveryListPage(),
         ),
       ],
       theme: ThemeData(

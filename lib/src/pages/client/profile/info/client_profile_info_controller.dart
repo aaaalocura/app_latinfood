@@ -10,11 +10,9 @@ import 'dart:async';
 
 class ClientProfileInfoController extends GetxController {
   User user = User.fromJson(GetStorage().read('user') ?? {});
-  int inactivityTime =
-      10; // Tiempo en minutos de inactividad antes de cerrar sesión
-  int warningTime =
-      4; // Tiempo en minutos para mostrar el Snackbar de advertencia
-  Timer? _timer; // Temporizador para verificar la inactividad
+  int inactivityTime = 5; // Cambiado a 5 minutos
+  int warningTime = 4; // Cambiado a 4 minutos
+  Timer? _timer;
 
   @override
   void onInit() {
@@ -36,8 +34,8 @@ class ClientProfileInfoController extends GetxController {
   }
 
   void startInactivityTimer() {
-    _timer?.cancel(); // Cancelar temporizador anterior si existe
-    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
       checkInactivity();
     });
   }
@@ -49,17 +47,14 @@ class ClientProfileInfoController extends GetxController {
     final elapsedMinutes = (currentTime - lastActivityTime) ~/ (1000 * 60);
 
     if (elapsedMinutes == warningTime) {
-      // Mostrar Snackbar de advertencia cuando falte 1 minuto
       Get.snackbar('Advertencia', 'La sesión se cerrará en 1 minuto',
           backgroundColor: Colors.yellow);
     }
 
     if (elapsedMinutes >= inactivityTime) {
-      // Verificar si no hay interacción del usuario en los últimos 5 minutos
       if (!Get.isSnackbarOpen) {
-        // Si no hay una notificación Snackbar abierta (usuario interactuando), entonces cerrar sesión
         Get.snackbar('Tiempo de sesión agotado', '');
-        singOut(); // Cerrar sesión
+        singOut();
       }
     }
   }
@@ -68,7 +63,6 @@ class ClientProfileInfoController extends GetxController {
     GetStorage().remove('user');
     Get.snackbar('Saliste', '');
     Get.offNamedUntil('/login', (route) => false);
-    updateActivityTime();
   }
 
   void goToAddress() {

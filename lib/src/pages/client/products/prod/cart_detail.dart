@@ -6,66 +6,68 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
 
-class CartPage extends StatelessWidget {
-  final CartController cartController = Get.find();
+class CartPage extends StatefulWidget {
+  const CartPage({super.key});
 
-  CartPage({super.key});
+  @override
+  // ignore: library_private_types_in_public_api
+  _CartPageState createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  final CartController cartController = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-     appBar: AppBar(
-  title: const Text(
-    'My Cart',
-  ),
-  centerTitle: true,
-  backgroundColor: Colors.white,
-  elevation: 0,
-  automaticallyImplyLeading: false,
-  actions: [
-    Padding(
-      padding: const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
-      child: Image.network(
-        'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-        width: 50, // Ajusta el ancho de la imagen según tus necesidades
-        height: 50, // Ajusta el alto de la imagen según tus necesidades
-      ),
-    ),
-  ],
-  flexibleSpace: FlexibleSpaceBar(
-    background: Stack(
-      fit: StackFit.expand,
-      children: [
-        // Coloca aquí la imagen o cualquier otro contenido que desees tener detrás del AppBar
-
-        // BackdropFilter para aplicar el efecto de difuminado
-        BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-          child: Container(
-            color: const Color.fromARGB(255, 255, 255, 255)
-                .withOpacity(0.1), // Color de difuminado
+      appBar: AppBar(
+        title: const Text(
+          'My Cart',
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+                right: 10.0), 
+            child: Image.network(
+              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+              width: 50,
+              height: 50,
+            ),
+          ),
+        ],
+        flexibleSpace: FlexibleSpaceBar(
+          background: Stack(
+            fit: StackFit.expand,
+            children: [
+             
+              BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                child: Container(
+                  color: const Color.fromARGB(255, 255, 255, 255)
+                      .withOpacity(0.1), 
+                ),
+              ),
+            ],
           ),
         ),
-      ],
-    ),
-  ),
-),
-
+      ),
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 30),
           Container(
-            // Ajusta el ancho al ancho disponible
             padding: const EdgeInsets.symmetric(
-                vertical: 10, horizontal: 20), // Ajusta el espaciado interior
+                vertical: 10, horizontal: 20), 
             decoration: BoxDecoration(
               color: const Color(0xFFFF7B33)
-                  .withOpacity(0.1), // Color de fondo con opacidad
+                  .withOpacity(0.1), 
               borderRadius:
-                  BorderRadius.circular(30), // Define las esquinas redondeadas
+                  BorderRadius.circular(30), 
             ),
             child: Text(
               'You have ${cartController.cartItemCount} items in your shopping cart',
@@ -107,13 +109,13 @@ class CartPage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           vertical: 8.0,
                           horizontal:
-                              12.0), // Ajusta el espaciado vertical y horizontal
+                              12.0), 
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(
-                            10), // Ajusta el radio de las esquinas según tu preferencia
+                            10), 
                         border: Border.all(
-                          color: Colors.white, // Color del borde
-                          width: 1, // Grosor del borde
+                          color: Colors.white, 
+                          width: 1, 
                         ),
                       ),
                       child: ListTile(
@@ -140,7 +142,7 @@ class CartPage extends StatelessWidget {
                               ),
                               const SizedBox(
                                   height:
-                                      5), // Espacio entre el nombre del producto y los textos adicionales
+                                      5), 
                               Row(
                                 children: [
                                   Text(
@@ -153,7 +155,7 @@ class CartPage extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(
-                                      width: 4), // Espacio entre los textos
+                                      width: 4), 
                                   const Text(
                                     '•', // Punto
                                     style: TextStyle(
@@ -162,10 +164,28 @@ class CartPage extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(
-                                      width: 4), // Espacio entre los textos
+                                      width: 4), 
                                   Text(
                                     cartItem.product.saborId ??
                                         'Not Flavor', // Texto derecho
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w300,
+                                      color: Color(0xFF999999),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  const Text(
+                                    '•', // Punto
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                      width: 4), 
+                                  Text(
+                                    'cajas: ${(cartItem.quantity ~/ cartItem.tam!).toString()}',
                                     style: const TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.w300,
@@ -181,7 +201,7 @@ class CartPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '\$${cartItem.product.price.toStringAsFixed(2)}',
+                              '\$${(cartItem.product.price * cartItem.quantity).toStringAsFixed(2)}',
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -195,7 +215,10 @@ class CartPage extends StatelessWidget {
                                   icon: const Icon(
                                       Icons.remove_circle_outline_outlined),
                                   onPressed: () {
-                                    cartController.decrementQuantity(cartItem);
+                                    setState(() {
+                                      cartController
+                                          .decrementQuantity(cartItem);
+                                    });
                                   },
                                 ),
                                 Text(
@@ -209,7 +232,10 @@ class CartPage extends StatelessWidget {
                                 IconButton(
                                   icon: const Icon(Icons.add_circle_outline),
                                   onPressed: () {
-                                    cartController.incrementQuantity(cartItem);
+                                    setState(() {
+                                      cartController
+                                          .incrementQuantity(cartItem);
+                                    });
                                   },
                                 ),
                               ],
@@ -244,13 +270,13 @@ class CartPage extends StatelessWidget {
         child: const Text(
           'Place Order',
           style: TextStyle(
-            fontSize: 16, // El tamaño de fuente en sp
-            height: 1, // La altura de línea en sp
-            // El nombre de la fuente 'Inter'
+            fontSize: 16,
+            height: 1, 
+            
             fontWeight:
-                FontWeight.w500, // El peso de fuente, en este caso 500 (medio)
+                FontWeight.w500, 
             color: Color.fromARGB(255, 255, 253,
-                253), // El color del texto en formato ARGB (8 dígitos hexadecimales)
+                253), 
           ),
         ),
       ),
@@ -258,5 +284,3 @@ class CartPage extends StatelessWidget {
     );
   }
 }
-
-

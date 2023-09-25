@@ -14,7 +14,7 @@ class CheckOutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double subtotal = cartController.totalAmount;
+    double subtotal = cartController.totalAmount_detail;
     double total = subtotal + shippingCost;
 
     return Scaffold(

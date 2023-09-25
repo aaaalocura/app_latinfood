@@ -32,10 +32,12 @@ class PosApiModel {
 class Item {
   final int id;
   final int quantity;
+  int? tam;
 
   Item({
     required this.id,
     required this.quantity,
+    this.tam, 
   });
 
   Map<String, dynamic> toJson() {

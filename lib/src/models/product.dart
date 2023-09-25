@@ -16,6 +16,8 @@ class Product {
   final String tieneKey;
   final String? keyProduct;
   final int? userId;
+  final int? tam1;
+  final int? tam2;
 
 
   Product({
@@ -36,6 +38,8 @@ class Product {
     required this.tieneKey,
     required this.keyProduct,
     required this.userId,
+    required this.tam1,
+    required this.tam2,
    
   });
 
@@ -58,6 +62,8 @@ class Product {
       tieneKey: json['TieneKey'],
       keyProduct: json['KeyProduct'],
       userId: json['user_id'],
+      tam1: json['tam1'],
+      tam2: json['tam2'],
       
     );
   }

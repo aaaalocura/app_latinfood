@@ -182,7 +182,7 @@ class ProductsListPage extends StatelessWidget {
                           actions: [
                             CupertinoActionSheetAction(
                               onPressed: () {
-                                cartController.addToCart(product, userId!, 1);
+                                cartController.addToCart(product, userId!, product.tam1!);
                                 Navigator.pop(context);
                               },
                               child: const Text('Add Cart'),
@@ -274,7 +274,16 @@ class ProductsListPage extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    '\$${product.price}',
+                                    'Caja: ${product.tam1} Unidades',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xFF999999),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    '\$${((product.tam1 ?? 1) * product.price).toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,

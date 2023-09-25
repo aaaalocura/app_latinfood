@@ -10,6 +10,7 @@ class CartController extends GetxController {
   final cartItems = <CartItem>[].obs;
   
   final Map<int, int> productQuantities = {};
+  
   // ignore: prefer_final_fields
   int _cartItemCount = 0;
 // ignore: unused_field
@@ -18,56 +19,75 @@ class CartController extends GetxController {
 
   int get cartItemCount2 => _cartItemCount;
   bool saleSuccessful = false;
-  void addToCart(Product product, int userId, int quantity) {
-    final existingItemIndex =
-        cartItems.indexWhere((item) => item.product.id == product.id);
-    if (existingItemIndex != -1) {
-      cartItems[existingItemIndex].quantity += quantity;
-    } else {
-      cartItems.add(CartItem(product: product, quantity: quantity));
-      Get.snackbar('Producto Agregado al Carrito', 'listo');
-    }
-    _updateProductQuantity(product.id, quantity);
+void addToCart(Product product, int userId, int quantity, [int? selectedSizeMultiplier]) {
+  final existingItemIndex =
+      cartItems.indexWhere((item) => item.product.id == product.id);
+
+  if (existingItemIndex != -1) {
+    cartItems[existingItemIndex].quantity += (quantity * (selectedSizeMultiplier ?? 1));
+  } else {
+    cartItems.add(CartItem(product: product, quantity: (selectedSizeMultiplier ?? 1), tam: selectedSizeMultiplier));
+    Get.snackbar('Producto Agregado al Carrito', 'listo');
   }
+
+  _updateProductQuantity(product.id, quantity, selectedSizeMultiplier);
+}
+
 
   void removeFromCart(CartItem cartItem) {
     cartItems.remove(cartItem);
     _updateProductQuantity(cartItem.product.id, -cartItem.quantity);
   }
 
-  void _updateProductQuantity(int productId, int quantity) {
+void _updateProductQuantity(int productId, int quantity, [int? tam]) {
+  if (tam != null) {
     if (productQuantities.containsKey(productId)) {
-      productQuantities[productId] = quantity + 1;
+      productQuantities[productId] = quantity + tam;
     } else {
       productQuantities[productId] = quantity;
     }
     _updateCartItemCount();
   }
+}
+
 
   void _updateCartItemCount() {
     _cartItemCount2 =
         productQuantities.values.fold(0, (total, quantity) => total + quantity);
+        
   }
 
   double get totalAmount {
+    double total = 0.0;
+    for (var cartItem in cartItems) {
+      total += cartItem.product.price * cartItem.tam!;
+    }
+    return total;
+  }
+  // ignore: non_constant_identifier_names
+  double get totalAmount_detail {
     double total = 0.0;
     for (var cartItem in cartItems) {
       total += cartItem.product.price * cartItem.quantity;
     }
     return total;
   }
-
 void decrementQuantity(CartItem cartItem) {
-  if (cartItem.quantity > 1) {
-    cartItem.quantity--;
+  int tam = cartItem.tam ?? 1; // Obtén el valor de tam o usa 1 como valor predeterminado
+  if (cartItem.quantity >= tam) {
+    cartItem.quantity -= tam;
     _updateCartItemCount(); // Llama a _updateCartItemCount una vez aquí
+    print("decrementando");
   }
 }
 
 void incrementQuantity(CartItem cartItem) {
-  cartItem.quantity++;
+  int tam = cartItem.tam ?? 1; // Obtén el valor de tam o usa 1 como valor predeterminado
+  cartItem.quantity += tam;
   _updateCartItemCount(); // Llama a _updateCartItemCount una vez aquí
+  print("incrementando");
 }
+
 
   Future<void> makeSale() async {
     if (cartItems.isEmpty) {
@@ -82,7 +102,7 @@ void incrementQuantity(CartItem cartItem) {
     // Crear el objeto PosApiModel con los datos del carrito y el usuario
     PosApiModel posApiModel = PosApiModel(
       cliente: userId!,
-      total: totalAmount,
+      total: totalAmount_detail,
       efectivo: 0.0,
       change: 0.0,
       items: itemsList,
@@ -113,6 +133,10 @@ void incrementQuantity(CartItem cartItem) {
 class CartItem {
   final Product product;
   int quantity;
-
-  CartItem({required this.product, required this.quantity});
+  int? tam;
+  CartItem({
+    required this.product,
+    required this.quantity,
+    this.tam, // Deja que el parámetro opcional esté aquí
+  }); // Asigna el valor de tam al campo de clase tam
 }
