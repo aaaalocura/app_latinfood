@@ -100,53 +100,40 @@ class Product {
   final int id;
   final String name;
   final String barcode;
-  final int saborID;
+
   final double cost; // Quita los paréntesis ()
   final double price; // Quita los paréntesis ()
 
   final int stock;
   final int alerts;
-  final String image;
-  final int categoryID;
-  final String descripcion;
-  final String estado;
-  final dynamic keyProduct;
-  final int userID;
+ 
+
 
   Product({
     required this.id,
     required this.name,
     required this.barcode,
-    required this.saborID,
+   
     required this.cost,
     required this.price,
     required this.stock,
     required this.alerts,
-    required this.image,
-    required this.categoryID,
-    required this.descripcion,
-    required this.estado,
-    required this.keyProduct,
-    required this.userID,
+  
+
   });
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'],
       name: json['name'],
       barcode: json['barcode'],
-      saborID: json['sabor_id'],
+     
       cost: double.parse(json['cost'].toString()), // Corregir el tipo a double
       price:
           double.parse(json['price'].toString()), // Corregir el tipo a double
       stock: json['stock'],
       alerts: json['alerts'],
-      image: json['image'],
-      categoryID: json['category_id'],
-      descripcion: json['descripcion'],
-      estado: json['estado'],
+      
 
-      keyProduct: json['keyProduct'],
-      userID: json['user_id'],
     );
   }
 }

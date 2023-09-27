@@ -25,6 +25,7 @@ void main() async {
   await GetStorage.init();
   runApp(const MyApp());
   Get.put(CartController());
+  
 }
 
 List<Category> categories = <Category>[].obs;
