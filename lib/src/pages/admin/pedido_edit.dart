@@ -293,7 +293,7 @@ class _SaleEditState extends State<SaleEdit> {
 
                                           if (response.statusCode == 200) {
                                             // Si la solicitud fue exitosa, muestra un cuadro de diálogo de éxito
-                                            print(response.statusCode);
+                                           // print(response.statusCode);
                                             showDialog(
                                               context: widget._scaffoldKey1
                                                   .currentContext!,
@@ -338,9 +338,7 @@ class _SaleEditState extends State<SaleEdit> {
                                               },
                                             );
                                           }
-                                          // Cierra el cuadro de diálogo de confirmación
-                                          print(response.statusCode);
-                                          print(detail.id);
+                                         goToAdminPedidos();
                                         },
                                         child: const Text('Sí'),
                                       ),
@@ -404,7 +402,7 @@ class _SaleEditState extends State<SaleEdit> {
                     actions: <Widget>[
                       ElevatedButton(
                         onPressed: () async {
-                          String barcode = barcodeController.text;
+                          //String barcode = barcodeController.text;
                           int quantity =
                               int.tryParse(quantityController.text) ?? 0;
 
@@ -464,6 +462,7 @@ class _SaleEditState extends State<SaleEdit> {
                               },
                             );
                           }
+                          goToAdminPedidos();
 
                           setState(() {});
                         },
