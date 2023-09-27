@@ -169,14 +169,14 @@ class SaleDetailPage extends StatelessWidget {
           const Spacer(),
           CupertinoButton(
             onPressed: () {
-               Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SaleEdit(
-                              sale: sale,
-                              saleDetails: sale.salesDetails,
-                            ),
-                          ),
-                        );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SaleEdit(
+                    sale: sale,
+                    saleDetails: sale.salesDetails,
+                  ),
+                ),
+              );
             },
             child: Container(
               decoration: BoxDecoration(

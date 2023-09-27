@@ -9,6 +9,7 @@ import '../../models/sale_model.dart';
 
 class SaleEdit extends StatefulWidget {
   final Sale sale;
+
   final List<SaleDetail> saleDetails;
   final GlobalKey<ScaffoldState> _scaffoldKey1 = GlobalKey<ScaffoldState>();
 
@@ -187,7 +188,7 @@ class _SaleEditState extends State<SaleEdit> {
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                   goToAdminPedidos();
-                                                   setState(() {});
+                                                  setState(() {});
                                                 },
                                                 child: const Text('OK'),
                                               ),
@@ -259,6 +260,95 @@ class _SaleEditState extends State<SaleEdit> {
                               ),
                               const SizedBox(height: 16.0),
                             ],
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(
+                                Icons.delete), // Icono de bote de basura
+                            onPressed: () {
+                              // Muestra un cuadro de diálogo de confirmación
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                        '¿Seguro de eliminar este producto?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          // Cierra el cuadro de diálogo sin hacer nada si se presiona "No"
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('No'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () async {
+                                          final saleDetailId = detail.id
+                                              .toString(); // Convierte el id en una cadena
+
+                                          final response = await http.delete(
+                                            Uri.parse(
+                                              'https://kdlatinfood.com/intranet/public/api/sales/borrar/$saleDetailId',
+                                            ),
+                                          );
+
+                                          if (response.statusCode == 200) {
+                                            // Si la solicitud fue exitosa, muestra un cuadro de diálogo de éxito
+                                            print(response.statusCode);
+                                            showDialog(
+                                              context: widget._scaffoldKey1
+                                                  .currentContext!,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text('Éxito'),
+                                                  content: const Text(
+                                                      'Producto eliminado con éxito.'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(); // Cierra el cuadro de diálogo de éxito
+                                                        goToAdminPedidos();
+                                                      },
+                                                      child: const Text('OK'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            // Si la solicitud no fue exitosa, muestra un cuadro de diálogo de error
+                                            showDialog(
+                                              context: widget._scaffoldKey1
+                                                  .currentContext!,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: const Text('Error'),
+                                                  content: const Text(
+                                                      'Error al eliminar el producto.'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop(); // Cierra el cuadro de diálogo de error
+                                                      },
+                                                      child: const Text('OK'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                          // Cierra el cuadro de diálogo de confirmación
+                                          print(response.statusCode);
+                                          print(detail.id);
+                                        },
+                                        child: const Text('Sí'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -353,7 +443,6 @@ class _SaleEditState extends State<SaleEdit> {
                             // Limpia los controladores y cierra el diálogo
                             barcodeController.clear();
                             quantityController.clear();
-                            
                           } else {
                             // Si la solicitud no fue exitosa, muestra un mensaje de error
                             showDialog(
@@ -375,7 +464,7 @@ class _SaleEditState extends State<SaleEdit> {
                               },
                             );
                           }
-                          
+
                           setState(() {});
                         },
                         child: const Text("Guardar"),
