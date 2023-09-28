@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'package:app_latin_food/src/models/sale.dart';
 import 'package:app_latin_food/src/models/user.dart';
 import 'package:get/get.dart';

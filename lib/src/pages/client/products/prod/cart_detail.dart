@@ -183,7 +183,7 @@ class _CartPageState extends State<CartPage> {
                                     ),
                                   ),
                                   const SizedBox(
-                                      width: 4), 
+                                      width: 4), // Espacio entre los textos
                                   Text(
                                     'cajas: ${(cartItem.quantity ~/ cartItem.tam!).toString()}',
                                     style: const TextStyle(
@@ -270,13 +270,13 @@ class _CartPageState extends State<CartPage> {
         child: const Text(
           'Place Order',
           style: TextStyle(
-            fontSize: 16,
-            height: 1, 
-            
+            fontSize: 16, // El tamaño de fuente en sp
+            height: 1, // La altura de línea en sp
+            // El nombre de la fuente 'Inter'
             fontWeight:
-                FontWeight.w500, 
+                FontWeight.w500, // El peso de fuente, en este caso 500 (medio)
             color: Color.fromARGB(255, 255, 253,
-                253), 
+                253), // El color del texto en formato ARGB (8 dígitos hexadecimales)
           ),
         ),
       ),

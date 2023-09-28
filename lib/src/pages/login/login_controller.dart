@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:app_latin_food/src/models/response_api.dart';
 import 'package:app_latin_food/src/providers/users_providers.dart';
 import 'package:flutter/foundation.dart';
@@ -20,6 +22,8 @@ class LoginController extends GetxController {
   }
 
   void login() async {
+    GetStorage().remove('user');
+    print("sesion anterior borrada");
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
@@ -38,7 +42,7 @@ class LoginController extends GetxController {
       if (responseApi.success == true) {
         GetStorage().write('user', responseApi.data);
         GetStorage().write('isAdmin', false);
-
+print("nueva sesion guardada");
         goToHomePage(
             userId:
                 responseApi.data['id']); // Pasa el userId a la página principal
@@ -61,6 +65,8 @@ class LoginController extends GetxController {
   }
 
   void loginAdmin() async {
+     GetStorage().remove('user');
+    print("sesion anterior borrada de admin");
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 

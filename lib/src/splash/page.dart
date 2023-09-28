@@ -5,6 +5,7 @@ import 'package:app_latin_food/src/pages/admin/botonbar.dart';
 import 'package:app_latin_food/src/pages/client/products/list/client_products_list_page.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
 import 'package:app_latin_food/src/pages/login/login_page.dart';
+import 'package:app_latin_food/src/pages/login/login_page_admin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -55,12 +56,14 @@ class _SecondClassState extends State<SecondClass>
               ThisIsFadeRoute(
                 page: userId != null
                     ? (GetStorage().read('isAdmin') == true
-                        ? ClientProductsListPageAdmin()
-                        : LoginPage())
+                        ? LoginPage()
+                        : LoginPage()
+                        
+                        )
                     : LoginPage(), // Redirige al inicio de sesión si userId es null
                 route: Text(userId != null
                     ? (GetStorage().read('isAdmin') == true
-                        ? '/homeadmin'
+                        ? '/loginAdmin'
                         : '/login')
                     : '/login'),
               ),

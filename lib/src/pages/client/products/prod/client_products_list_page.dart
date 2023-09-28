@@ -181,13 +181,13 @@ class ProductsListPage extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) => CupertinoActionSheet(
                           actions: [
-                            CupertinoActionSheetAction(
+                            /*CupertinoActionSheetAction(
                               onPressed: () {
                                 cartController.addToCart(product, userId!, product.tam1!);
                                 Navigator.pop(context);
                               },
                               child: const Text('Add Cart'),
-                            ),
+                            ),*/
                             CupertinoActionSheetAction(
                               onPressed: () {
                                 _favoriteController.AddToFavorites(
