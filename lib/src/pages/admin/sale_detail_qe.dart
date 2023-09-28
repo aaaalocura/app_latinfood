@@ -283,16 +283,17 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Icon(
+                                children: const [
+                                  Icon(
                                     Icons.check_circle_outline_outlined,
                                     size: 24.0,
                                     color: Colors
                                         .green, // Icono de verificación en verde
                                   ),
+                                  // ignore: prefer_const_constructors
                                   Text(
                                     'Compra Verificada',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16.0,
                                       color: Colors.black,
                                     ),

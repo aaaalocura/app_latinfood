@@ -44,6 +44,7 @@ class _SaleEditState extends State<SaleEdit> {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
+        // ignore: unnecessary_type_check
         if (data is List) {
           setState(() {
             // Actualiza la lista de productos

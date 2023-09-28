@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:math';
 import 'dart:ui';
 
@@ -34,7 +36,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
   int selectedSizeMultiplier2 = 1; // Multiplicador del precio inicial
 
-  // ignore: unused_element
   double _generateRandomRating() {
     final random = Random();
     return (random.nextInt(51)) / 10;

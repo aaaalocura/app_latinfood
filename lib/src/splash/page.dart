@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'dart:async';
 import 'package:app_latin_food/src/pages/admin/botonbar.dart';
 import 'package:app_latin_food/src/pages/client/products/list/client_products_list_page.dart';
@@ -53,12 +55,12 @@ class _SecondClassState extends State<SecondClass>
               ThisIsFadeRoute(
                 page: userId != null
                     ? (GetStorage().read('isAdmin') == true
-                        ? LoginPage()
+                        ? ClientProductsListPageAdmin()
                         : LoginPage())
                     : LoginPage(), // Redirige al inicio de sesión si userId es null
                 route: Text(userId != null
                     ? (GetStorage().read('isAdmin') == true
-                        ? '/login'
+                        ? '/homeadmin'
                         : '/login')
                     : '/login'),
               ),

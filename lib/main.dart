@@ -43,16 +43,9 @@ class MyApp extends StatefulWidget {
 }
 
 // Esta función se llama cuando la aplicación se cierra
-void singOut() {
-  GetStorage().remove('user');
-  Get.snackbar('Saliste', '');
-  Get.offNamedUntil('/login', (route) => false);
-}
 
-void onAppExit() {
-  // Llama a tu función de cerrar sesión
-  singOut();
-}
+
+
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   bool isDarkTheme = false;
@@ -71,14 +64,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      // La aplicación pasó al estado pausado (por ejemplo, cuando el usuario sale de la aplicación)
-      // Aquí puedes llamar a tu función de cierre de sesión
-      singOut();
-    }
-  }
+ 
 
   @override
   Widget build(BuildContext context) {

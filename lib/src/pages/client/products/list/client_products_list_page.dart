@@ -33,7 +33,7 @@ class ClientProductsListPage extends StatelessWidget {
           index: con.indexTab.value,
           children: [
             ProductsListPage(customerId: userId!),
-            CartPage(),
+            const CartPage(),
             ClientOrdersPage(customerId: userId),
             ClientProfileInfoPage(customerId: userId),
           ],

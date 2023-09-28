@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:ui';
 
 import 'package:app_latin_food/main.dart';
@@ -39,7 +41,6 @@ class ProductsListPage extends StatelessWidget {
     // ignore: no_leading_underscores_for_local_identifiers
     final _favoriteController = Get.put(FavoritesController());
 
-    // ignore: unused_local_variable
     final categoryIcons = {
       "04-Tequeños": Icons.abc_sharp,
       "03-Cachitos": Icons.access_alarm,

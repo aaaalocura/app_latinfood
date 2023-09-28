@@ -76,23 +76,23 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
               children: [
                 Text(
                   'Order ID: ${widget.sale.id}',
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   'Total: \$${widget.sale.total}',
-                  style: TextStyle(fontSize: 16.0),
+                  style: const TextStyle(fontSize: 16.0),
                 ),
                 Text(
                   'Total de Items: ${widget.sale.items}',
-                  style: TextStyle(fontSize: 16.0),
+                  style: const TextStyle(fontSize: 16.0),
                 ),
                 Text(
                   'Estado: ${widget.sale.status}',
-                  style: TextStyle(fontSize: 16.0),
+                  style: const TextStyle(fontSize: 16.0),
                 ),
                 Text(
                   'Estado de Envío: ${widget.sale.statusEnvio}',
-                  style: TextStyle(fontSize: 16.0),
+                  style: const TextStyle(fontSize: 16.0),
                 ),
                 const SizedBox(
                     height:
@@ -117,7 +117,7 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                         child: ListTile(
                           title: Text(
                             product.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),
                           subtitle: Column(
@@ -125,11 +125,11 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                             children: [
                               Text(
                                 'Precio: \$${detail.price}',
-                                style: TextStyle(fontSize: 16.0),
+                                style: const TextStyle(fontSize: 16.0),
                               ),
                               Text(
                                 'Cantidad: ${detail.quantity}',
-                                style: TextStyle(fontSize: 16.0),
+                                style: const TextStyle(fontSize: 16.0),
                               ),
                               // Agrega más detalles del producto si es necesario.
                             ],
