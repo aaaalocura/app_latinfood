@@ -46,58 +46,59 @@ class EnvioDetallePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Circles and Line representing status
-Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    Column(
-      children: [
-        _StatusCircle(
-          isCompleted: order.status == "PENDING" || order.status == "PAID",
-        ),
-        const SizedBox(height: 8.0), // Espacio entre el círculo y el texto
-        const _StatusText(
-          text: 'Ordered',
-        ), // Texto debajo del primer círculo
-      ],
-    ),
-    _CustomLine(), // Línea personalizada
-    Column(
-      children: [
-        _StatusCircle(isCompleted: order.status == "PAID"),
-        const SizedBox(height: 8.0),
-        const _StatusText(
-          text: 'Confirmed',
-        ),
-      ],
-    ),
-    _CustomLine(),
-    Column(
-      children: [
-        _StatusCircle(
-          isCompleted: order.statusEnvio == "ACTUAL" ||
-              order.statusEnvio == "FIN",
-        ),
-        const SizedBox(height: 8.0),
-        const _StatusText(
-          text: 'On Transit',
-        ),
-      ],
-    ),
-    _CustomLine(),
-    Column(
-      children: [
-        _StatusCircle(
-          isCompleted: order.statusEnvio == "FIN",
-        ),
-        const SizedBox(height: 8.0),
-        const _StatusText(
-          text: 'Complete',
-        ),
-      ],
-    ),
-  ],
-),
-
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    _StatusCircle(
+                      isCompleted:
+                          order.status == "PENDING" || order.status == "PAID",
+                    ),
+                    const SizedBox(
+                        height: 8.0), // Espacio entre el círculo y el texto
+                    const _StatusText(
+                      text: 'Ordered',
+                    ), // Texto debajo del primer círculo
+                  ],
+                ),
+                _CustomLine(), // Línea personalizada
+                Column(
+                  children: [
+                    _StatusCircle(isCompleted: order.status == "PAID"),
+                    const SizedBox(height: 8.0),
+                    const _StatusText(
+                      text: 'Confirmed',
+                    ),
+                  ],
+                ),
+                _CustomLine(),
+                Column(
+                  children: [
+                    _StatusCircle(
+                      isCompleted: order.statusEnvio == "ACTUAL" ||
+                          order.statusEnvio == "FIN",
+                    ),
+                    const SizedBox(height: 8.0),
+                    const _StatusText(
+                      text: 'On Transit',
+                    ),
+                  ],
+                ),
+                _CustomLine(),
+                Column(
+                  children: [
+                    _StatusCircle(
+                      isCompleted: order.statusEnvio == "FIN",
+                    ),
+                    const SizedBox(height: 8.0),
+                    const _StatusText(
+                      text: 'Complete',
+                    ),
+                  ],
+                ),
+              ],
+            ),
 
             const SizedBox(height: 20),
 
@@ -206,6 +207,7 @@ Row(
                     ),
                   ),
                 ),
+                
               ],
             ),
 
@@ -226,6 +228,7 @@ Row(
                 itemBuilder: (context, index) {
                   final detail = order.salesDetails[index];
                   return _buildOrderDetailItem(detail);
+                  
                 },
               ),
             ),
@@ -286,6 +289,7 @@ Row(
             )));
   }
 }
+
 class _CustomLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -306,8 +310,10 @@ class LinePainter extends CustomPainter {
       ..color = Colors.black // Color de la línea (ajusta según sea necesario)
       ..strokeWidth = 2.0; // Ancho de la línea (ajusta según sea necesario)
 
-    final Offset start = Offset(size.width / 2, 0); // Comienza en la parte superior
-    final Offset end = Offset(size.width / 2, size.height); // Termina en la parte inferior
+    final Offset start =
+        Offset(size.width / 2, 0); // Comienza en la parte superior
+    final Offset end =
+        Offset(size.width / 2, size.height); // Termina en la parte inferior
 
     canvas.drawLine(start, end, paint);
   }
@@ -317,11 +323,6 @@ class LinePainter extends CustomPainter {
     return false;
   }
 }
-
-
-
-
-
 
 class _StatusText extends StatelessWidget {
   final String text;

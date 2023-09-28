@@ -12,6 +12,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 return Scaffold(
+  
   bottomNavigationBar: SizedBox(
     height: 100,
     child: _textOyarce(),
