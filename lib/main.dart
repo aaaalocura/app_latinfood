@@ -60,14 +60,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     //  getCategories();
     super.initState();
-    WidgetsBinding.instance?.addObserver(
+    WidgetsBinding.instance.addObserver(
         this); // Registra esta instancia como observador de ciclo de vida
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance
-        ?.removeObserver(this); // Elimina el observador cuando se dispose
+        .removeObserver(this); // Elimina el observador cuando se dispose
     super.dispose();
   }
 

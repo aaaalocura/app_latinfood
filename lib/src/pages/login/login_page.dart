@@ -197,30 +197,7 @@ Widget _buttonLogin() {
   );
 }
 
-Widget _textDontHaveAccount() {
-  LoginController conex = Get.put(LoginController());
-  return Container(
-    color: Colors.white,
-    width: double.infinity,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text('Don\'t have account?'),
-        const SizedBox(width: 7),
-        GestureDetector(
-          onTap: () => conex.goToRegisterPage(),
-          child: const Text(
-            'create a new account',
-            style: TextStyle(
-              color: Color(0xE5FF5100),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
+
 // ignore: non_constant_identifier_names
 Widget _LoginAdmin() {
   LoginController conex = Get.put(LoginController());
