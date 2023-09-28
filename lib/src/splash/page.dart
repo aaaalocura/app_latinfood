@@ -53,13 +53,13 @@ class _SecondClassState extends State<SecondClass>
               ThisIsFadeRoute(
                 page: userId != null
                     ? (GetStorage().read('isAdmin') == true
-                        ? ClientProductsListPageAdmin()
-                        : ClientProductsListPage())
+                        ? LoginPage()
+                        : LoginPage())
                     : LoginPage(), // Redirige al inicio de sesión si userId es null
                 route: Text(userId != null
                     ? (GetStorage().read('isAdmin') == true
-                        ? '/homeadmin'
-                        : '/home')
+                        ? '/login'
+                        : '/login')
                     : '/login'),
               ),
             );

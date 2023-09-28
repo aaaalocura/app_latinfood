@@ -28,7 +28,7 @@ return Scaffold(
             const SizedBox(height: 20),
             _boxForm(context),
             const SizedBox(height: 20),
-            _textDontHaveAccount(),
+            
             _LoginAdmin(),
           ],
         ),

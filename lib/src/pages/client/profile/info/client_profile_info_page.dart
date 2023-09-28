@@ -38,22 +38,26 @@ class ClientProfileInfoPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
-          actions: [
-    Padding(
-      padding: const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
-      child: Image.network(
-        'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-        width: 50, // Ajusta el ancho de la imagen según tus necesidades
-        height: 50, // Ajusta el alto de la imagen según tus necesidades
-      ),
-    ),
-  ],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+                right: 10.0), // Ajusta el valor según tu preferencia
+            child: Image.network(
+              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+              width: 50, // Ajusta el ancho de la imagen según tus necesidades
+              height: 50, // Ajusta el alto de la imagen según tus necesidades
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: FutureBuilder<FindCustomer>(
-            future: fetchCustomerData(customerId), // Llama a la función que obtiene los datos del cliente
+            future: con.lastFetchedCustomerData != null
+                ? Future.value(con.lastFetchedCustomerData)
+                : fetchCustomerData(
+                    customerId), // Llama a la función que obtiene los datos del cliente
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Muestra un indicador de carga mientras se obtienen los datos
@@ -68,35 +72,35 @@ class ClientProfileInfoPage extends StatelessWidget {
                 );
               } else if (snapshot.hasError) {
                 // Muestra un mensaje de error si ocurre un error al obtener los datos
-                 return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    AnimatedOpacity(
-                      opacity: 1.0,
-                      duration: Duration(milliseconds: 500),
-                      child: Icon(
-                        Icons
-                            .wifi_tethering_off_sharp, // Cambiar por el icono deseado
-                        size: 100,
-                        color: Color(0xE5FF5100),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                    AnimatedOpacity(
-                      opacity: 1.0,
-                      duration: Duration(milliseconds: 500),
-                      child: Text(
-                        'No tienes conexion a internet',
-                        style: TextStyle(
-                          fontSize: 18,
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      AnimatedOpacity(
+                        opacity: 1.0,
+                        duration: Duration(milliseconds: 500),
+                        child: Icon(
+                          Icons
+                              .wifi_tethering_off_sharp, // Cambiar por el icono deseado
+                          size: 100,
                           color: Color(0xE5FF5100),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
+                      SizedBox(height: 16),
+                      AnimatedOpacity(
+                        opacity: 1.0,
+                        duration: Duration(milliseconds: 500),
+                        child: Text(
+                          'No tienes conexion a internet',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color(0xE5FF5100),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               } else {
                 // Si se obtuvieron los datos exitosamente, muestra la información del cliente
                 final customer = snapshot.data!;
@@ -111,9 +115,7 @@ class ClientProfileInfoPage extends StatelessWidget {
                           radius:
                               40, // Tamaño del avatar (puedes ajustarlo según tus necesidades)
                           backgroundImage:
-                              CachedNetworkImageProvider('${customer.image}')
-                        
-                          ),
+                              CachedNetworkImageProvider('${customer.image}')),
                     ),
                     const SizedBox(height: 8),
                     Align(
@@ -174,11 +176,14 @@ class ClientProfileInfoPage extends StatelessWidget {
                         'My Reward', Icons.wallet_giftcard_outlined, onTap: () {
                       Get.to(const ClientMyRewardPage());
                     }),
-                     _divider(),
+                    _divider(),
                     const SizedBox(height: 5),
                     _buildSubSectionItem(
-                        'My Favorites', Icons.favorite_border_outlined, onTap: () {
-                      Get.to( Favoriteprod(customerId: customerId,));
+                        'My Favorites', Icons.favorite_border_outlined,
+                        onTap: () {
+                      Get.to(Favoriteprod(
+                        customerId: customerId,
+                      ));
                     }),
                     _divider(),
                     const SizedBox(height: 5),
