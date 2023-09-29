@@ -53,9 +53,9 @@ class Sale {
 }
 
 class SaleDetail {
-  final int id;
+  final int? id;
   final double price;
-  final int quantity;
+   int quantity;
   final int productID;
   final int saleID;
   final DateTime createdAt;
@@ -66,7 +66,7 @@ class SaleDetail {
   final Product product;
 
   SaleDetail({
-    required this.id,
+     this.id,
     required this.price,
     required this.quantity,
     required this.productID,

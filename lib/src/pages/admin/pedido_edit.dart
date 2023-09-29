@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
+import 'package:app_latin_food/src/pages/admin/sale_edit_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +10,7 @@ import '../../models/sale_model.dart';
 
 class SaleEdit extends StatefulWidget {
   final Sale sale;
-
+  final SaleEditController con = Get.put(SaleEditController());
   final List<SaleDetail> saleDetails;
   final GlobalKey<ScaffoldState> _scaffoldKey1 = GlobalKey<ScaffoldState>();
 
@@ -21,19 +22,53 @@ class SaleEdit extends StatefulWidget {
 }
 
 class _SaleEditState extends State<SaleEdit> {
+  bool _isLoading = false;
+  List<Sale> sales = [];
+  Future<void> _loadSales() async {
+    if (_isLoading || !mounted) {
+      return; // Evitar consultas repetitivas o si el widget ya no está montado
+    }
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final salesData = await fetchSales();
+      if (mounted) {
+        setState(() {
+          sales = salesData;
+          _isLoading = false;
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+      // Manejar errores si es necesario
+      // ignore: avoid_print
+      print('Error fetching sales: $error');
+    }
+  }
+
   TextEditingController barcodeController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
   String? selectedBarcode; // Valor seleccionado en el DropdownButton
   List<Product> products = []; // Variable para almacenar los productos
   bool isEditing = false;
-  void goToAdminPedidos() {
-    Get.toNamed('/homeadmin');
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Llamar a _loadSales cuando cambien las dependencias (como el enrutamiento)
+    _loadSales();
   }
 
   @override
   void initState() {
     super.initState();
-    // Llama a la función para cargar los productos al iniciar el widget
+
     getProductsEDIT();
   }
 
@@ -45,17 +80,14 @@ class _SaleEditState extends State<SaleEdit> {
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         // ignore: unnecessary_type_check
-        if (data is List) {
-          setState(() {
-            // Actualiza la lista de productos
-            products = data.map((item) => Product.fromJson(item)).toList();
-          });
-          // Inicialmente, puedes seleccionar el primer producto si lo deseas
-          if (products.isNotEmpty) {
-            selectedBarcode = products[0].barcode;
-          }
-        } else {
-          // Manejo de errores
+
+        setState(() {
+          // Actualiza la lista de productos
+          products = data.map((item) => Product.fromJson(item)).toList();
+        });
+        // Inicialmente, puedes seleccionar el primer producto si lo deseas
+        if (products.isNotEmpty) {
+          selectedBarcode = products[0].barcode;
         }
       } else {
         // Manejo de errores
@@ -67,6 +99,12 @@ class _SaleEditState extends State<SaleEdit> {
 
   @override
   Widget build(BuildContext context) {
+    void goToAdminPedidos() {
+      Get.toNamed('/homeadmin');
+      Get.appUpdate();
+    }
+
+    _loadSales();
     return Scaffold(
       key: widget._scaffoldKey1,
       appBar: AppBar(
@@ -158,6 +196,9 @@ class _SaleEditState extends State<SaleEdit> {
                                   onPressed: () async {
                                     String newQuantity = quantityController
                                         .text; // Obtener la nueva cantidad del TextField
+                                    int parsedQuantity =
+                                        int.tryParse(newQuantity) ?? 0;
+                                    print(parsedQuantity);
                                     Navigator.of(context)
                                         .pop(); // Cerrar el diálogo
 
@@ -175,6 +216,7 @@ class _SaleEditState extends State<SaleEdit> {
                                     );
 
                                     if (response.statusCode == 200) {
+                                      setState(() {});
                                       // Si la solicitud fue exitosa, puedes mostrar un mensaje de éxito
                                       showDialog(
                                         context: widget
@@ -188,8 +230,22 @@ class _SaleEditState extends State<SaleEdit> {
                                               TextButton(
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
+                                                  Get.snackbar(
+                                                    'Cantidad actualizada con éxito',
+                                                    '',
+                                                    barBlur: 100,
+                                                    animationDuration:
+                                                        const Duration(
+                                                            seconds: 1),
+                                                  );
                                                   goToAdminPedidos();
-                                                  setState(() {});
+                                                  setState(() {
+
+                                                    fetchSales();
+                                                    _loadSales();
+                                                    Navigator.of(context).pop();
+                                                  });
+                                                  Navigator.of(context).pop();
                                                 },
                                                 child: const Text('OK'),
                                               ),
@@ -197,9 +253,8 @@ class _SaleEditState extends State<SaleEdit> {
                                           );
                                         },
                                       );
-
-                                      // Actualizar la cantidad en el modelo de datos local si es necesario
-                                      // ...
+                                      fetchSales();
+                                      _loadSales();
                                     } else {
                                       // Si la solicitud no fue exitosa, muestra un mensaje de error
                                       showDialog(
@@ -214,6 +269,12 @@ class _SaleEditState extends State<SaleEdit> {
                                               TextButton(
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
+                                                  setState(() {
+                                                    // Actualiza la cantidad en el objeto SaleDetail correspondiente
+                                                    widget.saleDetails[index]
+                                                            .quantity =
+                                                        parsedQuantity;
+                                                  });
                                                 },
                                                 child: const Text('OK'),
                                               ),
@@ -222,6 +283,8 @@ class _SaleEditState extends State<SaleEdit> {
                                         },
                                       );
                                     }
+                                    fetchSales();
+                                    _loadSales();
                                   },
                                   child: const Text('Guardar'),
                                 ),
@@ -294,7 +357,7 @@ class _SaleEditState extends State<SaleEdit> {
 
                                           if (response.statusCode == 200) {
                                             // Si la solicitud fue exitosa, muestra un cuadro de diálogo de éxito
-                                           // print(response.statusCode);
+                                            // print(response.statusCode);
                                             showDialog(
                                               context: widget._scaffoldKey1
                                                   .currentContext!,
@@ -308,7 +371,13 @@ class _SaleEditState extends State<SaleEdit> {
                                                       onPressed: () {
                                                         Navigator.of(context)
                                                             .pop(); // Cierra el cuadro de diálogo de éxito
-                                                        goToAdminPedidos();
+                                                        setState(() {
+                                                          widget.saleDetails
+                                                              .removeAt(
+                                                                  index); // Elimina el producto de la lista
+                                                                  Navigator.of(context).pop();
+                                                        });
+                                                        Navigator.of(context).pop();
                                                       },
                                                       child: const Text('OK'),
                                                     ),
@@ -339,7 +408,14 @@ class _SaleEditState extends State<SaleEdit> {
                                               },
                                             );
                                           }
-                                         goToAdminPedidos();
+
+                                          Get.snackbar(
+                                            'Producto Eliminado',
+                                            '',
+                                            barBlur: 100,
+                                            animationDuration:
+                                                const Duration(seconds: 1),
+                                          );
                                         },
                                         child: const Text('Sí'),
                                       ),
@@ -404,6 +480,8 @@ class _SaleEditState extends State<SaleEdit> {
                       ElevatedButton(
                         onPressed: () async {
                           //String barcode = barcodeController.text;
+                          final SaleEditController con =
+                              Get.put(SaleEditController());
                           int quantity =
                               int.tryParse(quantityController.text) ?? 0;
 
@@ -429,8 +507,18 @@ class _SaleEditState extends State<SaleEdit> {
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
-                                        goToAdminPedidos();
-                                        setState(() {});
+                                        
+                                        //goToAdminPedidos();
+                                        // Actualiza la interfaz de usuario
+                                        con.update();
+                                        setState(() {
+                                          widget.saleDetails;
+                                          fetchSales();
+                                          con.fetchSales();
+                                          _loadSales();
+                                          Navigator.of(context).pop();
+                                        });
+                                        Navigator.of(context).pop();
                                       },
                                       child: const Text('OK'),
                                     ),
@@ -438,10 +526,12 @@ class _SaleEditState extends State<SaleEdit> {
                                 );
                               },
                             );
-
+                            fetchSales();
+                            _loadSales();
                             // Limpia los controladores y cierra el diálogo
                             barcodeController.clear();
                             quantityController.clear();
+                            setState(() {});
                           } else {
                             // Si la solicitud no fue exitosa, muestra un mensaje de error
                             showDialog(
@@ -463,8 +553,15 @@ class _SaleEditState extends State<SaleEdit> {
                               },
                             );
                           }
-                          goToAdminPedidos();
-
+                          fetchSales();
+                          _loadSales();
+                          //goToAdminPedidos();
+                          Get.snackbar(
+                            'Producto guardado con éxito',
+                            '',
+                            barBlur: 100,
+                            animationDuration: const Duration(seconds: 1),
+                          );
                           setState(() {});
                         },
                         child: const Text("Guardar"),

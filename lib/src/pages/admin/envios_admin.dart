@@ -20,34 +20,33 @@ class _SalesListPageState extends State<SalesListPage> {
   bool _isLoading = false;
 
   // Agrega una función para cargar las ventas desde la API
-Future<void> _loadSales() async {
-  if (_isLoading || !mounted) {
-    return; // Evitar consultas repetitivas o si el widget ya no está montado
-  }
-  setState(() {
-    _isLoading = true;
-  });
-
-  try {
-    final salesData = await fetchSales();
-    if (mounted) {
-      setState(() {
-        sales = salesData;
-        _isLoading = false;
-      });
+  Future<void> _loadSales() async {
+    if (_isLoading || !mounted) {
+      return; // Evitar consultas repetitivas o si el widget ya no está montado
     }
-  } catch (error) {
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-    // Manejar errores si es necesario
-    // ignore: avoid_print
-    print('Error fetching sales: $error');
-  }
-}
+    setState(() {
+      _isLoading = true;
+    });
 
+    try {
+      final salesData = await fetchSales();
+      if (mounted) {
+        setState(() {
+          sales = salesData;
+          _isLoading = false;
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+      // Manejar errores si es necesario
+      // ignore: avoid_print
+      print('Error fetching sales: $error');
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -68,7 +67,6 @@ Future<void> _loadSales() async {
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
-          
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -89,11 +87,15 @@ Future<void> _loadSales() async {
         children: [
           SalesSection(
             title: 'Pending To Send',
-            sales: sales.where((sale) => sale.status == 'PAID' && sale.statusEnvio == 'PENDIENTE').toList(),
+            sales: sales
+                .where((sale) =>
+                    sale.status == 'PAID' && sale.statusEnvio == 'PENDIENTE')
+                .toList(),
           ),
           SalesSection1(
             title1: 'On Transit',
-            sales1: sales.where((sale) => sale.statusEnvio == 'ACTUAL').toList(),
+            sales1:
+                sales.where((sale) => sale.statusEnvio == 'ACTUAL').toList(),
           ),
           SalesSection2(
             title2: 'Received',
@@ -137,7 +139,7 @@ class SalesSection1 extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => SaleDetailPageFirma(
                         sale: sale,
-                         saleDetails: sale.salesDetails,
+                        saleDetails: sale.salesDetails,
                       ), // Pasa la venta seleccionada
                     ),
                   );
@@ -182,7 +184,7 @@ class SalesSection extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => SaleDetailPage(
                         sale: sale,
-                         saleDetails: sale.salesDetails,
+                        saleDetails: sale.salesDetails,
                       ), // Pasa la venta seleccionada
                     ),
                   );
@@ -194,6 +196,7 @@ class SalesSection extends StatelessWidget {
     );
   }
 }
+
 class SalesSection2 extends StatelessWidget {
   final String title2;
   final List<Sale> sales2;

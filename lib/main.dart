@@ -3,6 +3,7 @@ import 'package:app_latin_food/src/models/user.dart';
 import 'package:app_latin_food/src/pages/admin/botonbar.dart';
 import 'package:app_latin_food/src/pages/admin/envios_admin.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos_admin.dart';
+import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
 import 'package:app_latin_food/src/pages/client/delivery/list/client_delivery_page.dart';
 import 'package:app_latin_food/src/pages/client/products/list/client_products_list_page.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
@@ -25,6 +26,7 @@ void main() async {
   await GetStorage.init();
   runApp(const MyApp());
   Get.put(CartController());
+
   
 }
 
