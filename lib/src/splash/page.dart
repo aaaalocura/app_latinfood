@@ -56,7 +56,7 @@ class _SecondClassState extends State<SecondClass>
               ThisIsFadeRoute(
                 page: userId != null
                     ? (GetStorage().read('isAdmin') == true
-                        ? LoginPageAdmin()
+                        ? LoginPage()
                         : LoginPage()
                         
                         )

@@ -97,27 +97,27 @@ class SaleDetail {
 }
 
 class Product {
-  final int id;
+  final int? id;
   final String name;
   final String barcode;
 
-  final double cost; // Quita los paréntesis ()
-  final double price; // Quita los paréntesis ()
+  final double? cost; // Quita los paréntesis ()
+  final double? price; // Quita los paréntesis ()
 
-  final int stock;
-  final int alerts;
+  final int? stock;
+  final int? alerts;
  
 
 
   Product({
-    required this.id,
+     this.id,
     required this.name,
     required this.barcode,
    
-    required this.cost,
-    required this.price,
-    required this.stock,
-    required this.alerts,
+     this.cost,
+     this.price,
+     this.stock,
+     this.alerts,
   
 
   });
