@@ -272,7 +272,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: ListTile(
-                          title: Text(product.name),
+                          title: Text(product.name!),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

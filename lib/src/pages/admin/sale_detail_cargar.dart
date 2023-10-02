@@ -1,3 +1,4 @@
+import 'package:app_latin_food/src/pages/admin/pedido-edit/pedido_edit_page.dart';
 import 'package:app_latin_food/src/pages/admin/pedido_edit.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -119,7 +120,7 @@ class SaleDetailPage extends StatelessWidget {
                         ),
                         child: ListTile(
                           title: Text(
-                            product.name,
+                            product.name!,
                             style: const TextStyle(fontSize: 18.0),
                           ),
                           subtitle: Column(
@@ -177,7 +178,7 @@ class SaleDetailPage extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => SaleEdit(
+                  builder: (context) => SaleEditPage(
                     sale: sale,
                     saleDetails: sale.salesDetails,
                   ),

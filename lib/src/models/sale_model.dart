@@ -98,26 +98,16 @@ class SaleDetail {
 
 class Product {
   final int? id;
-  final String name;
-  final String barcode;
+  final String? name;
+  final String? barcode;
 
-  final double? cost; // Quita los paréntesis ()
-  final double? price; // Quita los paréntesis ()
-
-  final int? stock;
-  final int? alerts;
  
-
-
   Product({
      this.id,
-    required this.name,
-    required this.barcode,
+     this.name,
+     this.barcode,
    
-     this.cost,
-     this.price,
-     this.stock,
-     this.alerts,
+  
   
 
   });
@@ -126,12 +116,7 @@ class Product {
       id: json['id'],
       name: json['name'],
       barcode: json['barcode'],
-     
-      cost: double.parse(json['cost'].toString()), // Corregir el tipo a double
-      price:
-          double.parse(json['price'].toString()), // Corregir el tipo a double
-      stock: json['stock'],
-      alerts: json['alerts'],
+    
       
 
     );

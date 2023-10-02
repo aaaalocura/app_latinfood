@@ -110,7 +110,7 @@ class SaleDetailPageFin extends StatelessWidget {
                         ),
                         child: ListTile(
                           title: Text(
-                            product.name,
+                            product.name!,
                             style: const TextStyle(
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),

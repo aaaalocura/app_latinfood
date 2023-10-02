@@ -116,7 +116,7 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                         ),
                         child: ListTile(
                           title: Text(
-                            product.name,
+                            product.name!,
                             style: const TextStyle(
                                 fontSize: 18.0, fontWeight: FontWeight.bold),
                           ),

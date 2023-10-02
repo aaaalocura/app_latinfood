@@ -44,13 +44,13 @@ class _SaleEditState extends State<SaleEdit> {
         final jsonResponse = json.decode(res.body);
 
         if (jsonResponse is List) {
-          
           data = List<Map<String, dynamic>>.from(jsonResponse);
         }
 
         if (data.isNotEmpty && data[0].containsKey("barcode")) {
           selectedBarcode = data[0]["barcode"];
         }
+        setState(() {});
       }
     } catch (e) {
       // Manejo de errores
@@ -58,35 +58,8 @@ class _SaleEditState extends State<SaleEdit> {
   }
 
   Product? selectedProduct;
-  bool _isLoading = false;
-  List<Sale> sales = [];
-  Future<void> _loadSales() async {
-    if (_isLoading || !mounted) {
-      return; // Evitar consultas repetitivas o si el widget ya no está montado
-    }
-    setState(() {
-      _isLoading = true;
-    });
 
-    try {
-      final salesData = await fetchSales();
-      if (mounted) {
-        setState(() {
-          sales = salesData;
-          _isLoading = false;
-        });
-      }
-    } catch (error) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-      // Manejar errores si es necesario
-      // ignore: avoid_print
-      print('Error fetching sales: $error');
-    }
-  }
+  List<Sale> sales = [];
 
   TextEditingController barcodeController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
@@ -97,16 +70,9 @@ class _SaleEditState extends State<SaleEdit> {
   bool isEditing = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Llamar a _loadSales cuando cambien las dependencias (como el enrutamiento)
-    _loadSales();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    getProductsEDIT();
-    _loadSales();
+    print(selectedBarcode);
+
     return Scaffold(
       key: widget._scaffoldKey1,
       appBar: AppBar(
@@ -248,8 +214,6 @@ class _SaleEditState extends State<SaleEdit> {
                                           );
                                         },
                                       );
-                                      fetchSales();
-                                      _loadSales();
                                     } else {
                                       // Si la solicitud no fue exitosa, muestra un mensaje de error
                                       showDialog(
@@ -278,8 +242,6 @@ class _SaleEditState extends State<SaleEdit> {
                                         },
                                       );
                                     }
-                                    fetchSales();
-                                    _loadSales();
                                   },
                                   child: const Text('Guardar'),
                                 ),
@@ -303,7 +265,7 @@ class _SaleEditState extends State<SaleEdit> {
                         ),
                         child: ListTile(
                           title: Text(
-                            product.name,
+                            product.name!,
                             style: const TextStyle(fontSize: 18.0),
                           ),
                           subtitle: Column(
@@ -366,7 +328,7 @@ class _SaleEditState extends State<SaleEdit> {
                                                       onPressed: () {
                                                         Navigator.of(context)
                                                             .pop(); // Cierra el cuadro de diálogo de éxito
-                                                        
+
                                                         Get.snackbar(
                                                           'Producto Eliminado',
                                                           'De la venta: ${widget.sale.id}',
@@ -448,12 +410,17 @@ class _SaleEditState extends State<SaleEdit> {
                             setState(() {
                               selectedBarcode = newValue!;
                             });
+                            setState(() {});
                             print(selectedBarcode);
                           },
                           items: data.map((Map<String, dynamic> item) {
                             return DropdownMenuItem<String>(
                               value: item['barcode'],
-                              child: Text(item['name'] ?? 'Sin nombre'),
+                              child: Text(
+                                item['x|'] ?? 'Sin nombre',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             );
                           }).toList(),
                         ),
@@ -469,12 +436,9 @@ class _SaleEditState extends State<SaleEdit> {
                       ElevatedButton(
                         onPressed: () async {
                           //String barcode = barcodeController.text;
-
                           int quantity =int.tryParse(quantityController.text) ?? 0;
-
                           final response = await http.post(
-                            Uri.parse(
-                                'https://kdlatinfood.com/intranet/public/api/add-product-to-sale'), // Reemplaza con la URL de tu API
+                            Uri.parse('https://kdlatinfood.com/intranet/public/api/add-product-to-sale'), // Reemplaza con la URL de tu API
                             body: {
                               'sale_id': '${widget.sale.id}',
                               'barcode': selectedBarcode,
