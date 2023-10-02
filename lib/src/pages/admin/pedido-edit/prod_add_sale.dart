@@ -2,6 +2,7 @@
 
 import 'package:app_latin_food/src/models/sale_model.dart';
 import 'package:app_latin_food/src/pages/admin/pedido-edit/controller.dart';
+import 'package:app_latin_food/src/pages/admin/sale_detail_cargar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -99,12 +100,12 @@ class _SaleEditPageState extends State<AddProdcutSalePage> {
                       ?.name, // Aquí se usa el nombre del producto como valor
                   items: widget.con.products.map((Product product) {
                     return DropdownMenuItem<String>(
-                      value: product.name!, // Aquí se establece el nombre como valor
+                      value: product
+                          .name!, // Aquí se establece el nombre como valor
                       child: SizedBox(
-                        width: 270, 
+                        width: 270,
                         height: 90,
                         child: Text(
-
                           "${product.barcode!} - ${product.name!}",
                           overflow: TextOverflow
                               .ellipsis, // Trunca el texto con tres puntos suspensivos
@@ -142,14 +143,35 @@ class _SaleEditPageState extends State<AddProdcutSalePage> {
                     child: ElevatedButton(
                       onPressed: () async {
                         // Llama a la función para agregar el producto a la venta
-                          BuildContext currentContext = context;
                         await widget.con.addProductToSale(
                           saleId: widget.sale.id,
                           barcode: selectedProduct1!.barcode!,
                           quantity: quantity,
                         );
                         quantityController.clear();
-                         Navigator.pop(currentContext);
+                        widget.con.loadProducts();
+                        setState(() {});
+
+                        // Navega a '/homeadmin'
+                        Get.toNamed('/homeadmin');
+
+                        // Espera a que '/homeadmin' se cargue completamente antes de continuar
+                        await Future.microtask(() {});
+
+                        // Después de un breve retraso, navega a 'SaleDetailPage'
+                        await Future.delayed(const Duration(
+                            seconds :
+                                3)); // Ajusta el tiempo según tu necesidad
+
+                        // Navega a 'SaleDetailPage'
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SaleDetailPage(
+                              sale: widget.sale,
+                              saleDetails: widget.saleDetails,
+                            ),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,

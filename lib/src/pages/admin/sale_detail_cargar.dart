@@ -19,6 +19,7 @@ class SaleDetailPage extends StatelessWidget {
   void goToAdminPedidos() {
     Get.toNamed('/homeadmin');
   }
+  
  void refreshData() {
    fetchSales();
   }

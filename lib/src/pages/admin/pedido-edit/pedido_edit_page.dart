@@ -25,7 +25,12 @@ class _SaleEditPageState extends State<SaleEditPage> {
 
     widget.con.loadProducts();
   }
-
+ @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Llamar a _loadSales cuando cambien las dependencias (como el enrutamiento)
+     widget.con.fetchSales();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -257,8 +262,7 @@ class _SaleEditPageState extends State<SaleEditPage> {
                                             )
                                                 .then((_) {
                                               setState(() {
-                                                widget.saleDetails.remove(
-                                                    detail); // Elimina el producto de la lista local
+                                                widget.saleDetails.remove(detail); 
                                               });
                                             });
                                           },
