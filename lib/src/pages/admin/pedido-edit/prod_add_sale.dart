@@ -1,10 +1,12 @@
 // ignore_for_file: avoid_print
 
 import 'package:app_latin_food/src/models/sale_model.dart';
+import 'package:app_latin_food/src/pages/admin/botonbar.dart';
 import 'package:app_latin_food/src/pages/admin/pedido-edit/controller.dart';
 import 'package:app_latin_food/src/pages/admin/sale_detail_cargar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
 
 class AddProdcutSalePage extends StatefulWidget {
   final SaleEditController con = Get.put(SaleEditController());
@@ -31,6 +33,46 @@ class _SaleEditPageState extends State<AddProdcutSalePage> {
     widget.con.fetchSales();
     widget.con.loadProducts();
     // Establecer el valor inicial de selectedProduct
+  }
+
+  // Añade una variable para evitar consultas repetitivas a la API
+  bool _isLoading = false;
+  List<Sale> sales = [];
+  // Agrega una función para cargar las ventas desde la API
+  Future<void> _loadSales() async {
+    if (_isLoading || !mounted) {
+      return; // Evitar consultas repetitivas o si el widget ya no está montado
+    }
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final salesData = await fetchSales();
+      if (mounted) {
+        setState(() {
+          sales = salesData;
+          _isLoading = false;
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+      // Manejar errores si es necesario
+      print('Error fetching sales: $error');
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Future.microtask(() {
+      print("llamando funcion");
+      _loadSales();
+    });
   }
 
   @override
@@ -150,28 +192,9 @@ class _SaleEditPageState extends State<AddProdcutSalePage> {
                         );
                         quantityController.clear();
                         widget.con.loadProducts();
-                        setState(() {});
 
-                        // Navega a '/homeadmin'
                         Get.toNamed('/homeadmin');
-
-                        // Espera a que '/homeadmin' se cargue completamente antes de continuar
-                        await Future.microtask(() {});
-
-                        // Después de un breve retraso, navega a 'SaleDetailPage'
-                        await Future.delayed(const Duration(
-                            seconds :
-                                3)); // Ajusta el tiempo según tu necesidad
-
-                        // Navega a 'SaleDetailPage'
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SaleDetailPage(
-                              sale: widget.sale,
-                              saleDetails: widget.saleDetails,
-                            ),
-                          ),
-                        );
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,

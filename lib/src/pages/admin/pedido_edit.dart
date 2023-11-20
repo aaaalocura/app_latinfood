@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:app_latin_food/src/pages/admin/botonbar.dart';
-import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
 import 'package:app_latin_food/src/pages/admin/sale_detail_cargar.dart';
 import 'package:app_latin_food/src/pages/admin/sale_edit_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/sale_model.dart';

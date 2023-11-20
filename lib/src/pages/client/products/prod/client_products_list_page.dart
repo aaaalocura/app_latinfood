@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, unrelated_type_equality_checks
 
 import 'dart:ui';
 
@@ -167,138 +167,189 @@ class ProductsListPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   var product = con.filteredProducts[index];
                   return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProductDetailsPage(
-                              product: product, customerId: userId),
-                        ),
-                      );
-                    },
-                    onLongPress: () {
-                      showCupertinoModalPopup(
-                        context: context,
-                        builder: (BuildContext context) => CupertinoActionSheet(
-                          actions: [
-                            /*CupertinoActionSheetAction(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsPage(
+                                product: product, customerId: userId),
+                          ),
+                        );
+                      },
+                      onLongPress: () {
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              CupertinoActionSheet(
+                            actions: [
+                              /*CupertinoActionSheetAction(
                               onPressed: () {
                                 cartController.addToCart(product, userId!, product.tam1!);
                                 Navigator.pop(context);
                               },
                               child: const Text('Add Cart'),
                             ),*/
-                            CupertinoActionSheetAction(
+                              CupertinoActionSheetAction(
+                                onPressed: () {
+                                  _favoriteController.AddToFavorites(
+                                      product.id, userId!);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Add Favorite'),
+                              ),
+                            ],
+                            cancelButton: CupertinoActionSheetAction(
                               onPressed: () {
-                                _favoriteController.AddToFavorites(
-                                    product.id, userId!);
                                 Navigator.pop(context);
                               },
-                              child: const Text('Add Favorite'),
+                              child: const Text('Cancelar'),
                             ),
-                          ],
-                          cancelButton: CupertinoActionSheetAction(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancelar'),
                           ),
+                        );
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                      );
-                    },
-                    child: Card(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                      color: Colors.grey[300]!, width: 1),
-                                ),
-                                child: CachedNetworkImage(
-                                  imageUrl: product.image!,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      const Center(
-                                    child: Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: product.estado == 'CRUDO'
+                                  ? Colors.blue
+                                  : Colors.red,
+                              width: 2.0,
                             ),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(16.0, 0.0, 2.0, 1.0),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Stack(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Text(
-                                    product.name,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    'SKU: ${product.barcode}',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xFF999999),
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Tamaño: ${_getBarcodeDescription(product.barcode)}',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xFF999999),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          border: Border.all(
+                                              color: Colors.grey[300]!,
+                                              width: 1),
+                                        ),
+                                        child: CachedNetworkImage(
+                                          imageUrl: product.image!,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) =>
+                                              const Center(
+                                            child: CircularProgressIndicator(),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              const Center(
+                                            child: Icon(Icons.error),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'Caja: ${product.tam1} Unidades',
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400,
-                                      color: Color(0xFF999999),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    '\$${((product.tam1 ?? 1) * product.price).toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: Color(0xE5FF5100),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        16.0, 0.0, 2.0, 1.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            product.name,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: false,
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            'SKU: ${product.barcode}',
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0xFF999999),
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: false,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Tamaño: ${_getBarcodeDescription(product.barcode)}',
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0xFF999999),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            'Caja: ${product.tam1} Unidades',
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0xFF999999),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            '\$${((product.tam1 ?? 1) * product.price).toStringAsFixed(2)}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Color(0xE5FF5100),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
+                              // Banderita en la esquina superior derecha
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
+                                    ),
+                                    color: product.estado == 'CRUDO'
+                                        ? Colors.blue
+                                        : Colors.red,
+                                  ),
+                                  child: Text(
+                                    product.estado == 'CRUDO'
+                                        ? 'Raw'
+                                        : 'Pre-Cooked',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          12, // Ajusta el tamaño de fuente según tus necesidades
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
+                        ),
+                      )
+                      );
                 },
               ),
             ),

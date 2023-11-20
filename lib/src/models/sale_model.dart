@@ -100,12 +100,14 @@ class Product {
   final int? id;
   final String? name;
   final String? barcode;
+  
 
  
   Product({
      this.id,
      this.name,
      this.barcode,
+     
    
   
   

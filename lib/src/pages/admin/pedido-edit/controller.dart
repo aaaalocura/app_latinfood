@@ -10,7 +10,8 @@ class SaleEditController extends GetxController {
   // Cargar los productos para el Dropdown
   // Lista para almacenar los productos
   List<Product> products = [];
-  
+  List<Sale> sales = []; 
+   final RxList<SaleDetail> saleDetails = <SaleDetail>[].obs;
   // Función para cargar los productos desde la API
   Future<void> loadProducts() async {
     try {
@@ -38,6 +39,39 @@ class SaleEditController extends GetxController {
       );
     }
   }
+Future<void> fetchSales1() async {
+  try {
+    final response = await http.get(
+      Uri.parse('https://kdlatinfood.com/intranet/public/api/despachos'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonList = json.decode(response.body)['data'];
+      final sales = jsonList.map((json) => Sale.fromJson(json)).toList();
+
+      // No es necesario hacer solicitudes adicionales para detalles de venta y productos,
+      // ya que la API ya proporciona todos los datos necesarios.
+
+      // Actualiza la lista de ventas en el controlador
+      this.sales = sales;
+    } else {
+      await Future.delayed(const Duration(seconds: 5));
+      Get.snackbar(
+        'Accion No Completada',
+        'Volviendo a Intentar',
+        barBlur: 100,
+        animationDuration: const Duration(seconds: 1),
+      );
+    }
+  } catch (e) {
+    await Future.delayed(const Duration(seconds: 5));
+    Get.snackbar(
+      'Ocurrio un Error',
+      'Recargue la aplicacion',
+      barBlur: 100,
+      animationDuration: const Duration(seconds: 1),
+    );
+  }
+}
 
   Future<List<Sale>> fetchSales() async {
     int maxAttempts = 3;

@@ -1,9 +1,10 @@
 import 'package:app_latin_food/src/pages/admin/firma_sale.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
 import 'package:app_latin_food/src/pages/admin/sale_detail_fin.dart';
-import 'package:app_latin_food/src/pages/admin/sale_detail_qe.dart';
+
 import 'package:flutter/material.dart';
 import '../../models/sale_model.dart';
+import 'pedido-on-transit/pedido_ontransit_page.dart';
 
 class SalesListPage extends StatefulWidget {
   const SalesListPage({super.key});
@@ -117,7 +118,23 @@ class SalesSection1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text(title1),
+      title: Row(
+        children: [
+          Text(title1),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(
+                  horizontal: 20.0), // Espacio entre el texto y la franja
+              height: 10.0, // Altura de la franja verde
+              decoration: BoxDecoration(
+                color: Colors.yellow, // Color de la franja verde
+                borderRadius: BorderRadius.circular(
+                    5.0), // Radio para esquinas redondeadas
+              ),
+            ),
+          ),
+        ],
+      ),
       children: [
         if (sales1.isEmpty)
           const Padding(
@@ -131,19 +148,102 @@ class SalesSection1 extends StatelessWidget {
             itemCount: sales1.length,
             itemBuilder: (context, index) {
               final sale = sales1[index];
-              return ListTile(
-                title: Text('Venta #${sale.id}'),
-                subtitle: Text('Total: \$${sale.total}'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SaleDetailPageFirma(
-                        sale: sale,
-                        saleDetails: sale.salesDetails,
-                      ), // Pasa la venta seleccionada
+              return Card(
+                elevation: 4.0,
+                margin: const EdgeInsets.all(16.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: InkWell(
+                    onTap: () {
+                      // Navega a la página de detalles cuando se hace clic.
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SaleDetailPageFirma(
+                            sale: sale,
+                            saleDetails: sale.salesDetails,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.orange, Colors.deepOrange],
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ID del Pedido: ${sale.id}',
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Total: \$${sale.total}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Estado de Envío: ${sale.statusEnvio}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Client: ${sale.customer.name} ${sale.customer.lastName}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Address Client: ${sale.customer.address} ',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16.0,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 24.0,
+                              ),
+                              child: Text(
+                                'Cambiar Estado',
+                                style: TextStyle(
+                                  color: Colors.deepOrange,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  );
-                },
+                  ),
+                ),
               );
             },
           ),
@@ -162,7 +262,23 @@ class SalesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text(title),
+      title: Row(
+        children: [
+          Text(title),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(
+                  horizontal: 20.0), // Espacio entre el texto y la franja
+              height: 10.0, // Altura de la franja verde
+              decoration: BoxDecoration(
+                color: const Color(0xE5FF5100), // Color de la franja verde
+                borderRadius: BorderRadius.circular(
+                    5.0), // Radio para esquinas redondeadas
+              ),
+            ),
+          ),
+        ],
+      ),
       children: [
         if (sales.isEmpty)
           const Padding(
@@ -176,19 +292,102 @@ class SalesSection extends StatelessWidget {
             itemCount: sales.length,
             itemBuilder: (context, index) {
               final sale = sales[index];
-              return ListTile(
-                title: Text('Venta #${sale.id}'),
-                subtitle: Text('Total: \$${sale.total}'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SaleDetailPage(
-                        sale: sale,
-                        saleDetails: sale.salesDetails,
-                      ), // Pasa la venta seleccionada
+              return Card(
+                elevation: 4.0,
+                margin: const EdgeInsets.all(16.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: InkWell(
+                    onTap: () {
+                      // Navega a la página de detalles cuando se hace clic.
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SaleDetailPageN(
+                            sale: sale,
+                            saleDetails: sale.salesDetails,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.orange, Colors.deepOrange],
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ID del Pedido: ${sale.id}',
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Total: \$${sale.total}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Estado de Envío: ${sale.statusEnvio}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Client: ${sale.customer.name} ${sale.customer.lastName}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Address Client: ${sale.customer.address} ',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16.0,
+                          ), // Espacio entre detalles y botón
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 24.0,
+                              ),
+                              child: Text(
+                                'Cambiar Estado',
+                                style: TextStyle(
+                                  color: Colors.deepOrange,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  );
-                },
+                  ),
+                ),
               );
             },
           ),
@@ -207,7 +406,24 @@ class SalesSection2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text(title2),
+      title: Row(
+        children: [
+          Text(title2),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.symmetric(
+                  horizontal: 20.0), // Espacio entre el texto y la franja
+              height: 10.0, // Altura de la franja verde
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(
+                    228, 53, 255, 22), // Color de la franja verde
+                borderRadius: BorderRadius.circular(
+                    5.0), // Radio para esquinas redondeadas
+              ),
+            ),
+          ),
+        ],
+      ),
       children: [
         if (sales2.isEmpty)
           const Padding(
@@ -221,19 +437,102 @@ class SalesSection2 extends StatelessWidget {
             itemCount: sales2.length,
             itemBuilder: (context, index) {
               final sale = sales2[index];
-              return ListTile(
-                title: Text('Venta #${sale.id}'),
-                subtitle: Text('Total: \$${sale.total}'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SaleDetailPageFin(
-                        sale: sale,
-                        saleDetails: const [],
-                      ), // Pasa la venta seleccionada
+              return Card(
+                elevation: 4.0,
+                margin: const EdgeInsets.all(16.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16.0),
+                  child: InkWell(
+                    onTap: () {
+                      // Navega a la página de detalles cuando se hace clic.
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SaleDetailPageFin(
+                            sale: sale,
+                            saleDetails: const [],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [Colors.orange, Colors.deepOrange],
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ID del Pedido: ${sale.id}',
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Total: \$${sale.total}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Estado de Envío: ${sale.statusEnvio}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Client: ${sale.customer.name} ${sale.customer.lastName}',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            'Address Client: ${sale.customer.address} ',
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 16.0,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 24.0,
+                              ),
+                              child: Text(
+                                'Ver Detalles',
+                                style: TextStyle(
+                                  color: Colors.deepOrange,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  );
-                },
+                  ),
+                ),
               );
             },
           ),

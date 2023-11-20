@@ -50,6 +50,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
 
     final tamDefecto=widget.product.tam1!;    
+          // ignore: unused_element
           void updateQuantity() {
     // Actualizar la cantidad en función del tamaño seleccionado
     if (selectedSizeMultiplier == 1) {

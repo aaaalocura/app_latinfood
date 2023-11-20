@@ -1,3 +1,4 @@
+import 'package:app_latin_food/src/pages/admin/pedido-edit/controller.dart';
 import 'package:app_latin_food/src/pages/admin/pedido-edit/pedido_edit_page.dart';
 import 'package:app_latin_food/src/pages/admin/pedido_edit.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
@@ -12,20 +13,17 @@ class SaleDetailPage extends StatelessWidget {
   final Sale sale;
   final List<SaleDetail> saleDetails;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+ 
     SaleDetailPage({super.key, required this.sale, required this.saleDetails}) {
-    fetchSales(); // Llama a fetchSales en el constructor
   }
   void goToAdminPedidos() {
     Get.toNamed('/homeadmin');
   }
   
- void refreshData() {
-   fetchSales();
-  }
+
   @override
   Widget build(BuildContext context) {
-    fetchSales();
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(

@@ -30,8 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -52,7 +50,8 @@ dependencies:
   food_icons: ^0.0.6
   floating_snackbar: ^1.0.3+1
   intl: ^0.18.1
-  
+  flutter_barcode_scanner: ^2.0.0
+  google_fonts: ^6.1.0
   
 
 dev_dependencies:

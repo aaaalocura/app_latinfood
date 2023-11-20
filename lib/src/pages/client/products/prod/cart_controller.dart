@@ -77,7 +77,7 @@ void decrementQuantity(CartItem cartItem) {
   if (cartItem.quantity >= tam) {
     cartItem.quantity -= tam;
     _updateCartItemCount(); // Llama a _updateCartItemCount una vez aquí
-    print("decrementando");
+  //  print("decrementando");
   }
 }
 
@@ -85,7 +85,7 @@ void incrementQuantity(CartItem cartItem) {
   int tam = cartItem.tam ?? 1; // Obtén el valor de tam o usa 1 como valor predeterminado
   cartItem.quantity += tam;
   _updateCartItemCount(); // Llama a _updateCartItemCount una vez aquí
-  print("incrementando");
+ // print("incrementando");
 }
 
 

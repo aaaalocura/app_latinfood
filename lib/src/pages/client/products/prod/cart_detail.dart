@@ -185,7 +185,7 @@ class _CartPageState extends State<CartPage> {
                                   const SizedBox(
                                       width: 4), // Espacio entre los textos
                                   Text(
-                                    'cajas: ${(cartItem.quantity ~/ cartItem.tam!).toString()}',
+                                  cartItem.quantity.toString(),
                                     style: const TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.w300,
@@ -222,7 +222,7 @@ class _CartPageState extends State<CartPage> {
                                   },
                                 ),
                                 Text(
-                                  cartItem.quantity.toString(),
+                                  (cartItem.quantity ~/ cartItem.tam!).toString(),
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,

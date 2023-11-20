@@ -33,6 +33,7 @@ class ClientProductsListPage extends StatelessWidget {
           index: con.indexTab.value,
           children: [
             ProductsListPage(customerId: userId!),
+             // ignore: prefer_const_constructors
              CartPage(),
             ClientOrdersPage(customerId: userId),
             ClientProfileInfoPage(customerId: userId),
