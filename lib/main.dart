@@ -99,7 +99,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ],
       theme: ThemeData(
         primaryColor: const Color(0xE5FF5100),
-        fontFamily: '.SF UI Text',
+        fontFamily: 'Poppoins',
         colorScheme: const ColorScheme.light(
           primary: Color(0xE5FF5100),
           onPrimary: Colors.black,

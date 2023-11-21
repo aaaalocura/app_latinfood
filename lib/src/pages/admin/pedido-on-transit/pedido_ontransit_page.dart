@@ -114,7 +114,6 @@ class _SaleDetailPageState extends State<SaleDetailPageN> {
                               Text('Cantidad: ${detail.quantity}'),
                               const SizedBox(height: 16.0),
                               Row(
-
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children:  [

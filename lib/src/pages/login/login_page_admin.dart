@@ -84,6 +84,7 @@ Widget _textInfo() {
       color: Colors.black,
       fontWeight: FontWeight.bold,
       fontSize: 25,
+      fontFamily: AutofillHints.url
     ),
   );
 }
