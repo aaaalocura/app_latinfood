@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unused_import
 
 import 'package:app_latin_food/src/models/sale_model.dart';
 import 'package:app_latin_food/src/pages/admin/botonbar.dart';
@@ -17,6 +17,7 @@ class AddProdcutSalePage extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _SaleEditPageState createState() => _SaleEditPageState();
 }
 

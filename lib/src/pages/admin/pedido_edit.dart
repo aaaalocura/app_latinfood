@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:app_latin_food/src/pages/admin/botonbar.dart';
 import 'package:app_latin_food/src/pages/admin/sale_detail_cargar.dart';
 import 'package:app_latin_food/src/pages/admin/sale_edit_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -69,7 +70,9 @@ class _SaleEditState extends State<SaleEdit> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedBarcode);
+    if (kDebugMode) {
+      print(selectedBarcode);
+    }
 
     return Scaffold(
       key: widget._scaffoldKey1,
@@ -164,7 +167,9 @@ class _SaleEditState extends State<SaleEdit> {
                                         .text; // Obtener la nueva cantidad del TextField
                                     int parsedQuantity =
                                         int.tryParse(newQuantity) ?? 0;
-                                    print(parsedQuantity);
+                                    if (kDebugMode) {
+                                      print(parsedQuantity);
+                                    }
                                     Navigator.of(context)
                                         .pop(); // Cerrar el diálogo
 
@@ -409,7 +414,9 @@ class _SaleEditState extends State<SaleEdit> {
                               selectedBarcode = newValue!;
                             });
                             setState(() {});
-                            print(selectedBarcode);
+                            if (kDebugMode) {
+                              print(selectedBarcode);
+                            }
                           },
                           items: data.map((Map<String, dynamic> item) {
                             return DropdownMenuItem<String>(

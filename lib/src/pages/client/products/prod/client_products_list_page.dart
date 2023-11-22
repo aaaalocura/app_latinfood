@@ -303,6 +303,18 @@ class ProductsListPage extends StatelessWidget {
                                             ),
                                           ),
                                           const SizedBox(height: 4),
+                                          Text( 
+                                            'Descripcion: ${product.descripcion}',
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                              color: Color(0xFF999999),
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: false,
+                                          ),
+                                          const SizedBox(height: 4),
                                           Text(
                                             '\$${((product.tam1 ?? 1) * product.price).toStringAsFixed(2)}',
                                             style: const TextStyle(
@@ -311,6 +323,8 @@ class ProductsListPage extends StatelessWidget {
                                               color: Color(0xE5FF5100),
                                             ),
                                           ),
+                                          
+                                          
                                         ],
                                       ),
                                     ),

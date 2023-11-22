@@ -9,6 +9,10 @@ import 'package:http/http.dart' as http;
 
 class QRScannerController extends GetxController {
   var getResult = 'QR Code Result';
+  RxInt scanned = 0.obs;
+  void _updateScreen() {
+    update();
+  }
 
   Future<void> sendQRCodeToAPI(String qrCode, String ventaId) async {
     Get.dialog(
@@ -53,6 +57,7 @@ class QRScannerController extends GetxController {
           final message = jsonResponse['message'];
 
           if (message == 'Pase al siguiente producto.') {
+            _updateScreen();
             _showAlertDialog(message);
           } else if (message == 'Todos los codigos QR han sido escaneados.') {
             _showAllScannedDialog(message);
@@ -103,6 +108,10 @@ class QRScannerController extends GetxController {
     );
   }
 
+  void goToAdminPedidos() {
+    Get.toNamed('/homeadmin');
+  }
+
   void _showAllScannedDialog(String message) {
     Get.dialog(
       CupertinoAlertDialog(
@@ -112,7 +121,7 @@ class QRScannerController extends GetxController {
           CupertinoDialogAction(
             child: const Text('OK'),
             onPressed: () {
-              Get.back(); // Regresar a la pantalla anterior
+              goToAdminPedidos();
             },
           ),
         ],

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:app_latin_food/src/pages/admin/pedido-edit/controller.dart';
 import 'package:app_latin_food/src/pages/admin/pedido-edit/pedido_edit_page.dart';
 import 'package:app_latin_food/src/pages/admin/pedido_edit.dart';
@@ -14,6 +16,7 @@ class SaleDetailPage extends StatelessWidget {
   final List<SaleDetail> saleDetails;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
  
+    // ignore: empty_constructor_bodies
     SaleDetailPage({super.key, required this.sale, required this.saleDetails}) {
   }
   void goToAdminPedidos() {

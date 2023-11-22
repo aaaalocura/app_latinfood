@@ -3,6 +3,61 @@ import 'package:app_latin_food/src/pages/admin/pedido-on-transit/pedido_ontransi
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class SaleDetailItem extends StatefulWidget {
+  final SaleDetail detail;
+
+  SaleDetailItem({required this.detail, Key? key}) : super(key: key);
+
+  @override
+  _SaleDetailItemState createState() => _SaleDetailItemState();
+}
+
+class _SaleDetailItemState extends State<SaleDetailItem> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2.0,
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: ListTile(
+        title: Text(widget.detail.product.name!),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('SKU: ${widget.detail.product.barcode}'),
+            Text('Precio: \$${widget.detail.price}'),
+            Text('Cantidad: ${widget.detail.quantity}'),
+            const SizedBox(height: 16.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  Icons.check_circle_outline_outlined,
+                  size: 24.0,
+                  color: widget.detail.scanned == 1
+                      ? Colors.green
+                      : Colors.grey, // Icono de verificación en verde
+                ),
+                Text(
+                  widget.detail.scanned == 1
+                      ? 'Producto Escaneado'
+                      : 'Producto sin escanear',
+                  style: const TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class SaleDetailPageN extends StatefulWidget {
   final Sale sale;
 
@@ -11,7 +66,6 @@ class SaleDetailPageN extends StatefulWidget {
       : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _SaleDetailPageState createState() => _SaleDetailPageState();
 }
 
@@ -24,7 +78,6 @@ class _SaleDetailPageState extends State<SaleDetailPageN> {
     _qrScannerController = QRScannerController();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,9 +115,9 @@ class _SaleDetailPageState extends State<SaleDetailPageN> {
                       ),
                     ),
                     const Icon(
-                      Icons.receipt, // Icono para resaltar el número de pedido
+                      Icons.receipt,
                       size: 32.0,
-                      color: Color(0xE5FF5100), // Color de la aplicación
+                      color: Color(0xE5FF5100),
                     ),
                   ],
                 ),
@@ -84,59 +137,16 @@ class _SaleDetailPageState extends State<SaleDetailPageN> {
                   'Estado de Envío: ${widget.sale.statusEnvio}',
                   style: const TextStyle(fontSize: 16.0),
                 ),
-                const SizedBox(
-                    height:
-                        16.0), // Espacio entre detalles y lista de productos
+                const SizedBox(height: 16.0),
                 const Text('Productos en el Pedido',
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8.0),
                 Expanded(
                   child: ListView.builder(
                     itemCount: widget.sale.salesDetails.length,
                     itemBuilder: (context, index) {
                       final detail = widget.sale.salesDetails[index];
-                      final product = detail.product;
-
-                      return Card(
-                        elevation: 2.0,
-                        margin: const EdgeInsets.symmetric(vertical: 8.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: ListTile(
-                          title: Text(product.name!),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('SKU: ${detail.product.barcode}'),
-                              Text('Precio: \$${detail.price}'),
-                              Text('Cantidad: ${detail.quantity}'),
-                              const SizedBox(height: 16.0),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children:  [
-                                  
-                                  Icon(
-                                    Icons.check_circle_outline_outlined,
-                                    size: 24.0,
-                                    color: detail.scanned==1 ? Colors.green:Colors.grey, // Icono de verificación en verde
-                                  ),
-                                  // ignore: prefer_const_constructors
-                                  Text(
-                                    detail.scanned==1 ?'Producto Scaneado':'Producto sin scanear',
-                                    style: const TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                      return SaleDetailItem(detail: detail);
                     },
                   ),
                 ),
@@ -155,7 +165,7 @@ class _SaleDetailPageState extends State<SaleDetailPageN> {
           ),
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: const Text(
-            'Open Scan',
+            'Abrir Escáner',
             style: TextStyle(
               color: Colors.white,
             ),

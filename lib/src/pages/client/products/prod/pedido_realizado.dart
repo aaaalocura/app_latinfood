@@ -1,3 +1,4 @@
+import 'package:app_latin_food/src/pages/client/products/list/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
 import 'package:app_latin_food/src/pages/envios/envios_page.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,8 @@ import 'package:page_transition/page_transition.dart';
 
 class PedidoRealizadoPage extends StatelessWidget {
   PedidoRealizadoPage({super.key});
+  final ClientProductsListController con5 =
+      Get.put(ClientProductsListController());
   final ClientProfileInfoController con1 =
       Get.put(ClientProfileInfoController());
   @override
@@ -41,15 +44,9 @@ class PedidoRealizadoPage extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: ClientOrdersPage(customerId: userId),
-                        ),
-                      );
-                      Get.offNamed(
-                          '/home/delyvery'); // Redirecciona a la ruta '/home/delyvery'
+                      Get.toNamed('/home');
+                      con5.indexTab(
+                          2); // Redirecciona a la ruta '/home/delyvery'
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
@@ -71,8 +68,8 @@ class PedidoRealizadoPage extends StatelessWidget {
                   const SizedBox(height: 16), // Espacio entre los botones
                   ElevatedButton(
                     onPressed: () {
-                      // Aquí agregas la lógica para redireccionar al home
-                      Get.offNamed('/home'); // Redirecciona a la ruta '/home'
+                      Get.toNamed('/home');
+                      con5.indexTab(0);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
