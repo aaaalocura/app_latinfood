@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ClientSettingsPage extends StatelessWidget {
-  const ClientSettingsPage({super.key});
+   const ClientSettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ClientSettingsPage extends StatelessWidget {
         elevation: 0.5,
           actions: [
     Padding(
-      padding: const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
+      padding:  const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
       child: Image.network(
         'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
         width: 50, // Ajusta el ancho de la imagen según tus necesidades
@@ -37,7 +37,7 @@ class ClientSettingsPage extends StatelessWidget {
       ),
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:  const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -46,7 +46,7 @@ class ClientSettingsPage extends StatelessWidget {
                 onTap: () {
                   //Get.to(ClientDatosPage());
                 },
-                child: Padding(
+                child:  Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     children: const [
@@ -76,7 +76,7 @@ class ClientSettingsPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 // Cambiar el tema de la aplicación al tema oscuro
@@ -88,7 +88,7 @@ class ClientSettingsPage extends StatelessWidget {
                       20), // Ajusta el valor según el radio que desees
                 ),
               ),
-              child: const Text(
+              child:  const Text(
                 'Cambiar a tema oscuro',
                 style: TextStyle(
                   fontSize: 16,

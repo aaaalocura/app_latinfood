@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:app_latin_food/src/models/pedidos.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
@@ -22,34 +21,29 @@ class ClientOrdersPage extends StatelessWidget {
         title: const Text('Ongoing Transaction'),
         backgroundColor: Colors.white,
         elevation: 0.5,
-         flexibleSpace: FlexibleSpaceBar(
+        flexibleSpace: FlexibleSpaceBar(
           background: Stack(
             fit: StackFit.expand,
-            children: [
+            children: const [
               // Coloca aquí la imagen o cualquier otro contenido que desees tener detrás del AppBar
 
               // BackdropFilter para aplicar el efecto de difuminado
-              BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                child: Container(
-                  color: const Color.fromARGB(255, 255, 255, 255)
-                      .withOpacity(0.1), // Color de difuminado
-                ),
-              ),
+             
             ],
           ),
         ),
         automaticallyImplyLeading: false,
-          actions: [
-    Padding(
-      padding: const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
-      child: Image.network(
-        'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-        width: 50, // Ajusta el ancho de la imagen según tus necesidades
-        height: 50, // Ajusta el alto de la imagen según tus necesidades
-      ),
-    ),
-  ],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(
+                right: 10.0), // Ajusta el valor según tu preferencia
+            child: Image.network(
+              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+              width: 50, // Ajusta el ancho de la imagen según tus necesidades
+              height: 50, // Ajusta el alto de la imagen según tus necesidades
+            ),
+          ),
+        ],
       ),
       backgroundColor: Colors.white,
       body: ScrollConfiguration(
@@ -58,7 +52,7 @@ class ClientOrdersPage extends StatelessWidget {
           future: con.fetchClientOrders(customerId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CupertinoAlertDialog(
+              return  CupertinoAlertDialog(
                 content: Column(
                   children: const [
                     CupertinoActivityIndicator(),
@@ -68,7 +62,7 @@ class ClientOrdersPage extends StatelessWidget {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Center(
+              return  Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -98,7 +92,7 @@ class ClientOrdersPage extends StatelessWidget {
                 ),
               );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(
+              return  Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -129,6 +123,7 @@ class ClientOrdersPage extends StatelessWidget {
             } else {
               final orders = snapshot.data!;
               return ListView.builder(
+                
                 physics: const BouncingScrollPhysics(),
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
@@ -136,6 +131,7 @@ class ClientOrdersPage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
                     child: Card(
+                      color: Colors.white,
                       child: Column(
                         children: [
                           Container(

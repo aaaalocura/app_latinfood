@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 
+
 class QRScannerController extends GetxController {
   var getResult = 'QR Code Result';
   RxInt scanned = 0.obs;
@@ -14,13 +15,14 @@ class QRScannerController extends GetxController {
     update();
   }
 
-  Future<void> sendQRCodeToAPI(String qrCode, String ventaId) async {
+  Future<void> sendQRCodeToAPI(String qrCode, String keyProduct, int productID,
+      int saleID, int? id) async {
     Get.dialog(
       CupertinoAlertDialog(
         title: const Text('Cargando...'),
         content: Container(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
+          child:  Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
               CircularProgressIndicator(),
@@ -43,8 +45,11 @@ class QRScannerController extends GetxController {
       final response = await http.post(
         apiUrl,
         body: {
-          'ventaId': ventaId,
+          'ventaId': saleID.toString(),
           'qrCode': qrCode,
+          'product_id': productID.toString(),
+          'venta_detalle': id.toString(),
+          'key_prod': keyProduct,
         },
       );
 
@@ -59,8 +64,21 @@ class QRScannerController extends GetxController {
           if (message == 'Pase al siguiente producto.') {
             _updateScreen();
             _showAlertDialog(message);
-          } else if (message == 'Todos los codigos QR han sido escaneados.') {
+          } else if (message == 'Todos los códigos QR han sido escaneados.') {
             _showAllScannedDialog(message);
+
+            // Hacer el segundo POST a la nueva ruta
+            final secondResponse = await http.post(
+              Uri.parse(
+                  'https://kdlatinfood.com/intranet/public/api/updateActualSales'),
+              // Aquí coloca los datos que deseas enviar en el segundo POST
+              // {'key': 'value'},
+            );
+
+            // Imprimir la respuesta del segundo POST
+            if (kDebugMode) {
+              print('Respuesta del segundo POST: ${secondResponse.body}');
+            }
           } else {
             _showSnackbar(message);
           }
@@ -76,6 +94,9 @@ class QRScannerController extends GetxController {
     } catch (e) {
       Get.back(); // Cerrar el diálogo de carga
       _showErrorDialog('Error de conexión: $e');
+      if (kDebugMode) {
+        print('$e');
+      }
       if (kDebugMode) {
         print('Error de conexión: $e');
       }
@@ -129,7 +150,16 @@ class QRScannerController extends GetxController {
     );
   }
 
-  void scanQR(BuildContext context, String saleId) async {
+  void scanQR(BuildContext context, String keyProduct, int productID,
+      int saleID, int? id) async {
+    if (kDebugMode) {
+      print('Valor de keyProduct: $keyProduct');
+      print('Valor de productID: $productID');
+      print('Valor de saleID: $saleID');
+      print('Valor de Saleid_detalle: $id');
+      print('Valor del código QR: $getResult');
+    }
+
     try {
       String result = await FlutterBarcodeScanner.scanBarcode(
         '#ff6666', // Color de fondo del cabezal del escáner
@@ -140,10 +170,18 @@ class QRScannerController extends GetxController {
 
       if (result != '-1') {
         getResult = result;
+
+        // Imprimir por consola los valores que llegan a la función
         if (kDebugMode) {
+          print('Valor de keyProduct: $keyProduct');
+          print('Valor de productID: $productID');
+          print('Valor de saleID: $saleID');
+          print('Valor de Saleid_detalle: $id');
           print('Valor del código QR: $getResult');
         }
-        sendQRCodeToAPI(getResult, saleId);
+
+        // Llamar a la función sendQRCodeToAPI con los valores recibidos
+        sendQRCodeToAPI(getResult, keyProduct, productID, saleID, id);
       }
     } catch (e) {
       _showErrorDialog('Error al escanear el código QR: $e');

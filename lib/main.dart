@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:app_latin_food/src/models/category.dart';
 import 'package:app_latin_food/src/models/user.dart';
 import 'package:app_latin_food/src/pages/admin/botonbar.dart';
@@ -14,6 +16,10 @@ import 'package:app_latin_food/src/pages/login/login_page_admin.dart';
 import 'package:app_latin_food/src/pages/register/register_page.dart';
 import 'package:app_latin_food/src/providers/category_provider.dart';
 import 'package:app_latin_food/src/splash/page.dart';
+import 'package:app_latin_food/src/utils/firebase_config.dart';
+import 'package:app_latin_food/src/utils/push_notificacion_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -21,8 +27,22 @@ import 'package:get_storage/get_storage.dart';
 CategoriesProviders categoriesProviders = CategoriesProviders();
 User userSession = User.fromJson(GetStorage().read('user') ?? {});
 final ClientProfileInfoController con1 = Get.put(ClientProfileInfoController());
+PushNotificationsProvider pushNotificationsProvider= PushNotificationsProvider();
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: FireBaseConfig.currentPlatform);
+  
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  print('Recibiendo notificacio nen segundo plano ${message.messageId}');
+  pushNotificationsProvider.showNotification(message);
+}
 void main() async {
   await GetStorage.init();
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(options: FireBaseConfig.currentPlatform);
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    pushNotificationsProvider.initPushNotifications();
+  
   runApp(const MyApp());
   Get.put(CartController());
 }
@@ -51,6 +71,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(
         this); // Registra esta instancia como observador de ciclo de vida
+        pushNotificationsProvider.onMessageListener();
   }
 
   @override
@@ -75,7 +96,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         GetPage(name: '/login', page: () => LoginPage()),
         GetPage(name: '/loginAdmin', page: () => LoginPageAdmin()),
         GetPage(name: '/register', page: () => const RegisterPage()),
-        GetPage(name: '/PedidosAdmin', page: () => const PedidosAdmin()),
+        // ignore: prefer_const_constructors
+        GetPage(name: '/PedidosAdmin', page: () =>  PedidosAdmin()),
         GetPage(name: '/SalesListPage', page: () => const SalesListPage()),
         //GetPage(name: '/home', page: () =>  HomePage()),
         GetPage(
@@ -101,7 +123,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         primaryColor: const Color(0xE5FF5100),
         fontFamily: 'Poppoins',
         colorScheme: const ColorScheme.light(
-          primary: Color(0xE5FF5100),
+          primary: Color.fromARGB(228, 255, 255, 255),
           onPrimary: Colors.black,
           background: Colors.white,
           onBackground: Colors.black,
@@ -110,7 +132,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         brightness: Brightness.light,
       ),
-
       navigatorKey: Get.key,
     );
   }

@@ -51,7 +51,11 @@ dependencies:
   floating_snackbar: ^1.0.3+1
   intl: ^0.18.1
   flutter_barcode_scanner: ^2.0.0
-  
+  socket_io_client: ^2.0.3+1
+  firebase_messaging: ^14.7.6
+  firebase_core: ^2.24.0
+  flutter_local_notifications: ^16.2.0
+  badges: ^2.0.1
   
 
 dev_dependencies:

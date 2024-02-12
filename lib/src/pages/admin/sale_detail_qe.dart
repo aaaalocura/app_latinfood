@@ -29,7 +29,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
+        return  AlertDialog(
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
@@ -280,7 +280,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                               Text('Precio: \$${detail.price}'),
                               Text('Cantidad: ${detail.quantity}'),
                               const SizedBox(height: 16.0),
-                              Row(
+                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: const [

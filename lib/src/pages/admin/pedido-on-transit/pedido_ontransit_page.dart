@@ -1,11 +1,13 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:app_latin_food/src/models/sale_model.dart';
 import 'package:app_latin_food/src/pages/admin/pedido-on-transit/pedido_ontransit_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SaleDetailItem extends StatefulWidget {
   final SaleDetail detail;
 
+  // ignore: prefer_const_constructors_in_immutables
   SaleDetailItem({required this.detail, Key? key}) : super(key: key);
 
   @override
@@ -13,8 +15,18 @@ class SaleDetailItem extends StatefulWidget {
 }
 
 class _SaleDetailItemState extends State<SaleDetailItem> {
+  late QRScannerController
+      _qrScannerController; // Asegúrate de importar QrScannerController
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    _qrScannerController =
+        QRScannerController(); // Reemplaza QrScannerController con tu lógica de inicialización real
+  }
+
+  @override
+Widget build(BuildContext context) {
     return Card(
       elevation: 2.0,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -22,6 +34,12 @@ class _SaleDetailItemState extends State<SaleDetailItem> {
         borderRadius: BorderRadius.circular(12.0),
       ),
       child: ListTile(
+        leading: IconButton(
+          icon: const Icon(Icons.qr_code),
+          onPressed: () {
+            _scanQRCode();
+          },
+        ),
         title: Text(widget.detail.product.name!),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,6 +47,7 @@ class _SaleDetailItemState extends State<SaleDetailItem> {
             Text('SKU: ${widget.detail.product.barcode}'),
             Text('Precio: \$${widget.detail.price}'),
             Text('Cantidad: ${widget.detail.quantity}'),
+            Text('Id: ${widget.detail.product.id}'),
             const SizedBox(height: 16.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,6 +75,16 @@ class _SaleDetailItemState extends State<SaleDetailItem> {
       ),
     );
   }
+
+  void _scanQRCode() {
+    _qrScannerController.scanQR(
+      context,
+      widget.detail.product.KeyProduct!,
+      widget.detail.productID,
+      widget.detail.saleID,
+      widget.detail.id,
+    );
+  }
 }
 
 class SaleDetailPageN extends StatefulWidget {
@@ -70,12 +99,10 @@ class SaleDetailPageN extends StatefulWidget {
 }
 
 class _SaleDetailPageState extends State<SaleDetailPageN> {
-  late QRScannerController _qrScannerController;
 
   @override
   void initState() {
     super.initState();
-    _qrScannerController = QRScannerController();
   }
 
   @override
@@ -139,7 +166,8 @@ class _SaleDetailPageState extends State<SaleDetailPageN> {
                 ),
                 const SizedBox(height: 16.0),
                 const Text('Productos en el Pedido',
-                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8.0),
                 Expanded(
                   child: ListView.builder(
@@ -151,23 +179,6 @@ class _SaleDetailPageState extends State<SaleDetailPageN> {
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-      ),
-      floatingActionButton: CupertinoButton(
-        onPressed: () =>
-            _qrScannerController.scanQR(context, widget.sale.id.toString()),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            color: const Color(0xE5FF5100),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-          child: const Text(
-            'Abrir Escáner',
-            style: TextStyle(
-              color: Colors.white,
             ),
           ),
         ),

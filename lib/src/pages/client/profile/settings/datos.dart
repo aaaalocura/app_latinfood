@@ -120,6 +120,7 @@ class _ClientDatosPageState extends State<ClientDatosPage> {
         );
       }
     } catch (error) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error de conexión')),
       );

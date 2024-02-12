@@ -45,7 +45,7 @@ class CheckOutPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
+           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,7 +73,7 @@ class CheckOutPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                     Row(
                       // Alineación horizontal del icono y el texto
                       children: const [
                         Icon(
@@ -226,6 +226,7 @@ class CheckOutPage extends StatelessWidget {
           }
         },
         style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xE5FF5100),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),

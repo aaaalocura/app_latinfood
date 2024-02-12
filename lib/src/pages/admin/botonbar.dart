@@ -1,5 +1,5 @@
 import 'package:app_latin_food/src/pages/admin/envios_admin.dart';
-import 'package:app_latin_food/src/pages/admin/pedidos_admin.dart';
+import 'package:app_latin_food/src/pages/admin/pedidos-home/pedidos_home_pague.dart';
 import 'package:app_latin_food/src/pages/admin/perfil_admin.dart';
 
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
@@ -28,9 +28,13 @@ class ClientProductsListPageAdmin extends StatelessWidget {
       body: Obx(
         () => IndexedStack(
           index: con.indexTab.value,
-          children: const [
-            PedidosAdmin(),
+          // ignore: prefer_const_literals_to_create_immutables
+          children:  [
+            // ignore: prefer_const_constructors
+            HomePedidosView(),
+            // ignore: prefer_const_constructors
             SalesListPage(),
+            // ignore: prefer_const_constructors
             PerfilAdmin(),
           ],
         ),

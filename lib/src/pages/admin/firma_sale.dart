@@ -42,7 +42,7 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Detalle del pedido ',
+          'Order detail',
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
@@ -74,30 +74,77 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Order ID: ${widget.sale.id}',
-                  style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.shopping_cart,
+                          size: 28.0,
+                          color: Colors.blue,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Text(
+                          'Order ID: ${widget.sale.id}',
+                          style: const TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Total: \$${widget.sale.total}',
+                          style: const TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          'Total Items: ${widget.sale.items}',
+                          style: const TextStyle(fontSize: 18.0),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Text(
+                      'Order Status: ${widget.sale.status}',
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                    Text(
+                      'Shipment Status: ${widget.sale.statusEnvio}',
+                      style: const TextStyle(fontSize: 18.0),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Row(
+                      children: const [
+                        Icon(
+                          Icons.shopping_basket,
+                          size: 24.0,
+                          color: Colors.green,
+                        ),
+                        SizedBox(width: 8.0),
+                        Text(
+                          'Products in Order',
+                          style: TextStyle(
+                              fontSize: 24.0, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Text(
-                  'Total: \$${widget.sale.total}',
-                  style: const TextStyle(fontSize: 16.0),
-                ),
-                Text(
-                  'Total de Items: ${widget.sale.items}',
-                  style: const TextStyle(fontSize: 16.0),
-                ),
-                Text(
-                  'Estado: ${widget.sale.status}',
-                  style: const TextStyle(fontSize: 16.0),
-                ),
-                Text(
-                  'Estado de Envío: ${widget.sale.statusEnvio}',
-                  style: const TextStyle(fontSize: 16.0),
-                ),
+
                 const SizedBox(
                     height:
                         16.0), // Espacio entre detalles y lista de productos
-                const Text('Productos en el Pedido',
+                const Text('Products in the Order',
                     style:
                         TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8.0),
@@ -115,20 +162,34 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: ListTile(
+                          contentPadding: const EdgeInsets.all(16.0),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              "https://kdlatinfood.com/intranet/public/storage/products/${detail.product.image ?? ""}",
+                              width:
+                                  80.0, // Ajusta el ancho de la imagen según sea necesario
+                              height:
+                                  80.0, // Ajusta la altura de la imagen según sea necesario
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           title: Text(
                             product.name!,
                             style: const TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Precio: \$${detail.price}',
+                                'Price: \$${detail.price}',
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               Text(
-                                'Cantidad: ${detail.quantity}',
+                                'Amount: ${detail.quantity} items',
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               // Agrega más detalles del producto si es necesario.
@@ -223,12 +284,17 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return CupertinoAlertDialog(
-                                      title: const Text('Completado'),
+                                      title: const Text('Filled'),
                                       content: const Text(
-                                          'Pedido finalizado exitosamente'),
+                                          'Order completed successfully'),
                                       actions: [
                                         CupertinoDialogAction(
-                                          child: const Text('OK'),
+                                          child:  const Text('OK',
+                                style: TextStyle(
+                                  color: Colors
+                                      .black, // Cambia el color del texto a blanco
+                                  fontSize: 14.0,
+                                )),
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                             goToAdminPedidos();
@@ -248,7 +314,18 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                                 // Muestra un mensaje de error al usuario si lo deseas
                               }
                             },
-                            child: const Text('Confirmar'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xE5FF5100),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            child: const Text('Confirm',
+                                style: TextStyle(
+                                  color: Colors
+                                      .white, // Cambia el color del texto a blanco
+                                  fontSize: 14.0,
+                                )),
                           ),
                           const SizedBox(width: 20), // Espacio entre botones
                         ],
@@ -270,11 +347,12 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
-            color: Colors.blue, // Cambia el color según tu preferencia
+            color:
+                const Color(0xE5FF5100), // Cambia el color según tu preferencia
           ),
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
           child: const Text(
-            'Entregar',
+            'Deliver',
             style: TextStyle(
               color: Colors
                   .white, // Cambia el color del texto según tu preferencia

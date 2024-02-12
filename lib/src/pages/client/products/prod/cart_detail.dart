@@ -30,8 +30,7 @@ class _CartPageState extends State<CartPage> {
         automaticallyImplyLeading: false,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(
-                right: 10.0), 
+            padding: const EdgeInsets.only(right: 10.0),
             child: Image.network(
               'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
               width: 50,
@@ -43,12 +42,11 @@ class _CartPageState extends State<CartPage> {
           background: Stack(
             fit: StackFit.expand,
             children: [
-             
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                 child: Container(
-                  color: const Color.fromARGB(255, 255, 255, 255)
-                      .withOpacity(0.1), 
+                  color:
+                      const Color.fromARGB(255, 255, 255, 255).withOpacity(0.1),
                 ),
               ),
             ],
@@ -61,13 +59,10 @@ class _CartPageState extends State<CartPage> {
         children: [
           const SizedBox(height: 30),
           Container(
-            padding: const EdgeInsets.symmetric(
-                vertical: 10, horizontal: 20), 
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             decoration: BoxDecoration(
-              color: const Color(0xFFFF7B33)
-                  .withOpacity(0.1), 
-              borderRadius:
-                  BorderRadius.circular(30), 
+              color: const Color(0xFFFF7B33).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(30),
             ),
             child: Text(
               'You have ${cartController.cartItemCount} items in your shopping cart',
@@ -107,15 +102,12 @@ class _CartPageState extends State<CartPage> {
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal:
-                              12.0), 
+                          vertical: 8.0, horizontal: 12.0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            10), 
+                        borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: Colors.white, 
-                          width: 1, 
+                          color: Colors.white,
+                          width: 1,
                         ),
                       ),
                       child: ListTile(
@@ -140,9 +132,7 @@ class _CartPageState extends State<CartPage> {
                                 style: const TextStyle(fontSize: 18),
                                 textAlign: TextAlign.left,
                               ),
-                              const SizedBox(
-                                  height:
-                                      5), 
+                              const SizedBox(height: 5),
                               Row(
                                 children: [
                                   Text(
@@ -154,8 +144,7 @@ class _CartPageState extends State<CartPage> {
                                       color: Color(0xFF999999),
                                     ),
                                   ),
-                                  const SizedBox(
-                                      width: 4), 
+                                  const SizedBox(width: 4),
                                   const Text(
                                     '•', // Punto
                                     style: TextStyle(
@@ -163,8 +152,7 @@ class _CartPageState extends State<CartPage> {
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  const SizedBox(
-                                      width: 4), 
+                                  const SizedBox(width: 4),
                                   Text(
                                     cartItem.product.saborId ??
                                         'Not Flavor', // Texto derecho
@@ -185,7 +173,7 @@ class _CartPageState extends State<CartPage> {
                                   const SizedBox(
                                       width: 4), // Espacio entre los textos
                                   Text(
-                                  cartItem.quantity.toString(),
+                                    cartItem.quantity.toString(),
                                     style: const TextStyle(
                                       fontSize: 10,
                                       fontWeight: FontWeight.w300,
@@ -222,7 +210,8 @@ class _CartPageState extends State<CartPage> {
                                   },
                                 ),
                                 Text(
-                                  (cartItem.quantity ~/ cartItem.tam!).toString(),
+                                  (cartItem.quantity ~/ cartItem.tam!)
+                                      .toString(),
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
@@ -251,35 +240,40 @@ class _CartPageState extends State<CartPage> {
           ),
         ],
       ),
-      floatingActionButton: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            PageTransition(
-              type: PageTransitionType.fade,
-              child: CheckOutPage(),
+      floatingActionButton: Obx(() {
+        return ElevatedButton(
+          onPressed: cartController.cartItemCount > 0
+              ? () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.fade,
+                      child: CheckOutPage(),
+                    ),
+                  );
+                }
+              : null, // Deshabilita el botón si no hay productos en el carrito
+          style: ElevatedButton.styleFrom(
+            backgroundColor: cartController.cartItemCount > 0
+                ? const Color(0xE5FF5100)
+                : Colors
+                    .grey, // Cambia el color del botón si está deshabilitado
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 12),
-        ),
-        child: const Text(
-          'Place Order',
-          style: TextStyle(
-            fontSize: 16, // El tamaño de fuente en sp
-            height: 1, // La altura de línea en sp
-            // El nombre de la fuente 'Inter'
-            fontWeight:
-                FontWeight.w500, // El peso de fuente, en este caso 500 (medio)
-            color: Color.fromARGB(255, 255, 253,
-                253), // El color del texto en formato ARGB (8 dígitos hexadecimales)
+          child: const Text(
+            'Place Order',
+            style: TextStyle(
+              fontSize: 16,
+              height: 1,
+              fontWeight: FontWeight.w500,
+              color: Color.fromARGB(255, 255, 253, 253),
+            ),
           ),
-        ),
-      ),
+        );
+      }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

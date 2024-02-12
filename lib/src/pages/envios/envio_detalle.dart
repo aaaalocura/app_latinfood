@@ -1,5 +1,6 @@
 import 'package:app_latin_food/src/models/pedidos.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -207,7 +208,6 @@ class EnvioDetallePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                
               ],
             ),
 
@@ -228,7 +228,6 @@ class EnvioDetallePage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final detail = order.salesDetails[index];
                   return _buildOrderDetailItem(detail);
-                  
                 },
               ),
             ),
@@ -249,10 +248,17 @@ class EnvioDetallePage extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.shopping_cart,
-                  size: 36,
-                  color: Color(0xE5FF5100),
+                CachedNetworkImage(
+                  imageUrl:
+                      "https://kdlatinfood.com/intranet/public/storage/products/${detail.product?.image ?? ""}",
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) {
+                    return Container();
+                  },
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.contain,
                 ),
                 const SizedBox(width: 16),
                 Expanded(

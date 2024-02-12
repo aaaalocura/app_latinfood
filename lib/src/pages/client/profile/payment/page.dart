@@ -6,32 +6,32 @@ import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// ignore: use_key_in_widget_constructors
+// ignore: use_key_in_widget_ructors
 class PaymentMethodsPage extends StatelessWidget {
   final ClientProfileInfoController con =
       Get.put(ClientProfileInfoController());
   final int customerId;
 
-  // Constructor que recibe el customerId
+  // ructor que recibe el customerId
   PaymentMethodsPage({Key? key, required this.customerId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(
+          icon:  const Icon(
             Icons.arrow_back_ios,
             color: Color(0xE5FF5100),
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Payment Methods'),
+        title:  const Text('Payment Methods'),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0.5,
           actions: [
     Padding(
-      padding: const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
+      padding:  const EdgeInsets.only(right: 10.0), // Ajusta el valor según tu preferencia
       child: Image.network(
         'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
         width: 50, // Ajusta el ancho de la imagen según tus necesidades
@@ -43,12 +43,12 @@ class PaymentMethodsPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding:  const EdgeInsets.all(20.0),
           child: FutureBuilder<FindCustomer>(
             future: fetchCustomerData(customerId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CupertinoAlertDialog(
+                return  CupertinoAlertDialog(
                   content: Column(
                     children: const [
                       CupertinoActivityIndicator(),
@@ -58,7 +58,7 @@ class PaymentMethodsPage extends StatelessWidget {
                   ),
                 );
               } else if (snapshot.hasError) {
-                 return Center(
+                 return  Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -104,11 +104,11 @@ class PaymentMethodsPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(20.0),
+                            padding:  const EdgeInsets.all(20.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
+                                 const Text(
                                   'Wallet:',
                                   style: TextStyle(
                                     fontSize: 20,
@@ -117,10 +117,10 @@ class PaymentMethodsPage extends StatelessWidget {
                                     color: Color.fromARGB(255, 0, 0, 0),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
+                                 const SizedBox(height: 10),
                                 Text(
                                   '\$${customer.saldo} USD',
-                                  style: const TextStyle(
+                                  style:  const TextStyle(
                                     fontSize: 30,
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.bold,
@@ -141,7 +141,7 @@ class PaymentMethodsPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          child: Padding(
+                          child:  Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,7 +180,7 @@ class PaymentMethodsPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          child: Padding(
+                          child:  Padding(
                             padding: const EdgeInsets.all(20.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +223,7 @@ class PaymentMethodsPage extends StatelessWidget {
 }
 
 Future<FindCustomer> fetchCustomerData(int customerId) async {
-  const maxAttempts = 3; // Número máximo de intentos
+  var maxAttempts = 3; // Número máximo de intentos
   var attempts = 0;
 
   while (attempts < maxAttempts) {

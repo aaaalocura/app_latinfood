@@ -32,9 +32,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   int selectedSizeMultiplier = 1; // Multiplicador del precio inicial
   final cartController = Get.find<CartController>();
 
-
   int selectedSizeMultiplier2 = 1; // Multiplicador del precio inicial
-  
+
   // ignore: unused_element
   double _generateRandomRating() {
     final random = Random();
@@ -49,17 +48,20 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     final int? userId =
         con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
 
-    final tamDefecto=widget.product.tam1!;    
-          // ignore: unused_element
-          void updateQuantity() {
-    // Actualizar la cantidad en función del tamaño seleccionado
-    if (selectedSizeMultiplier == 1) {
-      quantity = widget.product.tam1!; // Puedes establecer la cantidad según el tamaño 1
-    } else if (selectedSizeMultiplier == 2) {
-      quantity =widget.product.tam2!; // Puedes establecer la cantidad según el tamaño 2
+    final tamDefecto = widget.product.tam1!;
+    // ignore: unused_element
+    void updateQuantity() {
+      // Actualizar la cantidad en función del tamaño seleccionado
+      if (selectedSizeMultiplier == 1) {
+        quantity = widget
+            .product.tam1!; // Puedes establecer la cantidad según el tamaño 1
+      } else if (selectedSizeMultiplier == 2) {
+        quantity = widget
+            .product.tam2!; // Puedes establecer la cantidad según el tamaño 2
+      }
     }
-  }
-    // ignore: non_constant_identifier_names
+
+    // ignore: non_ant_identifier_names, non_constant_identifier_names
     final int id_prod = widget.product.id;
     // ignore: unused_local_variable
     final RxBool isFavorite = false.obs;
@@ -231,83 +233,86 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ),
                     const SizedBox(height: 50),
                     // Botón para la cantidad
-Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    if (widget.product.tam1 != widget.product.tam2) // Verifica si son diferentes
-      ElevatedButton(
-        onPressed: () {
-          setState(() {
-            selectedSize =
-                "TAMAÑO 1"; // Cambiar el tamaño seleccionado
-            isAddToCartEnabled =
-                true; // Habilitar el botón "Add to Cart"
-            selectedSizeMultiplier = widget.product
-                .tam1!; // Establecer multiplicador a 2
-            selectedSizeMultiplier2 = 1;
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: selectedSize == "TAMAÑO 1"
-              ? Colors.green
-              :  const Color(0xE5FF5100), // Color de fondo naranja
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-                20.0), // Esquinas redondeadas
-          ),
-        ),
-        child: Text(
-          "${widget.product.tam1} p/c",
-          style: const TextStyle(
-            fontSize: 16, // El tamaño de fuente en sp
-            height: 1.5, // La altura de línea en sp
-            fontFamily:
-                'Inter', // El nombre de la fuente 'Inter'
-            fontWeight: FontWeight
-                .w600, // El peso de fuente, en este caso 600 (negrita)
-            color: Colors.white, // El color del texto
-          ),
-        ),
-      ),
-    if (widget.product.tam1 != widget.product.tam2) // Verifica si son diferentes
-      const SizedBox(width: 7), // Espacio entre los botones
-    ElevatedButton(
-      onPressed: () {
-        setState(() {
-          selectedSize =
-              "TAMAÑO 2"; // Cambiar el tamaño seleccionado
-          isAddToCartEnabled =
-              true; // Habilitar el botón "Add to Cart"
-          selectedSizeMultiplier = widget.product
-              .tam2!; // Establecer multiplicador a 2
-          selectedSizeMultiplier2 = 2;
-        });
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: selectedSize == "TAMAÑO 2"
-            ? Colors.green
-            : const Color(0xE5FF5100), // Color de fondo naranja
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-              20.0), // Esquinas redondeadas
-        ),
-      ),
-      child: Text(
-        "${widget.product.tam2} p/c",
-        style: const TextStyle(
-          fontSize: 16, // El tamaño de fuente en sp
-          height: 1.5, // La altura de línea en sp
-          fontFamily:
-              'Inter', // El nombre de la fuente 'Inter'
-          fontWeight: FontWeight
-              .w600, // El peso de fuente, en este caso 600 (negrita)
-          color: Colors.white, // El color del texto
-        ),
-      ),
-    ),
-  ],
-),
-
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (widget.product.tam1 !=
+                            widget.product.tam2) // Verifica si son diferentes
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                selectedSize =
+                                    "TAMAÑO 1"; // Cambiar el tamaño seleccionado
+                                isAddToCartEnabled =
+                                    true; // Habilitar el botón "Add to Cart"
+                                selectedSizeMultiplier = widget.product
+                                    .tam1!; // Establecer multiplicador a 2
+                                selectedSizeMultiplier2 = 1;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: selectedSize == "TAMAÑO 1"
+                                  ? Colors.green
+                                  : const Color(
+                                      0xE5FF5100), // Color de fondo naranja
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20.0), // Esquinas redondeadas
+                              ),
+                            ),
+                            child: Text(
+                              "${widget.product.tam1} p/c",
+                              style: const TextStyle(
+                                fontSize: 16, // El tamaño de fuente en sp
+                                height: 1.5, // La altura de línea en sp
+                                fontFamily:
+                                    'Inter', // El nombre de la fuente 'Inter'
+                                fontWeight: FontWeight
+                                    .w600, // El peso de fuente, en este caso 600 (negrita)
+                                color: Colors.white, // El color del texto
+                              ),
+                            ),
+                          ),
+                        if (widget.product.tam1 !=
+                            widget.product.tam2) // Verifica si son diferentes
+                          const SizedBox(width: 7), // Espacio entre los botones
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedSize =
+                                  "TAMAÑO 2"; // Cambiar el tamaño seleccionado
+                              isAddToCartEnabled =
+                                  true; // Habilitar el botón "Add to Cart"
+                              selectedSizeMultiplier = widget.product
+                                  .tam2!; // Establecer multiplicador a 2
+                              selectedSizeMultiplier2 = 2;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: selectedSize == "TAMAÑO 2"
+                                ? Colors.green
+                                : const Color(
+                                    0xE5FF5100), // Color de fondo naranja
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  20.0), // Esquinas redondeadas
+                            ),
+                          ),
+                          child: Text(
+                            "${widget.product.tam2} p/c",
+                            style: const TextStyle(
+                              fontSize: 16, // El tamaño de fuente en sp
+                              height: 1.5, // La altura de línea en sp
+                              fontFamily:
+                                  'Inter', // El nombre de la fuente 'Inter'
+                              fontWeight: FontWeight
+                                  .w600, // El peso de fuente, en este caso 600 (negrita)
+                              color: Colors.white, // El color del texto
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
 
                     const SizedBox(height: 60),
                     // Precio del producto
@@ -343,17 +348,25 @@ Row(
                         ElevatedButton.icon(
                           onPressed: isAddToCartEnabled
                               ? () {
-                      // Lógica para agregar al carrito con la cantidad y el tamaño seleccionados
-                      cartController.addToCart(
-                          widget.product, userId!, quantity, selectedSizeMultiplier);
-                      // Actualizar el contador del carrito|
-                      cartController.update();
-                      if (Navigator.canPop(context)) {
-                        Navigator.pop(context);
-                      }
-                    }
+                                  // Lógica para agregar al carrito con la cantidad y el tamaño seleccionados
+                                  cartController.addToCart(
+                                      widget.product,
+                                      userId!,
+                                      quantity,
+                                      selectedSizeMultiplier);
+                                  // Actualizar el contador del carrito|
+                                  cartController.update();
+                                  if (Navigator.canPop(context)) {
+                                    Navigator.pop(context);
+                                  }
+                                }
                               : null, // Deshabilitar el botón si no se ha seleccionado un tamaño
                           style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                selectedSize.isEmpty
+                                ? Colors.green
+                                : const Color(
+                                    0xE5FF5100),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(60),
                             ),
@@ -439,7 +452,10 @@ Row(
                                           onPressed: () {
                                             // Lógica para añadir al carrito
                                             cartController.addToCart(
-                                                relatedProduct, userId!, 1,tamDefecto);
+                                                relatedProduct,
+                                                userId!,
+                                                1,
+                                                tamDefecto);
                                             Navigator.pop(context);
                                           },
                                           child: const Text('Add to Cart'),

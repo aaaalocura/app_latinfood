@@ -1,11 +1,14 @@
-import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
-import 'package:app_latin_food/src/pages/admin/sale_detail_cargar.dart';
+import 'package:app_latin_food/src/pages/admin/pedidos-home/pedido-detalle/detalle_page.dart';
+import 'package:app_latin_food/src/pages/admin/pedidos-home/pedidos_home_controller.dart';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:app_latin_food/src/models/sale_model.dart';
 
-import '../../models/sale_model.dart';
-
-class PedidosAdmin extends StatelessWidget {
-  const PedidosAdmin({super.key});
+class HomePedidosView extends StatelessWidget {
+  final HomePedidosController controller = Get.put(HomePedidosController());
+  final RxBool isRefreshing = false.obs;
+  HomePedidosView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,28 +36,22 @@ class PedidosAdmin extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.white,
-      body: FutureBuilder<List<Sale>>(
-        future: fetchSales(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(
-                child: Text('Error al cargar los datos: ${snapshot.error}'));
+      body: Obx(
+        () {
+          if (controller.sales.isEmpty && !controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (controller.sales.isEmpty && controller.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           } else {
-            final sales = snapshot.data;
-            final pendingSales =
-                sales?.where((sale) => sale.status == 'PENDING').toList();
-
-            if (pendingSales == null || pendingSales.isEmpty) {
-              return const Center(
-                  child: Text('No se encontraron ventas pendientes a cargar.'));
-            }
-
             return ListView.builder(
-              itemCount: pendingSales.length,
+              itemCount: controller.sales.length,
               itemBuilder: (context, index) {
-                final sale = pendingSales[index];
+                
+                Sale sale = controller.sales[index];
                 return Card(
                   elevation: 4.0,
                   margin: const EdgeInsets.all(16.0),
@@ -68,7 +65,7 @@ class PedidosAdmin extends StatelessWidget {
                         // Navega a la página de detalles cuando se hace clic.
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => SaleDetailPage(
+                            builder: (context) => SaleDetailPageNew(
                               sale: sale,
                               saleDetails: sale.salesDetails,
                             ),
@@ -88,7 +85,7 @@ class PedidosAdmin extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'ID del Pedido: ${sale.id}',
+                              'Order ID: #${sale.id}',
                               style: const TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
@@ -102,9 +99,8 @@ class PedidosAdmin extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-
                             Text(
-                              'Estado de Envío: ${sale.statusEnvio}',
+                              'Shipping Status: ${sale.statusEnvio}',
                               style: const TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.white,
@@ -138,7 +134,7 @@ class PedidosAdmin extends StatelessWidget {
                                   horizontal: 24.0,
                                 ),
                                 child: Text(
-                                  'Ver Detalles',
+                                  'See details',
                                   style: TextStyle(
                                     color: Colors.deepOrange,
                                     fontWeight: FontWeight.bold,
@@ -156,6 +152,29 @@ class PedidosAdmin extends StatelessWidget {
             );
           }
         },
+      ),
+      floatingActionButton: Obx(
+        () => FloatingActionButton(
+          onPressed: () async {
+            if (!isRefreshing.value) {
+              isRefreshing.value = true;
+              try {
+                await controller.fetchSales();
+              } finally {
+                isRefreshing.value = false;
+              }
+            }
+          },
+          backgroundColor: const Color(0xE5FF5100),
+          child: isRefreshing.value
+              ? const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
+              : const  Icon(
+                  Icons.refresh_rounded,
+                  color: Colors.white, // Establece el color del icono en blanco
+                )
+        ),
       ),
     );
   }

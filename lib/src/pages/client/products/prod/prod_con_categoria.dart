@@ -45,7 +45,7 @@ class ProdCategoria extends StatelessWidget {
         elevation: 0.5,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(
+            padding:  const EdgeInsets.only(
                 right: 10.0), // Ajusta el valor según tu preferencia
             child: Image.network(
               'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
@@ -64,7 +64,7 @@ class ProdCategoria extends StatelessWidget {
               BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                 child: Container(
-                  color: const Color.fromARGB(255, 255, 255, 255)
+                  color:  const Color.fromARGB(255, 255, 255, 255)
                       .withOpacity(0.1), // Color de difuminado
                 ),
               ),
@@ -77,7 +77,7 @@ class ProdCategoria extends StatelessWidget {
         future: ProductController().fetchProductsByCategory(categoryId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CupertinoAlertDialog(
+            return  CupertinoAlertDialog(
               content: Column(
                 children: const [
                   CupertinoActivityIndicator(),
@@ -85,7 +85,7 @@ class ProdCategoria extends StatelessWidget {
               ),
             );
           } else if (snapshot.hasError) {
-            return Center(
+            return  Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -121,7 +121,7 @@ class ProdCategoria extends StatelessWidget {
     itemBuilder: (context, index) {
       var product = products[index];
       return Container(
-        margin: const EdgeInsets.all(8),
+        margin:  const EdgeInsets.all(8),
         child: Card(
           elevation: 2,
           child: InkWell(
@@ -134,7 +134,7 @@ class ProdCategoria extends StatelessWidget {
                       onPressed: () {
                       // ProductDetailsPage( product: product, customerId: userId);
                       },
-                      child: const Text('View this product'),
+                      child:  const Text('View this product'),
                     ),
                     CupertinoActionSheetAction(
                       onPressed: () {
@@ -142,14 +142,14 @@ class ProdCategoria extends StatelessWidget {
                                     product.id, userId!);
                                 Navigator.pop(context);
                               },
-                      child: const Text('Add Favorites'),
+                      child:  const Text('Add Favorites'),
                     ),
                   ],
                   cancelButton: CupertinoActionSheetAction(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Cancelar'),
+                    child:  const Text('Cancelar'),
                   ),
                 ),
               );
@@ -158,7 +158,7 @@ class ProdCategoria extends StatelessWidget {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:  const EdgeInsets.all(8.0),
                     child: Text(product.name ?? ''),
                   ),
                 ),

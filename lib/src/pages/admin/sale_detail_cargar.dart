@@ -137,7 +137,7 @@ class SaleDetailPage extends StatelessWidget {
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               const SizedBox(height: 16.0),
-                              Row(
+                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: const [
@@ -228,7 +228,7 @@ class SaleDetailPage extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return AlertDialog(
+                              return  AlertDialog(
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: const [

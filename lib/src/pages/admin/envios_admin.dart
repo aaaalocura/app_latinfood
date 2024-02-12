@@ -452,7 +452,7 @@ class SalesSection2 extends StatelessWidget {
                         MaterialPageRoute(
                           builder: (context) => SaleDetailPageFin(
                             sale: sale,
-                            saleDetails: const [],
+                            saleDetails: sale.salesDetails,
                           ),
                         ),
                       );

@@ -8,10 +8,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class LoginController extends GetxController {
+  
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
   UsersProviders usersProviders = UsersProviders();
+  
 
   void goToRegisterPage() {
     Get.toNamed('/register');
@@ -42,7 +44,7 @@ class LoginController extends GetxController {
       if (responseApi.success == true) {
         GetStorage().write('user', responseApi.data);
         GetStorage().write('isAdmin', false);
-print("nueva sesion guardada");
+        print("nueva sesion guardada");
         goToHomePage(
             userId:
                 responseApi.data['id']); // Pasa el userId a la página principal
@@ -65,7 +67,7 @@ print("nueva sesion guardada");
   }
 
   void loginAdmin() async {
-     GetStorage().remove('user');
+    GetStorage().remove('user');
     print("sesion anterior borrada de admin");
     String email = emailController.text.trim();
     String password = passwordController.text.trim();

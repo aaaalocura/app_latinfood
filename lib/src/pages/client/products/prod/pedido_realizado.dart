@@ -1,9 +1,7 @@
 import 'package:app_latin_food/src/pages/client/products/list/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
-import 'package:app_latin_food/src/pages/envios/envios_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:page_transition/page_transition.dart';
 
 class PedidoRealizadoPage extends StatelessWidget {
   PedidoRealizadoPage({super.key});
@@ -13,7 +11,6 @@ class PedidoRealizadoPage extends StatelessWidget {
       Get.put(ClientProfileInfoController());
   @override
   Widget build(BuildContext context) {
-    final int userId = int.parse('${con1.user.id}');
     return Scaffold(
       appBar: AppBar(
         title: const Text(''),

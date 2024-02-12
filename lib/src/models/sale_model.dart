@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, duplicate_ignore
+
 class Sale {
   final int id;
   final String total;
@@ -10,7 +12,7 @@ class Sale {
   final String statusEnvio;
   // ignore: non_constant_identifier_names
   final int? CustomerID;
-  
+
   final List<SaleDetail> salesDetails;
   final Customer customer;
 
@@ -26,24 +28,21 @@ class Sale {
     required this.statusEnvio,
     // ignore: non_constant_identifier_names
     required this.CustomerID,
-   
     required this.salesDetails,
     required this.customer,
   });
   factory Sale.fromJson(Map<String, dynamic> json) {
     return Sale(
       id: json['id'],
-      total: json['total'].toString(), 
+      total: json['total'].toString(),
       items: json['items'],
-      cash: double.parse(json['cash'].toString()), 
-      change:
-          double.parse(json['change'].toString()), 
+      cash: double.parse(json['cash'].toString()),
+      change: double.parse(json['change'].toString()),
       status: json['status'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       statusEnvio: json['status_envio'],
       CustomerID: json['customer_id'],
-    
       salesDetails: (json['sales_details'] as List<dynamic>)
           .map((detail) => SaleDetail.fromJson(detail))
           .toList(),
@@ -55,7 +54,7 @@ class Sale {
 class SaleDetail {
   final int? id;
   final double price;
-   int quantity;
+  int quantity;
   final int productID;
   final int saleID;
   final DateTime createdAt;
@@ -64,9 +63,10 @@ class SaleDetail {
   final int lotID;
   final int scanned;
   final Product product;
+  
 
   SaleDetail({
-     this.id,
+    this.id,
     required this.price,
     required this.quantity,
     required this.productID,
@@ -77,6 +77,7 @@ class SaleDetail {
     required this.lotID,
     required this.scanned,
     required this.product,
+    
   });
   factory SaleDetail.fromJson(Map<String, dynamic> json) {
     return SaleDetail(
@@ -100,27 +101,26 @@ class Product {
   final int? id;
   final String? name;
   final String? barcode;
-  
-
- 
+  final String? KeyProduct;
+  final String? image;
+   bool? isSelected;
+   int selectedQuantity;
   Product({
-     this.id,
-     this.name,
-     this.barcode,
-     
-   
-  
-  
-
+    this.id,
+    this.name,
+    this.barcode,
+    this.KeyProduct,
+    this.image,
+     this.isSelected = false,
+      this.selectedQuantity = 0,
   });
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       id: json['id'],
       name: json['name'],
       barcode: json['barcode'],
-    
-      
-
+      KeyProduct: json['KeyProduct'],
+      image: json['image'],
     );
   }
 }
@@ -152,7 +152,6 @@ class Customer {
     required this.createdAt,
     required this.updatedAt,
     required this.image,
-    
   });
   factory Customer.fromJson(Map<String, dynamic> json) {
     return Customer(
@@ -164,11 +163,10 @@ class Customer {
       password: json['password'],
       address: json['address'],
       phone: json['phone'],
-      saldo: json['saldo'].toDouble(),  
+      saldo: json['saldo'].toDouble(),
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
       image: json['image'],
-     
     );
   }
 }

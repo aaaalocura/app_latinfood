@@ -1,5 +1,6 @@
-// ignore_for_file: unused_local_variable, unrelated_type_equality_checks
+// ignore_for_file: unused_local_variable, unrelated_type_equality_checks, unused_element, avoid_print
 
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:app_latin_food/main.dart';
@@ -18,6 +19,12 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:app_latin_food/src/pages/client/products/prod/check_out.dart';
+
+class SizeController extends GetxController {
+  RxString selectedSize = ''.obs;
+}
 
 // ignore: must_be_immutable
 class ProductsListPage extends StatelessWidget {
@@ -33,6 +40,16 @@ class ProductsListPage extends StatelessWidget {
       Get.put(ClientProductsListController());
   final CartController cartController = Get.find();
   bool isFavorite = false;
+  bool isAddToCartEnabled =
+      false; // Variable para habilitar/deshabilitar el botón "Add to Cart"
+  int selectedSizeMultiplier = 1; // Multiplicador del precio inicial
+  final cartController1 = Get.find<CartController>();
+
+  final Map<int, int> selectedSizeMultipliers = {};
+  double _generateRandomRating() {
+    final random = Random();
+    return (random.nextInt(51)) / 10;
+  }
 
   ProductsListPage({super.key, required int customerId});
 
@@ -40,7 +57,21 @@ class ProductsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     final _favoriteController = Get.put(FavoritesController());
+    final ProductsListController conG = Get.put(ProductsListController());
+    final ProductsListController conF = Get.find();
+    final ProductsListController productController =
+        Get.put(ProductsListController());
+    final SizeController sizeController = Get.put(SizeController());
+    String selectedButton = "";
+    final Map<int, String> selectedSizeMultipliers1 = {};
 
+    CartItem? findCartItemByProduct(Product product) {
+      // Busca el CartItem correspondiente al producto dado
+      return cartController.cartItems
+          .firstWhere((cartItem) => cartItem.product.id == product.id);
+    }
+
+    int quantity = 1;
     final categoryIcons = {
       "04-Tequeños": Icons.abc_sharp,
       "03-Cachitos": Icons.access_alarm,
@@ -152,224 +183,689 @@ class ProductsListPage extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
-      body: Obx(
-        () => IndexedStack(
-          index: con.indexTab.value,
-          children: [
-            ScrollConfiguration(
-              behavior: const CupertinoScrollBehavior(),
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
+      body: Obx(() => DefaultTabController(
+            length: 2, // Número de pestañas
+            child: Column(
+              children: [
+                const TabBar(
+                  labelColor: Color(0xE5FF5100),
+                  indicator: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.blue,
+                        width: 3.0, // Grosor de la línea indicadora
+                      ),
+                    ),
+                  ),
+                  tabs: [
+                    Tab(
+                      icon: Icon(Icons.ac_unit), // Ícono para el estado "Crudo"
+                      text: 'Crudo', // Pestaña para productos crudos
+                    ),
+                    Tab(
+                      icon: Icon(Icons
+                          .fire_extinguisher), // Ícono para el estado "Precocido"
+                      text: 'Precocido', // Pestaña para productos precocidos
+                    ),
+                  ],
                 ),
-                itemCount: con.filteredProducts.length,
-                itemBuilder: (context, index) {
-                  var product = con.filteredProducts[index];
-                  return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsPage(
-                                product: product, customerId: userId),
-                          ),
-                        );
-                      },
-                      onLongPress: () {
-                        showCupertinoModalPopup(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              CupertinoActionSheet(
-                            actions: [
-                              /*CupertinoActionSheetAction(
-                              onPressed: () {
-                                cartController.addToCart(product, userId!, product.tam1!);
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Add Cart'),
-                            ),*/
-                              CupertinoActionSheetAction(
-                                onPressed: () {
-                                  _favoriteController.AddToFavorites(
-                                      product.id, userId!);
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('Add Favorite'),
-                              ),
-                            ],
-                            cancelButton: CupertinoActionSheetAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancelar'),
-                            ),
-                          ),
-                        );
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: product.estado == 'CRUDO'
-                                  ? Colors.blue
-                                  : Colors.red,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Stack(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: Colors.grey[300]!,
-                                              width: 1),
-                                        ),
-                                        child: CachedNetworkImage(
-                                          imageUrl: product.image!,
-                                          fit: BoxFit.cover,
-                                          placeholder: (context, url) =>
-                                              const Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              const Center(
-                                            child: Icon(Icons.error),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      // Contenido de la pestaña de productos crudos
+                      ListView.builder(
+                        itemCount: con.filteredProductsCrudos.length,
+                        itemBuilder: (context, index) {
+                          var product = con.filteredProductsCrudos[index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailsPage(
+                                    product: product,
+                                    customerId: userId,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        16.0, 0.0, 2.0, 1.0),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                ),
+                              );
+                            },
+                            onLongPress: () {
+                              showCupertinoModalPopup(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    CupertinoActionSheet(
+                                  actions: [
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        _favoriteController.AddToFavorites(
+                                          product.id,
+                                          userId!,
+                                        );
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Add Favorite'),
+                                    ),
+                                  ],
+                                  cancelButton: CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Cancelar'),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Izquierda: Imagen y Etiqueta (Raw/Pre-Cooked)
+                                        Stack(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Container(
+                                                width: 100,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: Colors.blue,
+                                                    width: 2.0,
+                                                  ),
+                                                ),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: product.image!,
+                                                  fit: BoxFit.cover,
+                                                  placeholder: (context, url) =>
+                                                      const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          const Center(
+                                                    child: Icon(Icons.error),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(4),
+                                                decoration: const BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                  ),
+                                                  color: Colors.blue,
+                                                ),
+                                                child: const Text(
+                                                  'Raw',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // Centro: Nombre, SKU, Caja y Precio
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  product.name,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  softWrap: false,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  'SKU: ${product.barcode}',
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xFF999999),
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  softWrap: false,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  'Caja: ${product.tam1} Unidades',
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xFF999999),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  '\$${((product.tam1 ?? 1) * product.price).toStringAsFixed(2)}',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color: Color(0xE5FF5100),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        // Derecha: Botones de - y + con Contador
+                                        Obx(() {
+                                          // Obtiene el contador del producto actual
+                                          final contador = con
+                                                  .contadoresPorProducto[
+                                                      product.id.toString()]
+                                                  ?.value ??
+                                              0;
+
+                                          return Row(
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(Icons.remove),
+                                                onPressed: () {
+                                                  // Implementa la lógica para decrementar el contador
+                                                  con.decrementarContador(
+                                                      product.id.toString());
+                                                  // Obtiene el CartItem correspondiente al producto actual
+                                                  CartItem? cartItem =
+                                                      findCartItemByProduct(
+                                                          product);
+                                                  if (cartItem != null) {
+                                                    // Verifica si el contador llega a 0
+                                                    if (cartItem.quantity <=
+                                                        0) {
+                                                      // Si el contador es 0 o menor, elimina el producto del carrito
+                                                      cartController
+                                                          .removeFromCart(
+                                                              cartItem);
+                                                      print(
+                                                          'Producto eliminado del carrito: ${cartItem.product.name}');
+                                                    } else {
+                                                      // Si el contador es mayor que 0, decrementa la cantidad en el carrito
+                                                      cartController
+                                                          .decrementQuantity(
+                                                              cartItem);
+                                                      print(
+                                                          'Quito del carrito: ${cartItem.quantity} x ${cartItem.product.name}');
+                                                    }
+                                                  } else {
+                                                    print(
+                                                        'No se encontró el producto en el carrito');
+                                                  }
+                                                },
+                                              ),
+                                              Text(
+                                                '$contador',
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(Icons.add),
+                                                onPressed: () {
+                                                  // Implementa la lógica para incrementar el contador
+                                                  con.incrementarContador(
+                                                      product.id.toString());
+                                                  cartController.addToCart(
+                                                      product,
+                                                      userId!,
+                                                      quantity);
+                                                  print(
+                                                      'Añadido al carrito: $quantity x ${product.name}');
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
                                         children: [
-                                          Text(
-                                            product.name,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            softWrap: false,
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            'SKU: ${product.barcode}',
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                              color: Color(0xFF999999),
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            softWrap: false,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            'Tamaño: ${_getBarcodeDescription(product.barcode)}',
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                              color: Color(0xFF999999),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            'Caja: ${product.tam1} Unidades',
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                              color: Color(0xFF999999),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text( 
-                                            'Descripcion: ${product.descripcion}',
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                              color: Color(0xFF999999),
-                                            ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            softWrap: false,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            '\$${((product.tam1 ?? 1) * product.price).toStringAsFixed(2)}',
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                              color: Color(0xE5FF5100),
-                                            ),
-                                          ),
-                                          
-                                          
+                                          Obx(() {
+                                            final contador = con
+                                                    .contadoresPorProducto[
+                                                        product.id.toString()]
+                                                    ?.value ??
+                                                0;
+                                            final total = contador *
+                                                (product.price *
+                                                    (product.tam1 ?? 1));
+                                            return ElevatedButton(
+                                              onPressed: () {},
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "Total: \$${total.toStringAsFixed(2)}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  height: 1.5,
+                                                  fontFamily: 'Inter',
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            );
+                                          }),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              // Banderita en la esquina superior derecha
-                              Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ),
-                                    color: product.estado == 'CRUDO'
-                                        ? Colors.blue
-                                        : Colors.red,
-                                  ),
-                                  child: Text(
-                                    product.estado == 'CRUDO'
-                                        ? 'Raw'
-                                        : 'Pre-Cooked',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          12, // Ajusta el tamaño de fuente según tus necesidades
-                                    ),
-                                  ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      )
-                      );
-                },
-              ),
+                            ),
+                          );
+                        },
+                      ),
+                      // Contenido de la pestaña de productos precocidos
+                      ListView.builder(
+                        itemCount: con.filteredProductsPreCocidos.length,
+                        itemBuilder: (context, index) {
+                          var product = con.filteredProductsPreCocidos[index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductDetailsPage(
+                                    product: product,
+                                    customerId: userId,
+                                  ),
+                                ),
+                              );
+                            },
+                            onLongPress: () {
+                              showCupertinoModalPopup(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    CupertinoActionSheet(
+                                  actions: [
+                                    CupertinoActionSheetAction(
+                                      onPressed: () {
+                                        _favoriteController.AddToFavorites(
+                                          product.id,
+                                          userId!,
+                                        );
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Add Favorite'),
+                                    ),
+                                  ],
+                                  cancelButton: CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Cancelar'),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Izquierda: Imagen y Etiqueta (Raw/Pre-Cooked)
+                                        Stack(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Container(
+                                                width: 100,
+                                                height: 100,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: Colors.red,
+                                                    width: 2.0,
+                                                  ),
+                                                ),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: product.image!,
+                                                  fit: BoxFit.cover,
+                                                  placeholder: (context, url) =>
+                                                      const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          const Center(
+                                                    child: Icon(Icons.error),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(4),
+                                                decoration: const BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                  ),
+                                                  color: Colors.red,
+                                                ),
+                                                child: const Text(
+                                                  'Pre-Cooked',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // Centro: Nombre, SKU, Caja y Precio
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  product.name,
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  softWrap: false,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  'SKU: ${product.barcode}',
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xFF999999),
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  softWrap: false,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  'Caja: ${product.tam1} Unidades',
+                                                  style: const TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xFF999999),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 8),
+                                                Text(
+                                                  '\$${((product.tam1 ?? 1) * product.price).toStringAsFixed(2)}',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                    color: Color(0xE5FF5100),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        // Derecha: Botones de - y + con Contador
+                                        Obx(() {
+                                          // Obtiene el contador del producto actual
+                                          final contador = con
+                                                  .contadoresPorProducto[
+                                                      product.id.toString()]
+                                                  ?.value ??
+                                              0;
+
+                                          return Row(
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(Icons.remove),
+                                                onPressed: () {
+                                                  // Implementa la lógica para decrementar el contador
+                                                  con.decrementarContador(
+                                                      product.id.toString());
+                                                  // Obtiene el CartItem correspondiente al producto actual
+                                                  CartItem? cartItem =
+                                                      findCartItemByProduct(
+                                                          product);
+                                                  if (cartItem != null) {
+                                                    // Verifica si el contador llega a 0
+                                                    if (cartItem.quantity <=
+                                                        0) {
+                                                      // Si el contador es 0 o menor, elimina el producto del carrito
+                                                      cartController
+                                                          .removeFromCart(
+                                                              cartItem);
+                                                      print(
+                                                          'Producto eliminado del carrito: ${cartItem.product.name}');
+                                                    } else {
+                                                      // Si el contador es mayor que 0, decrementa la cantidad en el carrito
+                                                      cartController
+                                                          .decrementQuantity(
+                                                              cartItem);
+                                                      print(
+                                                          'Quito del carrito: ${cartItem.quantity} x ${cartItem.product.name}');
+                                                    }
+                                                  } else {
+                                                    print(
+                                                        'No se encontró el producto en el carrito');
+                                                  }
+                                                },
+                                              ),
+                                              Text(
+                                                '$contador',
+                                                style: const TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(Icons.add),
+                                                onPressed: () {
+                                                  // Implementa la lógica para incrementar el contador
+                                                  con.incrementarContador(
+                                                      product.id.toString());
+                                                  cartController.addToCart(
+                                                      product,
+                                                      userId!,
+                                                      quantity);
+                                                  print(
+                                                      'Añadido al carrito: $quantity x ${product.name}');
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Container(
+                                      padding: const EdgeInsets.only(top: 0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Obx(() {
+                                            final contador = con
+                                                    .contadoresPorProducto[
+                                                        product.id.toString()]
+                                                    ?.value ??
+                                                0;
+                                            final total = contador *
+                                                (product.price *
+                                                    (product.tam1 ?? 1));
+                                            return ElevatedButton(
+                                              onPressed: () {},
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "Total: \$${total.toStringAsFixed(2)}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  height: 1.5,
+                                                  fontFamily: 'Inter',
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          )),
+      floatingActionButton: Obx(() {
+        final totalProducts = con.contadoresPorProducto.values
+            .map<int>((value) => value.value as int) // Convertir a int
+            .fold<int>(
+              0,
+              (sum, value) => sum + value,
+            );
+
+        return SizedBox(
+          width: MediaQuery.of(context).size.width -
+              60, // Ajusta según tus necesidades
+          child: ElevatedButton(
+            onPressed: cartController.cartItemCount > 0
+                ? () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.fade,
+                        child: CheckOutPage(),
+                      ),
+                    );
+                  }
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xE5FF5100),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              minimumSize: Size(MediaQuery.of(context).size.width,
+                  0), // Ajusta según tus necesidades
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Place Order',
+                  style: TextStyle(
+                    fontSize: 16,
+                    height: 1,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 255, 253, 253),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  'Items: $totalProducts',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    height: 1,
+                    fontWeight: FontWeight.w500,
+                    color: Color.fromARGB(255, 255, 253, 253),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -397,6 +893,10 @@ class ProductsListPage extends StatelessWidget {
           );
         } else {
           final categories = snapshot.data!;
+          if (categories.isNotEmpty) {
+            selectedCategoryController.setSelectedCategory(categories.first.id);
+            con.getProductsByCategoryPreCocidos(categories.first.name);
+          }
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
@@ -409,9 +909,8 @@ class ProductsListPage extends StatelessWidget {
 
                 return GestureDetector(
                   onTap: () async {
-                    selectedCategoryController.setSelectedCategory(category.id);
-                    con.getProductsByCategory(category
-                        .name); // Llama a la función para obtener productos por categoría
+                   selectedCategoryController.setSelectedCategory(category.id);
+                    con.getProductsByCategoryPreCocidos(category.name);
                   },
                   child: SizedBox(
                     width: 80,
@@ -419,8 +918,6 @@ class ProductsListPage extends StatelessWidget {
                     child: Obx(() {
                       final isSelected =
                           selectedCategoryId.value == category.id;
-                      final icon = categoryIcons[category.name];
-
                       return Column(
                         children: [
                           Card(
@@ -437,9 +934,16 @@ class ProductsListPage extends StatelessWidget {
                               width: 80,
                               height: 80,
                               padding: const EdgeInsets.fromLTRB(8, 2, 8, 8),
-                              child: Icon(
-                                icon ?? Icons.abc_outlined,
-                                size: 40,
+                              child: CachedNetworkImage(
+                                imageUrl: category.image ?? "",
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) {
+                                  return Container();
+                                },
+                                width: 40,
+                                height: 40,
+                                fit: BoxFit.contain,
                               ),
                             ),
                           ),
@@ -478,6 +982,8 @@ class ProductsListPage extends StatelessWidget {
         return 'sin tamaño';
     }
   }
+
+  void setState(Null Function() param0) {}
 }
 
 class ProductSearchDelegate extends SearchDelegate<Product> {
@@ -669,7 +1175,108 @@ Future<void> refreshCategories() async {
     final newCategories = await CategoryController.fetchCategories();
     categories.assignAll(newCategories);
   } catch (e) {
-    // ignore: avoid_print
     print('Error al recargar las categorías: $e');
+  }
+}
+
+class MyButtonsWidget extends StatefulWidget {
+  final Map<int, String> selectedSizeMultipliers;
+  final String tam1;
+  final String tam2;
+  final Function(String) onSizeSelected;
+
+  MyButtonsWidget({
+    required this.selectedSizeMultipliers,
+    required this.tam1,
+    required this.tam2,
+    required this.onSizeSelected,
+  });
+
+  @override
+  _MyButtonsWidgetState createState() => _MyButtonsWidgetState();
+}
+
+class _MyButtonsWidgetState extends State<MyButtonsWidget> {
+  late String selectedButton;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedButton = ""; // Inicializa selectedButton según tus necesidades
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            _handleButtonPress(widget.tam1);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: selectedButton == widget.tam1
+                ? Colors.green
+                : const Color(0xE5FF5100),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+          child: Text(
+            "x${widget.tam1}",
+            style: const TextStyle(
+              fontSize: 16,
+              height: 1.5,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        if (widget.tam1 != widget.tam2) ...[
+          const SizedBox(width: 7),
+          ElevatedButton(
+            onPressed: () {
+              _handleButtonPress(widget.tam2);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: selectedButton == widget.tam2
+                  ? Colors.green
+                  : const Color(0xE5FF5100),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+            child: Text(
+              "x${widget.tam2}",
+              style: const TextStyle(
+                fontSize: 16,
+                height: 1.5,
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  void _handleButtonPress(String button) {
+    setState(() {
+      if (selectedButton != button) {
+        selectedButton = button;
+        widget.selectedSizeMultipliers[1] = button;
+        widget.onSizeSelected(
+            button); // Llamar a la función de devolución de llamada
+        print(selectedButton);
+        Get.snackbar(
+          'Perfecto',
+          'Tamaño $button Seleccionado',
+          barBlur: 100,
+          animationDuration: const Duration(seconds: 1),
+        );
+      }
+    });
   }
 }

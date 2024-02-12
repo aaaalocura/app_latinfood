@@ -233,7 +233,7 @@ Widget _textOyarce() {
       borderRadius: BorderRadius.circular(20),
     ),
     alignment: Alignment.center, // Centrar el texto dentro del contenedor
-    child: Row(
+    child:  Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: const [
         Text(

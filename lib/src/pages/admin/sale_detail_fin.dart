@@ -26,7 +26,7 @@ class SaleDetailPageFin extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Detalle del pedido',
+          'Detalle del pedido FIN',
           style: TextStyle(
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
@@ -58,41 +58,71 @@ class SaleDetailPageFin extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Order ID: ${sale.id}',
-                  style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.shopping_cart,
+                          size: 28.0,
+                          color: Colors.blue,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Text(
+                          'Order ID: ${sale.id}',
+                          style: const TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Total: \$${sale.total}',
+                          style: const TextStyle(fontSize: 18.0),
+                        ),
+                        Text(
+                          'Total Items: ${sale.items}',
+                          style: const TextStyle(fontSize: 18.0),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
                     Text(
-                      'Total: \$${sale.total}',
+                      'Order Status: ${sale.status}',
                       style: const TextStyle(fontSize: 18.0),
                     ),
                     Text(
-                      'Total Items: ${sale.items}',
+                      'Shipment Status: ${sale.statusEnvio}',
                       style: const TextStyle(fontSize: 18.0),
+                    ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    Row(
+                      children: const [
+                        Icon(
+                          Icons.shopping_basket,
+                          size: 24.0,
+                          color: Colors.green,
+                        ),
+                        SizedBox(width: 8.0),
+                        Text(
+                          'Products in Order',
+                          style: TextStyle(
+                              fontSize: 24.0, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-                const SizedBox(
-                    height:
-                        16.0), // Espacio entre detalles y lista de productos
-                Text(
-                  'Order Status: ${sale.status}',
-                  style: const TextStyle(fontSize: 18.0),
-                ),
-                Text(
-                  'Shipment Status: ${sale.statusEnvio}',
-                  style: const TextStyle(fontSize: 18.0),
-                ),
-                const SizedBox(
-                    height:
-                        16.0), // Espacio entre estado de envío y lista de productos
-                const Text(
-                  'Products in Order',
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8.0),
                 Expanded(
@@ -109,20 +139,34 @@ class SaleDetailPageFin extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         child: ListTile(
+                          contentPadding: const EdgeInsets.all(16.0),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              "https://kdlatinfood.com/intranet/public/storage/products/${detail.product.image ?? ""}",
+                              width:
+                                  80.0, // Ajusta el ancho de la imagen según sea necesario
+                              height:
+                                  80.0, // Ajusta la altura de la imagen según sea necesario
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           title: Text(
                             product.name!,
                             style: const TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Price: \$${detail.price}',
+                                'Precio: \$${detail.price}',
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               Text(
-                                'Quantity: ${detail.quantity}',
+                                'Cantidad: ${detail.quantity}',
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               // Agrega más detalles del producto si es necesario.

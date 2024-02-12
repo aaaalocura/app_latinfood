@@ -8,7 +8,7 @@ class RegisterController extends GetxController {
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
-  
+
   TextEditingController phoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -23,7 +23,7 @@ class RegisterController extends GetxController {
     String password = passwordController.text.trim();
     String name = nameController.text.trim();
     String lastName = lastNameController.text.trim();
-    
+
     String phone = phoneController.text.trim();
     String address = addressController.text.trim();
     String passwordConfirmation = passwordConfirm.text.trim();
@@ -40,7 +40,6 @@ class RegisterController extends GetxController {
       User user = User(
         name: name,
         lastName: lastName,
-       
         email: email,
         password: password,
         address: address,
@@ -53,15 +52,8 @@ class RegisterController extends GetxController {
     }
   }
 
-  bool isValidForm(
-      String email,
-      String password,
-      String name,
-      String phone,
-      String address,
-      String lastName,
-      
-      String passwordConfirmation) {
+  bool isValidForm(String email, String password, String name, String phone,
+      String address, String lastName, String passwordConfirmation) {
     if (!GetUtils.isEmail(email)) {
       Get.snackbar('Correo no válido', 'Ingresa un correo válido');
       return false;
@@ -86,8 +78,6 @@ class RegisterController extends GetxController {
       Get.snackbar('Error', 'Ingresa tu apellido');
       return false;
     }
-
-
 
     if (phone.isEmpty) {
       Get.snackbar('Error', 'Ingresa tu número de teléfono');
