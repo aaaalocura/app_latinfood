@@ -284,7 +284,10 @@ class ProductsListPage extends StatelessWidget {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   border: Border.all(
-                                                    color: Colors.blue,
+                                                    color: product.estado ==
+                                                            'CRUDO'
+                                                        ? Colors.blue
+                                                        : Colors.red,
                                                     width: 2.0,
                                                   ),
                                                 ),
@@ -310,19 +313,24 @@ class ProductsListPage extends StatelessWidget {
                                               child: Container(
                                                 padding:
                                                     const EdgeInsets.all(4),
-                                                decoration: const BoxDecoration(
+                                                decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.only(
+                                                      const BorderRadius.only(
                                                     topLeft:
                                                         Radius.circular(10),
                                                     bottomRight:
                                                         Radius.circular(10),
                                                   ),
-                                                  color: Colors.blue,
+                                                  color:
+                                                      product.estado == 'CRUDO'
+                                                          ? Colors.blue
+                                                          : Colors.red,
                                                 ),
-                                                child: const Text(
-                                                  'Raw',
-                                                  style: TextStyle(
+                                                child: Text(
+                                                  product.estado == 'CRUDO'
+                                                      ? 'Raw'
+                                                      : 'Pre-Cooked',
+                                                  style: const TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 12,
@@ -398,39 +406,49 @@ class ProductsListPage extends StatelessWidget {
 
                                           return Row(
                                             children: [
-                                              IconButton(
-                                                icon: const Icon(Icons.remove),
-                                                onPressed: () {
-                                                  // Implementa la lógica para decrementar el contador
-                                                  con.decrementarContador(
-                                                      product.id.toString());
-                                                  // Obtiene el CartItem correspondiente al producto actual
-                                                  CartItem? cartItem =
-                                                      findCartItemByProduct(
-                                                          product);
-                                                  if (cartItem != null) {
-                                                    // Verifica si el contador llega a 0
-                                                    if (cartItem.quantity <=
-                                                        0) {
-                                                      // Si el contador es 0 o menor, elimina el producto del carrito
-                                                      cartController
-                                                          .removeFromCart(
-                                                              cartItem);
-                                                      print(
-                                                          'Producto eliminado del carrito: ${cartItem.product.name}');
+                                              // Utiliza Visibility para controlar la visibilidad del botón de decremento
+                                              Visibility(
+                                                visible: contador >
+                                                    0, // Muestra el botón solo si el contador es mayor que 0
+                                                child: IconButton(
+                                                  icon:
+                                                      const Icon(Icons.remove),
+                                                  onPressed: () {
+                                                    // Implementa la lógica para decrementar el contador
+                                                    con.decrementarContador(
+                                                        product.id.toString());
+
+                                                    // Obtiene el CartItem correspondiente al producto actual
+                                                    CartItem? cartItem =
+                                                        findCartItemByProduct(
+                                                            product);
+
+                                                    if (cartItem != null) {
+                                                      // Verifica si el contador llega a 0
+                                                      if (cartItem.quantity -
+                                                              (cartItem.tam ??
+                                                                  1) <=
+                                                          0) {
+                                                        // Si el contador es 0 o menor, elimina el producto del carrito
+                                                        cartController
+                                                            .removeFromCart(
+                                                                cartItem);
+                                                        print(
+                                                            'Producto eliminado del carrito: ${cartItem.product.name}');
+                                                      } else {
+                                                        // Si el contador es mayor que 0, decrementa la cantidad en el carrito
+                                                        cartController
+                                                            .decrementQuantity(
+                                                                cartItem);
+                                                        print(
+                                                            'Quito del carrito: ${cartItem.quantity} x ${cartItem.product.name}, Tamaño: ${cartItem.tam}');
+                                                      }
                                                     } else {
-                                                      // Si el contador es mayor que 0, decrementa la cantidad en el carrito
-                                                      cartController
-                                                          .decrementQuantity(
-                                                              cartItem);
                                                       print(
-                                                          'Quito del carrito: ${cartItem.quantity} x ${cartItem.product.name}');
+                                                          'No se encontró el producto en el carrito');
                                                     }
-                                                  } else {
-                                                    print(
-                                                        'No se encontró el producto en el carrito');
-                                                  }
-                                                },
+                                                  },
+                                                ),
                                               ),
                                               Text(
                                                 '$contador',
@@ -445,12 +463,18 @@ class ProductsListPage extends StatelessWidget {
                                                   // Implementa la lógica para incrementar el contador
                                                   con.incrementarContador(
                                                       product.id.toString());
+                                                  // Verifica si selectedSizeMultiplier está configurado, si no, usa product.tam1 como valor predeterminado
+                                                  final selectedSize =
+                                                      selectedSizeMultipliers[
+                                                              product.id] ??
+                                                          product.tam1;
                                                   cartController.addToCart(
                                                       product,
                                                       userId!,
-                                                      quantity);
+                                                      quantity,
+                                                      selectedSize);
                                                   print(
-                                                      'Añadido al carrito: $quantity x ${product.name}');
+                                                      'Añadido al carrito: $quantity x ${product.name}, Tamaño: $selectedSize');
                                                 },
                                               ),
                                             ],
@@ -465,15 +489,32 @@ class ProductsListPage extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
+                                          MyButtonsWidget(
+                                            selectedSizeMultipliers:
+                                                selectedSizeMultipliers1,
+                                            tam1: product.tam1!.toString(),
+                                            tam2: product.tam2!.toString(),
+                                            onSizeSelected: (selectedSize) {
+                                              // Actualizar el tamaño seleccionado para el cálculo del total
+                                              selectedSizeMultipliers1[
+                                                  product.id] = selectedSize;
+                                            },
+                                          ),
+                                          const SizedBox(width: 7),
                                           Obx(() {
                                             final contador = con
                                                     .contadoresPorProducto[
                                                         product.id.toString()]
                                                     ?.value ??
                                                 0;
+
+                                            final selectedMultiplier =
+                                                selectedSizeMultipliers[
+                                                        product.id] ??
+                                                    product.tam1;
                                             final total = contador *
                                                 (product.price *
-                                                    (product.tam1 ?? 1));
+                                                    selectedMultiplier!);
                                             return ElevatedButton(
                                               onPressed: () {},
                                               style: ElevatedButton.styleFrom(
@@ -578,7 +619,10 @@ class ProductsListPage extends StatelessWidget {
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   border: Border.all(
-                                                    color: Colors.red,
+                                                    color: product.estado ==
+                                                            'CRUDO'
+                                                        ? Colors.blue
+                                                        : Colors.red,
                                                     width: 2.0,
                                                   ),
                                                 ),
@@ -604,19 +648,24 @@ class ProductsListPage extends StatelessWidget {
                                               child: Container(
                                                 padding:
                                                     const EdgeInsets.all(4),
-                                                decoration: const BoxDecoration(
+                                                decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.only(
+                                                      const BorderRadius.only(
                                                     topLeft:
                                                         Radius.circular(10),
                                                     bottomRight:
                                                         Radius.circular(10),
                                                   ),
-                                                  color: Colors.red,
+                                                  color:
+                                                      product.estado == 'CRUDO'
+                                                          ? Colors.blue
+                                                          : Colors.red,
                                                 ),
-                                                child: const Text(
-                                                  'Pre-Cooked',
-                                                  style: TextStyle(
+                                                child: Text(
+                                                  product.estado == 'CRUDO'
+                                                      ? 'Raw'
+                                                      : 'Pre-Cooked',
+                                                  style: const TextStyle(
                                                     color: Colors.white,
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 12,
@@ -692,39 +741,49 @@ class ProductsListPage extends StatelessWidget {
 
                                           return Row(
                                             children: [
-                                              IconButton(
-                                                icon: const Icon(Icons.remove),
-                                                onPressed: () {
-                                                  // Implementa la lógica para decrementar el contador
-                                                  con.decrementarContador(
-                                                      product.id.toString());
-                                                  // Obtiene el CartItem correspondiente al producto actual
-                                                  CartItem? cartItem =
-                                                      findCartItemByProduct(
-                                                          product);
-                                                  if (cartItem != null) {
-                                                    // Verifica si el contador llega a 0
-                                                    if (cartItem.quantity <=
-                                                        0) {
-                                                      // Si el contador es 0 o menor, elimina el producto del carrito
-                                                      cartController
-                                                          .removeFromCart(
-                                                              cartItem);
-                                                      print(
-                                                          'Producto eliminado del carrito: ${cartItem.product.name}');
+                                              // Utiliza Visibility para controlar la visibilidad del botón de decremento
+                                              Visibility(
+                                                visible: contador >
+                                                    0, // Muestra el botón solo si el contador es mayor que 0
+                                                child: IconButton(
+                                                  icon:
+                                                      const Icon(Icons.remove),
+                                                  onPressed: () {
+                                                    // Implementa la lógica para decrementar el contador
+                                                    con.decrementarContador(
+                                                        product.id.toString());
+
+                                                    // Obtiene el CartItem correspondiente al producto actual
+                                                    CartItem? cartItem =
+                                                        findCartItemByProduct(
+                                                            product);
+
+                                                    if (cartItem != null) {
+                                                      // Verifica si el contador llega a 0
+                                                      if (cartItem.quantity -
+                                                              (cartItem.tam ??
+                                                                  1) <=
+                                                          0) {
+                                                        // Si el contador es 0 o menor, elimina el producto del carrito
+                                                        cartController
+                                                            .removeFromCart(
+                                                                cartItem);
+                                                        print(
+                                                            'Producto eliminado del carrito: ${cartItem.product.name}');
+                                                      } else {
+                                                        // Si el contador es mayor que 0, decrementa la cantidad en el carrito
+                                                        cartController
+                                                            .decrementQuantity(
+                                                                cartItem);
+                                                        print(
+                                                            'Quito del carrito: ${cartItem.quantity} x ${cartItem.product.name}, Tamaño: ${cartItem.tam}');
+                                                      }
                                                     } else {
-                                                      // Si el contador es mayor que 0, decrementa la cantidad en el carrito
-                                                      cartController
-                                                          .decrementQuantity(
-                                                              cartItem);
                                                       print(
-                                                          'Quito del carrito: ${cartItem.quantity} x ${cartItem.product.name}');
+                                                          'No se encontró el producto en el carrito');
                                                     }
-                                                  } else {
-                                                    print(
-                                                        'No se encontró el producto en el carrito');
-                                                  }
-                                                },
+                                                  },
+                                                ),
                                               ),
                                               Text(
                                                 '$contador',
@@ -739,12 +798,18 @@ class ProductsListPage extends StatelessWidget {
                                                   // Implementa la lógica para incrementar el contador
                                                   con.incrementarContador(
                                                       product.id.toString());
+                                                  // Verifica si selectedSizeMultiplier está configurado, si no, usa product.tam1 como valor predeterminado
+                                                  final selectedSize =
+                                                      selectedSizeMultipliers[
+                                                              product.id] ??
+                                                          product.tam1;
                                                   cartController.addToCart(
                                                       product,
                                                       userId!,
-                                                      quantity);
+                                                      quantity,
+                                                      selectedSize);
                                                   print(
-                                                      'Añadido al carrito: $quantity x ${product.name}');
+                                                      'Añadido al carrito: $quantity x ${product.name}, Tamaño: $selectedSize');
                                                 },
                                               ),
                                             ],
@@ -759,15 +824,32 @@ class ProductsListPage extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
+                                          MyButtonsWidget(
+                                            selectedSizeMultipliers:
+                                                selectedSizeMultipliers1,
+                                            tam1: product.tam1!.toString(),
+                                            tam2: product.tam2!.toString(),
+                                            onSizeSelected: (selectedSize) {
+                                              // Actualizar el tamaño seleccionado para el cálculo del total
+                                              selectedSizeMultipliers1[
+                                                  product.id] = selectedSize;
+                                            },
+                                          ),
+                                          const SizedBox(width: 7),
                                           Obx(() {
                                             final contador = con
                                                     .contadoresPorProducto[
                                                         product.id.toString()]
                                                     ?.value ??
                                                 0;
+
+                                            final selectedMultiplier =
+                                                selectedSizeMultipliers[
+                                                        product.id] ??
+                                                    product.tam1;
                                             final total = contador *
                                                 (product.price *
-                                                    (product.tam1 ?? 1));
+                                                    selectedMultiplier!);
                                             return ElevatedButton(
                                               onPressed: () {},
                                               style: ElevatedButton.styleFrom(
@@ -895,7 +977,7 @@ class ProductsListPage extends StatelessWidget {
           final categories = snapshot.data!;
           if (categories.isNotEmpty) {
             selectedCategoryController.setSelectedCategory(categories.first.id);
-            con.getProductsByCategoryPreCocidos(categories.first.name);
+            // con.getProductsByCategoryPreCocidos(categories.first.name);
             con.getProductsByCategoryCrudos(categories.first.name);
           }
           return SingleChildScrollView(
@@ -910,8 +992,9 @@ class ProductsListPage extends StatelessWidget {
 
                 return GestureDetector(
                   onTap: () async {
-                   selectedCategoryController.setSelectedCategory(category.id);
+                    selectedCategoryController.setSelectedCategory(category.id);
                     con.getProductsByCategoryPreCocidos(category.name);
+                    con.getProductsByCategoryCrudos(category.name);
                   },
                   child: SizedBox(
                     width: 80,
