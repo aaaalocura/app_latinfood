@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 
-
 class QRScannerController extends GetxController {
   var getResult = 'QR Code Result';
   RxInt scanned = 0.obs;
@@ -15,14 +14,14 @@ class QRScannerController extends GetxController {
     update();
   }
 
-  Future<void> sendQRCodeToAPI(String qrCode, String keyProduct, int productID,
+  Future<void> sendQRCodeToAPI(BuildContext context,String qrCode, String keyProduct, int productID,
       int saleID, int? id) async {
     Get.dialog(
       CupertinoAlertDialog(
         title: const Text('Cargando...'),
         content: Container(
           padding: const EdgeInsets.all(16.0),
-          child:  Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
               CircularProgressIndicator(),
@@ -65,7 +64,8 @@ class QRScannerController extends GetxController {
             _updateScreen();
             _showAlertDialog(message);
           } else if (message == 'Todos los códigos QR han sido escaneados.') {
-            _showAllScannedDialog(message);
+            // ignore: use_build_context_synchronously
+            _showAllScannedDialog(context,message);
 
             // Hacer el segundo POST a la nueva ruta
             final secondResponse = await http.post(
@@ -133,20 +133,30 @@ class QRScannerController extends GetxController {
     Get.toNamed('/homeadmin');
   }
 
-  void _showAllScannedDialog(String message) {
-    Get.dialog(
-      CupertinoAlertDialog(
-        title: const Text('Todos los productos fueron escaneados'),
-        content: Text(message),
-        actions: [
-          CupertinoDialogAction(
-            child: const Text('OK'),
-            onPressed: () {
-              goToAdminPedidos();
-            },
+  void _showAllScannedDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: const [
+              Icon(Icons.check_circle, color: Colors.green), // Ícono de éxito
+              SizedBox(width: 8), // Espacio entre el ícono y el texto
+              Text('Todos los productos fueron escaneados'), // Título
+            ],
           ),
-        ],
-      ),
+          content: Text(message), // Contenido con el mensaje
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Cerrar el diálogo
+                goToAdminPedidos(); // Ir a la pantalla de administración de pedidos
+              },
+              child: const Text('OK'), // Botón de OK
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -181,7 +191,8 @@ class QRScannerController extends GetxController {
         }
 
         // Llamar a la función sendQRCodeToAPI con los valores recibidos
-        sendQRCodeToAPI(getResult, keyProduct, productID, saleID, id);
+        // ignore: use_build_context_synchronously
+        sendQRCodeToAPI(context,getResult, keyProduct, productID, saleID, id);
       }
     } catch (e) {
       _showErrorDialog('Error al escanear el código QR: $e');

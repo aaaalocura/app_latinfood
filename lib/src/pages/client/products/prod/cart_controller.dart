@@ -21,23 +21,23 @@ class CartController extends GetxController {
 
   int get cartItemCount2 => _cartItemCount;
   bool saleSuccessful = false;
-  void addToCart(Product product, int userId, int quantity,
+  void addToCart(Product product, int userId, int counter,
       [int? selectedSizeMultiplier]) {
     final existingItemIndex =
         cartItems.indexWhere((item) => item.product.id == product.id);
 
     if (existingItemIndex != -1) {
       cartItems[existingItemIndex].quantity +=
-          (quantity * (selectedSizeMultiplier ?? 1));
+          (counter * (selectedSizeMultiplier ?? 1));
     } else {
       cartItems.add(CartItem(
           product: product,
-          quantity: (selectedSizeMultiplier ?? 1),
+          quantity: (selectedSizeMultiplier! *counter),
           tam: selectedSizeMultiplier));
       Get.snackbar('Producto Agregado al Carrito', 'listo');
     }
 
-    _updateProductQuantity(product.id, quantity, selectedSizeMultiplier);
+    _updateProductQuantity(product.id, counter, selectedSizeMultiplier);
       //Get.find<ProductsListController>().incrementarContador(product.id.toString());
 
   }

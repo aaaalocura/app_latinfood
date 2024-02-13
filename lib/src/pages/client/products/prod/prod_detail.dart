@@ -31,7 +31,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       false; // Variable para habilitar/deshabilitar el botón "Add to Cart"
   int selectedSizeMultiplier = 1; // Multiplicador del precio inicial
   final cartController = Get.find<CartController>();
-
+  int counter = 0;
   int selectedSizeMultiplier2 = 1; // Multiplicador del precio inicial
 
   // ignore: unused_element
@@ -236,83 +236,113 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // Botón de decremento
+                        RawMaterialButton(
+                          onPressed: () {
+                            setState(() {
+                              // Decrementar el contador
+                              if (counter > 0) {
+                                counter--;
+                              }
+                            });
+                          },
+                          shape: const CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: Colors.grey,
+                          padding: const EdgeInsets.all(15.0),
+                          child: const Icon(Icons.remove, color: Colors.white),
+                        ),
+                        const SizedBox(
+                            width:
+                                1), // Espacio entre los botones de tamaño y los botones de aumento/decremento
+                        // Botones de tamaño
                         if (widget.product.tam1 !=
                             widget.product.tam2) // Verifica si son diferentes
-                          ElevatedButton(
+                          RawMaterialButton(
                             onPressed: () {
                               setState(() {
-                                selectedSize =
-                                    "TAMAÑO 1"; // Cambiar el tamaño seleccionado
-                                isAddToCartEnabled =
-                                    true; // Habilitar el botón "Add to Cart"
-                                selectedSizeMultiplier = widget.product
-                                    .tam1!; // Establecer multiplicador a 2
+                                selectedSize = "TAMAÑO 1";
+                                isAddToCartEnabled = true;
+                                selectedSizeMultiplier = widget.product.tam1!;
                                 selectedSizeMultiplier2 = 1;
                               });
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: selectedSize == "TAMAÑO 1"
-                                  ? Colors.green
-                                  : const Color(
-                                      0xE5FF5100), // Color de fondo naranja
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    20.0), // Esquinas redondeadas
-                              ),
-                            ),
+                            shape: const CircleBorder(),
+                            elevation: 2.0,
+                            fillColor: selectedSize == "TAMAÑO 1"
+                                ? Colors.green
+                                : const Color(0xE5FF5100),
+                            padding: const EdgeInsets.all(15.0),
                             child: Text(
-                              "${widget.product.tam1} p/c",
+                              "x${widget.product.tam1}",
                               style: const TextStyle(
-                                fontSize: 16, // El tamaño de fuente en sp
-                                height: 1.5, // La altura de línea en sp
-                                fontFamily:
-                                    'Inter', // El nombre de la fuente 'Inter'
-                                fontWeight: FontWeight
-                                    .w600, // El peso de fuente, en este caso 600 (negrita)
-                                color: Colors.white, // El color del texto
+                                fontSize: 16,
+                                height: 1.5,
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
                               ),
                             ),
                           ),
                         if (widget.product.tam1 !=
                             widget.product.tam2) // Verifica si son diferentes
-                          const SizedBox(width: 7), // Espacio entre los botones
-                        ElevatedButton(
+                          const SizedBox(width:1),
+                        RawMaterialButton(
                           onPressed: () {
                             setState(() {
-                              selectedSize =
-                                  "TAMAÑO 2"; // Cambiar el tamaño seleccionado
-                              isAddToCartEnabled =
-                                  true; // Habilitar el botón "Add to Cart"
-                              selectedSizeMultiplier = widget.product
-                                  .tam2!; // Establecer multiplicador a 2
+                              selectedSize = "TAMAÑO 2";
+                              isAddToCartEnabled = true;
+                              selectedSizeMultiplier = widget.product.tam2!;
                               selectedSizeMultiplier2 = 2;
                             });
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: selectedSize == "TAMAÑO 2"
-                                ? Colors.green
-                                : const Color(
-                                    0xE5FF5100), // Color de fondo naranja
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  20.0), // Esquinas redondeadas
-                            ),
-                          ),
+                          shape: const CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: selectedSize == "TAMAÑO 2"
+                              ? Colors.green
+                              : const Color(0xE5FF5100),
+                          padding: const EdgeInsets.all(15.0),
                           child: Text(
-                            "${widget.product.tam2} p/c",
+                            "x${widget.product.tam2}",
                             style: const TextStyle(
-                              fontSize: 16, // El tamaño de fuente en sp
-                              height: 1.5, // La altura de línea en sp
-                              fontFamily:
-                                  'Inter', // El nombre de la fuente 'Inter'
-                              fontWeight: FontWeight
-                                  .w600, // El peso de fuente, en este caso 600 (negrita)
-                              color: Colors.white, // El color del texto
+                              fontSize: 16,
+                              height: 1.5,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
                             ),
                           ),
                         ),
+                        // Botón de incremento
+                        RawMaterialButton(
+                          onPressed: () {
+                            setState(() {
+                              // Incrementar el contador
+                              counter++;
+                            });
+                          },
+                          shape: const CircleBorder(),
+                          elevation: 2.0,
+                          fillColor: Colors.grey,
+                          padding: const EdgeInsets.all(15.0),
+                          child: const Icon(Icons.add, color: Colors.white),
+                        ),
                       ],
                     ),
+
+// Contador
+                    Container(
+  alignment: Alignment.center, // Centra el contenido del contenedor
+  padding: const EdgeInsets.symmetric(vertical: 10.0), // Añade un espacio vertical alrededor del contador
+  child: Text(
+    counter.toString(),
+    style: const TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+),
+
 
                     const SizedBox(height: 60),
                     // Precio del producto
@@ -348,13 +378,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ElevatedButton.icon(
                           onPressed: isAddToCartEnabled
                               ? () {
-                                  // Lógica para agregar al carrito con la cantidad y el tamaño seleccionados
-                                  cartController.addToCart(
-                                      widget.product,
-                                      userId!,
-                                      quantity,
-                                      selectedSizeMultiplier);
-                                  // Actualizar el contador del carrito|
+                                  cartController.addToCart(widget.product,
+                                      userId!, counter, selectedSizeMultiplier);
                                   cartController.update();
                                   if (Navigator.canPop(context)) {
                                     Navigator.pop(context);
@@ -362,11 +387,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                 }
                               : null, // Deshabilitar el botón si no se ha seleccionado un tamaño
                           style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                selectedSize.isEmpty
+                            backgroundColor: selectedSize.isEmpty
                                 ? Colors.green
-                                : const Color(
-                                    0xE5FF5100),
+                                : const Color(0xE5FF5100),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(60),
                             ),
