@@ -104,11 +104,19 @@ class QRScannerController extends GetxController {
   }
 
   void _showSnackbar(String message) {
-    Get.snackbar(
-      'Respuesta de la API',
-      message,
-      duration: const Duration(seconds: 5),
-      snackPosition: SnackPosition.TOP,
+    Get.dialog(
+      CupertinoAlertDialog(
+        title: const Text('Respuesta de la API'),
+        content: Text(message),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('OK'),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -134,31 +142,22 @@ class QRScannerController extends GetxController {
   }
 
   void _showAllScannedDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Row(
-            children: const [
-              Icon(Icons.check_circle, color: Colors.green), // Ícono de éxito
-              SizedBox(width: 8), // Espacio entre el ícono y el texto
-              Text('Todos los productos fueron escaneados'), // Título
-            ],
+  Get.dialog(
+      CupertinoAlertDialog(
+        title: const Text('Finzalizado'),
+        content: Text(message),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('OK'),
+            onPressed: () {
+              Get.back();
+            },
           ),
-          content: Text(message), // Contenido con el mensaje
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Cerrar el diálogo
-                goToAdminPedidos(); // Ir a la pantalla de administración de pedidos
-              },
-              child: const Text('OK'), // Botón de OK
-            ),
-          ],
-        );
-      },
+        ],
+      ),
     );
-  }
+}
+
 
   void scanQR(BuildContext context, String keyProduct, int productID,
       int saleID, int? id) async {
