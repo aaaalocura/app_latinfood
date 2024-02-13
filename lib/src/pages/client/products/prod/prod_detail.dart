@@ -254,7 +254,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         ),
                         const SizedBox(
                             width:
-                                1), // Espacio entre los botones de tamaño y los botones de aumento/decremento
+                                0), // Espacio entre los botones de tamaño y los botones de aumento/decremento
                         // Botones de tamaño
                         if (widget.product.tam1 !=
                             widget.product.tam2) // Verifica si son diferentes
@@ -286,7 +286,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           ),
                         if (widget.product.tam1 !=
                             widget.product.tam2) // Verifica si son diferentes
-                          const SizedBox(width:1),
+                          const SizedBox(width:0),
                         RawMaterialButton(
                           onPressed: () {
                             setState(() {
