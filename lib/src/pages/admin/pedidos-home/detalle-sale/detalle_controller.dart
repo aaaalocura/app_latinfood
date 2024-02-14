@@ -31,10 +31,8 @@ class SaleController extends GetxController {
 
 // Función para recargar la página
   void reloadPage(int saleId) {
-    // Actualiza el estado de isLoading para forzar la recarga de la página
     isLoading.value = true;
     update();
-    // Llama nuevamente a la función fetchSaleDetails para cargar los detalles de la venta
     fetchSaleDetails(saleId);
   }
 
@@ -49,10 +47,6 @@ class SaleController extends GetxController {
       final response = await http.put(apiUrl);
 
       if (response.statusCode == 200) {
-        // Si la respuesta es 200, puedes realizar acciones adicionales si es necesario
-        // ...
-        // Actualiza la lista después de cargar el pedido
-
         Get.snackbar('Success', 'Order loaded successfully');
         goToAdminPedidos();
       } else {
@@ -62,8 +56,7 @@ class SaleController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'Connection error: $e',
           backgroundColor: Colors.red);
-      // Puedes manejar el error de conexión como desees
-      // ...
+      
     } finally {
       isLoading.value = false;
     }

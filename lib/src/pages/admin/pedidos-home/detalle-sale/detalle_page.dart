@@ -20,6 +20,7 @@ class Detalle_Venta extends StatelessWidget {
     // Llamar a la función fetchSaleDetails con el saleId proporcionado
     WidgetsBinding.instance.addPostFrameCallback((_) {
       saleController.fetchSaleDetails(saleId);
+      saleController.fetchProducts();
     });
 
     return Scaffold(
@@ -59,6 +60,7 @@ class Detalle_Venta extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CupertinoActivityIndicator(), // Estilo similar a iOS
+
                 SizedBox(height: 10),
                 Text('Cargando productos'), // Texto personalizado
               ],
@@ -128,200 +130,210 @@ class Detalle_Venta extends StatelessWidget {
               // Botón para agregar producto
               const SizedBox(height: 20),
               Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 20),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      ElevatedButton(
-        onPressed: () {
-          // Show the bottom sheet to add product
-          saleController.fetchProducts();
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return GetBuilder<SaleController>(
-                builder: (controller) {
-                  return Container(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Seleccionar Productos:',
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        saleController.fetchProducts();
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return GetBuilder<SaleController>(
+                              builder: (controller) {
+                                return Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Seleccionar Productos:',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount: controller.products.length,
+                                          itemBuilder: (context, index) {
+                                            final Product product =
+                                                controller.products[index];
+                                            return ListTile(
+                                              leading: CachedNetworkImage(
+                                                imageUrl:
+                                                    "https://kdlatinfood.com/intranet/public/storage/products/${product.image ?? ""}",
+                                                placeholder: (context, url) =>
+                                                    const CircularProgressIndicator(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(),
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.contain,
+                                              ),
+                                              title: Text(product.name ?? ''),
+                                              subtitle:
+                                                  Text(product.barcode ?? ''),
+                                              onTap: () {
+                                                showModalBottomSheet(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return QuantityInputModal(
+                                                      productName:
+                                                          product.name ?? '',
+                                                      productID:
+                                                          product.barcode!,
+                                                      saleID: saleId,
+                                                      onConfirm:
+                                                          (Map<int, Product>
+                                                              products) {
+                                                        // Agregar productos al mapa
+                                                        selectedProducts
+                                                            .addAll(products);
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      228, 222, 21, 21),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                            ),
+                                            child: const Text('Cancelar',
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .white, // Cambia el color del texto a blanco
+                                                  fontSize: 14.0,
+                                                )),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              // Lógica para guardar la cantidad de productos
+                                              Navigator.of(context).pop();
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color(0xE5FF5100),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                            ),
+                                            child: const Text('Confirmar',
+                                                style: TextStyle(
+                                                  color: Colors
+                                                      .white, // Cambia el color del texto a blanco
+                                                  fontSize: 14.0,
+                                                )),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xE5FF5100),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: const Text('Agregar Productos',
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: controller.products.length,
-                            itemBuilder: (context, index) {
-                              final Product product =
-                                  controller.products[index];
-                              return ListTile(
-                                leading: CachedNetworkImage(
-                                  imageUrl:
-                                      "https://kdlatinfood.com/intranet/public/storage/products/${product.image ?? ""}",
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      Container(),
-                                  width: 40,
-                                  height: 40,
-                                  fit: BoxFit.contain,
-                                ),
-                                title: Text(product.name ?? ''),
-                                subtitle: Text(product.barcode ?? ''),
-                                onTap: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return QuantityInputModal(
-                                        productName: product.name ?? '',
-                                        productID: product.barcode!,
-                                        saleID: saleId,
-                                        onConfirm: (Map<int, Product>
-                                            products) {
-                                          // Agregar productos al mapa
-                                          selectedProducts.addAll(products);
-                                        },
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(228, 222, 21, 21),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              child: const Text('Cancelar',
-                                  style: TextStyle(
-                                    color: Colors
-                                        .white, // Cambia el color del texto a blanco
-                                    fontSize: 14.0,
-                                  )),
-                            ),
-                            const SizedBox(width: 10),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Lógica para guardar la cantidad de productos
-                                Navigator.of(context).pop();
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xE5FF5100),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              child: const Text('Confirmar',
-                                  style: TextStyle(
-                                    color: Colors
-                                        .white, // Cambia el color del texto a blanco
-                                    fontSize: 14.0,
-                                  )),
-                            ),
-                          ],
-                        ),
-                      ],
+                            color: Colors
+                                .white, // Cambia el color del texto a blanco
+                            fontSize: 14.0,
+                          )),
                     ),
-                  );
-                },
-              );
-            },
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xE5FF5100),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        child: const Text('Agregar Productos',
-            style: TextStyle(
-              color: Colors.white, // Cambia el color del texto a blanco
-              fontSize: 14.0,
-            )),
-      ),
-      ElevatedButton(
-        onPressed: () {
-          _showConfirmationDialog(context, saleId);
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xE5FF5100),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-        child: Obx(() {
-          return controller1.isLoading.value
-              ? const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                )
-              : const Text(
-                  'Cargar Pedido', // Texto del botón
-                  style: TextStyle(
-                    color: Colors.white, // Color del texto
-                    fontSize: 16, // Tamaño del texto
-                  ),
-                );
-        }),
-      ),
-    ],
-  ),
-),
-
+                    ElevatedButton(
+                      onPressed: () {
+                        _showConfirmationDialog(context, saleId);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xE5FF5100),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Obx(() {
+                        return controller1.isLoading.value
+                            ? const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              )
+                            : const Text(
+                                'Cargar Pedido', // Texto del botón
+                                style: TextStyle(
+                                  color: Colors.white, // Color del texto
+                                  fontSize: 16, // Tamaño del texto
+                                ),
+                              );
+                      }),
+                    ),
+                  ],
+                ),
+              ),
 
               // Lista de detalles de la venta
               const SizedBox(height: 20),
-              Expanded(
-                child: CustomScrollView(
-                  slivers: [
-                    // SliverAppBar con el título fijo
-                    const SliverAppBar(
-                      backgroundColor: Colors.white,
-                      automaticallyImplyLeading:
-                          false, // Oculta el botón de retorno
-                      pinned:
-                          true, // Mantiene el título fijo mientras se desplaza
-                      flexibleSpace: Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text(
-                          'Detalles de la Venta:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+              const Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Text(
+                  'Detalles de la Venta:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
 
-                    // SliverList para la lista de detalles de la venta
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.all(15),
+                  children: [
+                    // Lista desplazable de productos
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount:
+                            saleController.sale.value?.salesDetails.length ?? 0,
+                        itemBuilder: (context, index) {
                           final detail =
                               saleController.sale.value!.salesDetails[index];
+
                           return ListTile(
                             contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16,
                               vertical: 8,
                             ),
-                            tileColor: const Color.fromARGB(255, 255, 255, 255), // Color de fondo
+                            tileColor: const Color.fromARGB(
+                                255, 255, 255, 255), // Color de fondo
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -349,25 +361,57 @@ class Detalle_Venta extends StatelessWidget {
                             ),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete),
-                              color: Colors.red, // Color del icono
+                              color: Colors.red,
                               onPressed: () {
-                                // Eliminar el producto primero
-                                controller1
-                                    .deleteProductFromSale(saleId: detail.id!)
-                                    .then((_) {
-                                  // Una vez completada la eliminación, volver a cargar los detalles de la venta
-                                  saleController.isLoading.value =
-                                      true; // Mostrar CircularProgressIndicator
-                                  saleController.fetchSaleDetails(saleId);
-                                });
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                            'Seguro de eliminar ${detail.product.name}'),
+                                        content: const Text(
+                                            '¿Está seguro que desea eliminar este producto?'),
+                                        actions: [
+                                          TextButton(
+                                            child: const Text(
+                                              'No',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(),
+                                          ),
+                                          TextButton(
+                                            child: const Text(
+                                              'Si',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+
+                                              // Código para eliminar
+                                              controller1
+                                                  .deleteProductFromSale(
+                                                      saleId: detail.id!)
+                                                  .then((_) {
+                                                // Recargar detalles
+                                                saleController
+                                                    .fetchSaleDetails(saleId);
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    });
                               },
                             ),
                           );
-                        },
-                        childCount:
-                            saleController.sale.value!.salesDetails.length,
-                      ),
-                    ),
+                        }),
                   ],
                 ),
               ),
