@@ -1,12 +1,11 @@
-import 'package:app_latin_food/src/pages/admin/pedidos-home/detalle-sale/add_prod.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos-home/detalle-sale/detalle_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:app_latin_food/src/models/sale_model.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class Detalle_Venta extends StatelessWidget {
   final int saleId;
   final SaleController controller1 = SaleController();
@@ -55,10 +54,10 @@ class Detalle_Venta extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Obx(() {
         if (saleController.isLoading.value) {
-          return Center(
+          return const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 CupertinoActivityIndicator(), // Estilo similar a iOS
                 SizedBox(height: 10),
                 Text('Cargando productos'), // Texto personalizado

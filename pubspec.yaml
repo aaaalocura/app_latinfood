@@ -37,7 +37,10 @@ dependencies:
   get_storage: ^2.1.1
   http: ^0.13.3
   animations: ^2.0.1
-  cached_network_image: ^3.0.0
+  cached_network_image:
+    git:
+      url: https://github.com/gauravmehta13/flutter_cached_network_image.git
+      path: cached_network_image
   page_transition: ^2.0.2
   url_launcher: ^6.0.0
   image_picker: ^0.8.4
