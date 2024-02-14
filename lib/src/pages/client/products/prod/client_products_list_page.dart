@@ -1274,6 +1274,7 @@ class MyButtonsWidget extends StatefulWidget {
     required this.tam1,
     required this.tam2,
     required this.onSizeSelected,
+    
   });
 
   @override
