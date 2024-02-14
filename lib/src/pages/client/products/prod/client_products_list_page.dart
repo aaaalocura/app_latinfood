@@ -204,7 +204,7 @@ class ProductsListPage extends StatelessWidget {
                     ),
                     Tab(
                       icon: Icon(Icons
-                          .fire_extinguisher), // Ícono para el estado "Precocido"
+                          .fire_extinguisher_sharp), // Ícono para el estado "Precocido"
                       text: 'Precocido', // Pestaña para productos precocidos
                     ),
                   ],

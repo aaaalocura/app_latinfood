@@ -70,134 +70,236 @@ class Detalle_Venta extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Datos del cliente
-              const Padding(
-                padding: EdgeInsets.all(20),
-                child: Text(
-                  'Datos del Cliente:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  'Nombre: ${saleController.sale.value?.customer.name}',
-                  style: const TextStyle(fontSize: 16),
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Datos del Cliente:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10), // Separación entre elementos
+                    Text(
+                      'Nombre: ${saleController.sale.value?.customer.name}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 5), // Separación entre elementos
+                    Text(
+                      'Email: ${saleController.sale.value?.customer.email}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 5), // Separación entre elementos
+                    Text(
+                      'Teléfono: ${saleController.sale.value?.customer.phone}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 20), // Separación entre elementos
+                    const Text(
+                      'Datos de la Venta:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10), // Separación entre elementos
+                    Text(
+                      'ID de Venta: ${saleController.sale.value?.id}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 5), // Separación entre elementos
+                    Text(
+                      'Total: ${saleController.sale.value?.total}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 5), // Separación entre elementos
+                    Text(
+                      'Número de Items: ${saleController.sale.value?.items}',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
               ),
+
               // Más detalles del cliente si es necesario...
 
               // Botón para agregar producto
               const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Show the bottom sheet to add product
-                    saleController.fetchProducts();
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return GetBuilder<SaleController>(
-                          builder: (controller) {
-                            return Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Seleccionar Productos:',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemCount: controller.products.length,
-                                      itemBuilder: (context, index) {
-                                        final Product product =
-                                            controller.products[index];
-                                        return ListTile(
-                                          leading: CachedNetworkImage(
-                                            imageUrl:
-                                                "https://kdlatinfood.com/intranet/public/storage/products/${product.image ?? ""}",
-                                            placeholder: (context, url) =>
-                                                const CircularProgressIndicator(),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Container(),
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.contain,
-                                          ),
-                                          title: Text(product.name ?? ''),
-                                          subtitle: Text(product.barcode ?? ''),
-                                          onTap: () {
-                                            showModalBottomSheet(
-                                              context: context,
-                                              builder: (context) {
-                                                return QuantityInputModal(
-                                                  productName:
-                                                      product.name ?? '',
-                                                  productID: product.barcode!,
-                                                  saleID: saleId,
-                                                  onConfirm: (Map<int, Product>
-                                                      products) {
-                                                    // Agregar productos al mapa
-                                                    selectedProducts
-                                                        .addAll(products);
-                                                  },
-                                                );
-                                              },
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
+  padding: const EdgeInsets.symmetric(horizontal: 20),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      ElevatedButton(
+        onPressed: () {
+          // Show the bottom sheet to add product
+          saleController.fetchProducts();
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return GetBuilder<SaleController>(
+                builder: (controller) {
+                  return Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Seleccionar Productos:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: controller.products.length,
+                            itemBuilder: (context, index) {
+                              final Product product =
+                                  controller.products[index];
+                              return ListTile(
+                                leading: CachedNetworkImage(
+                                  imageUrl:
+                                      "https://kdlatinfood.com/intranet/public/storage/products/${product.image ?? ""}",
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Container(),
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.contain,
+                                ),
+                                title: Text(product.name ?? ''),
+                                subtitle: Text(product.barcode ?? ''),
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return QuantityInputModal(
+                                        productName: product.name ?? '',
+                                        productID: product.barcode!,
+                                        saleID: saleId,
+                                        onConfirm: (Map<int, Product>
+                                            products) {
+                                          // Agregar productos al mapa
+                                          selectedProducts.addAll(products);
                                         },
-                                        child: const Text('Cancelar'),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          // Lógica para guardar la cantidad de productos
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text('Confirmar'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color.fromARGB(228, 222, 21, 21),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                               ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: const Text('Agregar Producto'),
-                ),
-              ),
+                              child: const Text('Cancelar',
+                                  style: TextStyle(
+                                    color: Colors
+                                        .white, // Cambia el color del texto a blanco
+                                    fontSize: 14.0,
+                                  )),
+                            ),
+                            const SizedBox(width: 10),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Lógica para guardar la cantidad de productos
+                                Navigator.of(context).pop();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xE5FF5100),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              child: const Text('Confirmar',
+                                  style: TextStyle(
+                                    color: Colors
+                                        .white, // Cambia el color del texto a blanco
+                                    fontSize: 14.0,
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xE5FF5100),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: const Text('Agregar Productos',
+            style: TextStyle(
+              color: Colors.white, // Cambia el color del texto a blanco
+              fontSize: 14.0,
+            )),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          _showConfirmationDialog(context, saleId);
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xE5FF5100),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: Obx(() {
+          return controller1.isLoading.value
+              ? const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                )
+              : const Text(
+                  'Cargar Pedido', // Texto del botón
+                  style: TextStyle(
+                    color: Colors.white, // Color del texto
+                    fontSize: 16, // Tamaño del texto
+                  ),
+                );
+        }),
+      ),
+    ],
+  ),
+),
+
 
               // Lista de detalles de la venta
               const SizedBox(height: 20),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Padding(
+                child: CustomScrollView(
+                  slivers: [
+                    // SliverAppBar con el título fijo
+                    const SliverAppBar(
+                      backgroundColor: Colors.white,
+                      automaticallyImplyLeading:
+                          false, // Oculta el botón de retorno
+                      pinned:
+                          true, // Mantiene el título fijo mientras se desplaza
+                      flexibleSpace: Padding(
                         padding: EdgeInsets.all(20),
                         child: Text(
                           'Detalles de la Venta:',
@@ -207,66 +309,73 @@ class Detalle_Venta extends StatelessWidget {
                           ),
                         ),
                       ),
-                      ...saleController.sale.value?.salesDetails.map((detail) {
-                            return ListTile(
-                              leading: CachedNetworkImage(
-                                imageUrl:
-                                    "https://kdlatinfood.com/intranet/public/storage/products/${detail.product.image ?? ""}",
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    Container(),
-                                width: 40,
-                                height: 40,
-                                fit: BoxFit.contain,
+                    ),
+
+                    // SliverList para la lista de detalles de la venta
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          final detail =
+                              saleController.sale.value!.salesDetails[index];
+                          return ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            tileColor: const Color.fromARGB(255, 255, 255, 255), // Color de fondo
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            leading: CachedNetworkImage(
+                              imageUrl:
+                                  "https://kdlatinfood.com/intranet/public/storage/products/${detail.product.image ?? ""}",
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Container(),
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.contain,
+                            ),
+                            title: Text(
+                              detail.product.name!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
                               ),
-                              title: Text(detail.product.name!),
-                              subtitle: Text(
-                                  'Cantidad: ${detail.quantity}, Precio: ${detail.price}'),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {
-                                  // Eliminar el producto primero
-                                  controller1
-                                      .deleteProductFromSale(saleId: detail.id!)
-                                      .then((_) {
-                                    // Una vez completada la eliminación, volver a cargar los detalles de la venta
-                                    saleController.isLoading.value =
-                                        true; // Mostrar CircularProgressIndicator
-                                    saleController.fetchSaleDetails(saleId);
-                                  });
-                                },
+                            ),
+                            subtitle: Text(
+                              'Cantidad: ${detail.quantity}, Precio: ${detail.price}',
+                              style: TextStyle(
+                                color: Colors.grey[700],
                               ),
-                            );
-                          }).toList() ??
-                          [
-                            const Text('No se encontraron detalles de la venta')
-                          ],
-                    ],
-                  ),
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete),
+                              color: Colors.red, // Color del icono
+                              onPressed: () {
+                                // Eliminar el producto primero
+                                controller1
+                                    .deleteProductFromSale(saleId: detail.id!)
+                                    .then((_) {
+                                  // Una vez completada la eliminación, volver a cargar los detalles de la venta
+                                  saleController.isLoading.value =
+                                      true; // Mostrar CircularProgressIndicator
+                                  saleController.fetchSaleDetails(saleId);
+                                });
+                              },
+                            ),
+                          );
+                        },
+                        childCount:
+                            saleController.sale.value!.salesDetails.length,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           );
         }
       }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Llama a la función loadOrder cuando se presiona el botón flotante
-          _showConfirmationDialog(context, saleId);
-        },
-        backgroundColor: const Color(0xE5FF5100),
-        child: Obx(() {
-          return controller1.isLoading.value
-              ? const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                )
-              : const Icon(
-                  Icons.cloud_upload_rounded,
-                  color: Colors.white, // Establece el color del icono en blanco
-                );
-        }),
-      ),
     );
   }
 
@@ -352,7 +461,17 @@ class QuantityInputModal extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancelar'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 255, 7, 7),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text('Cancelar',
+                    style: TextStyle(
+                      color: Colors.white, // Cambia el color del texto a blanco
+                      fontSize: 14.0,
+                    )),
               ),
               const SizedBox(width: 10),
               ElevatedButton(
@@ -362,7 +481,9 @@ class QuantityInputModal extends StatelessWidget {
                     // Lógica para agregar el producto al mapa
                     saleController
                         .addProductToSale(
-                            saleId: saleID, barcode: productID, quantity: quantity)
+                            saleId: saleID,
+                            barcode: productID,
+                            quantity: quantity)
                         .then((_) {
                       Navigator.of(context).pop();
                       saleController.isLoading.value =
@@ -371,7 +492,17 @@ class QuantityInputModal extends StatelessWidget {
                     });
                   }
                 },
-                child: const Text('Agregar producto'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xE5FF5100),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: const Text('Agregar',
+                    style: TextStyle(
+                      color: Colors.white, // Cambia el color del texto a blanco
+                      fontSize: 14.0,
+                    )),
               ),
             ],
           ),
