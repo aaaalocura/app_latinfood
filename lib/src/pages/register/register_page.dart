@@ -59,7 +59,7 @@ class RegisterPage extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 2),
-             const Row(
+              Row(
               mainAxisAlignment: MainAxisAlignment.center,
             ),
             const SizedBox(height: 5),
@@ -133,9 +133,9 @@ Widget _textOyarce() {
       borderRadius: BorderRadius.circular(20),
     ),
     alignment: Alignment.center, // Centrar el texto dentro del contenedor
-    child:  const Row(
+    child:   Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: const[
         Text(
           'Design by ',
           style: TextStyle(

@@ -55,10 +55,10 @@ class Detalle_Venta extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Obx(() {
         if (saleController.isLoading.value) {
-          return const Center(
+          return  Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 CupertinoActivityIndicator(), // Estilo similar a iOS
 
                 SizedBox(height: 10),

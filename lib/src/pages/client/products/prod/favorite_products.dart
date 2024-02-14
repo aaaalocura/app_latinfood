@@ -59,9 +59,9 @@ class _FavoriteprodState extends State<Favoriteprod> {
         future: _favoriteController.getFavoriteProducts(widget.customerId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CupertinoAlertDialog(
+            return  CupertinoAlertDialog(
               content: Column(
-                children: [
+                children:const [
                   CupertinoActivityIndicator(),
                   SizedBox(height: 8),
                   Text('Loading data...'),
@@ -69,10 +69,10 @@ class _FavoriteprodState extends State<Favoriteprod> {
               ),
             );
           } else if (snapshot.hasError) {
-            return const Center(
+            return  Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: const[
                   AnimatedOpacity(
                     opacity: 1.0,
                     duration: Duration(milliseconds: 500),
@@ -101,10 +101,10 @@ class _FavoriteprodState extends State<Favoriteprod> {
           } else if (!snapshot.hasData) {
             return const Center(child: Text('Cargando datos...'));
           } else if (snapshot.data!.isEmpty) {
-            return const Center(
+            return  Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children:const [
                   AnimatedOpacity(
                     opacity: 1.0,
                     duration: Duration(milliseconds: 500),
@@ -218,8 +218,8 @@ class _FavoriteprodState extends State<Favoriteprod> {
                                     softWrap: false,
                                   ),
                                   const SizedBox(height: 4),
-                                  const Row(
-                                    children: [
+                                   Row(
+                                    children:const [
                                       Icon(Icons.star,
                                           color: Colors.yellow, size: 16),
                                       Icon(Icons.star,

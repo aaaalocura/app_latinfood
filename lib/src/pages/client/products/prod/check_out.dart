@@ -45,11 +45,11 @@ class CheckOutPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-           const Padding(
-            padding: EdgeInsets.all(16.0),
+            Padding(
+            padding:const EdgeInsets.all(16.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children:const [
                 SizedBox(width: 8),
                 Text(
                   'Delivery Address',
@@ -73,9 +73,9 @@ class CheckOutPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                     const Row(
+                      Row(
                       // Alineación horizontal del icono y el texto
-                      children: [
+                      children: const[
                         Icon(
                           Icons.home,
                           size: 24,

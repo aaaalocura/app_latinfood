@@ -123,8 +123,8 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                     const SizedBox(
                       height: 16.0,
                     ),
-                    const Row(
-                      children: [
+                     Row(
+                      children: const [
                         Icon(
                           Icons.shopping_basket,
                           size: 24.0,

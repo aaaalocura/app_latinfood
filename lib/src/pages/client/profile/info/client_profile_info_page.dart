@@ -61,9 +61,9 @@ class ClientProfileInfoPage extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Muestra un indicador de carga mientras se obtienen los datos
-                return  const CupertinoAlertDialog(
+                return   CupertinoAlertDialog(
                   content: Column(
-                    children: [
+                    children:const [
                       CupertinoActivityIndicator(),
                       SizedBox(height: 8),
                       Text('Loading data...'),
@@ -72,10 +72,10 @@ class ClientProfileInfoPage extends StatelessWidget {
                 );
               } else if (snapshot.hasError) {
                 // Muestra un mensaje de error si ocurre un error al obtener los datos
-                return  const Center(
+                return   Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: const[
                       AnimatedOpacity(
                         opacity: 1.0,
                         duration: Duration(milliseconds: 500),

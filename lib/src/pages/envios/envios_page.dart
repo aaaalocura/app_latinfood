@@ -21,10 +21,10 @@ class ClientOrdersPage extends StatelessWidget {
         title: const Text('Ongoing Transaction'),
         backgroundColor: Colors.white,
         elevation: 0.5,
-        flexibleSpace: const FlexibleSpaceBar(
+        flexibleSpace:  FlexibleSpaceBar(
           background: Stack(
             fit: StackFit.expand,
-            children: [
+            children: const[
               // Coloca aquí la imagen o cualquier otro contenido que desees tener detrás del AppBar
 
               // BackdropFilter para aplicar el efecto de difuminado
@@ -52,9 +52,9 @@ class ClientOrdersPage extends StatelessWidget {
           future: con.fetchClientOrders(customerId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return  const CupertinoAlertDialog(
+              return   CupertinoAlertDialog(
                 content: Column(
-                  children: [
+                  children: const[
                     CupertinoActivityIndicator(),
                     SizedBox(height: 8),
                     Text('Cargando datos...'),
@@ -62,10 +62,10 @@ class ClientOrdersPage extends StatelessWidget {
                 ),
               );
             } else if (snapshot.hasError) {
-              return  const Center(
+              return   Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children:const[
                     AnimatedOpacity(
                       opacity: 1.0,
                       duration: Duration(milliseconds: 500),
@@ -92,10 +92,10 @@ class ClientOrdersPage extends StatelessWidget {
                 ),
               );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return  const Center(
+              return   Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const[
                     AnimatedOpacity(
                       opacity: 1.0,
                       duration: Duration(milliseconds: 500),

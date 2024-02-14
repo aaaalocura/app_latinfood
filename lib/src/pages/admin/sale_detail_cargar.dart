@@ -137,10 +137,10 @@ class SaleDetailPage extends StatelessWidget {
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               const SizedBox(height: 16.0),
-                               const Row(
+                                Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
+                                children: const [
                                   Icon(
                                     Icons.check_circle_outline_outlined,
                                     size: 24.0,
@@ -228,10 +228,10 @@ class SaleDetailPage extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return  const AlertDialog(
+                              return   AlertDialog(
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  children: [
+                                  children: const [
                                     CircularProgressIndicator(), // Indicador de carga
                                     SizedBox(
                                         height:
