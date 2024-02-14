@@ -59,9 +59,9 @@ class _FavoriteprodState extends State<Favoriteprod> {
         future: _favoriteController.getFavoriteProducts(widget.customerId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CupertinoAlertDialog(
+            return const CupertinoAlertDialog(
               content: Column(
-                children: const [
+                children: [
                   CupertinoActivityIndicator(),
                   SizedBox(height: 8),
                   Text('Loading data...'),
@@ -69,10 +69,10 @@ class _FavoriteprodState extends State<Favoriteprod> {
               ),
             );
           } else if (snapshot.hasError) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   AnimatedOpacity(
                     opacity: 1.0,
                     duration: Duration(milliseconds: 500),
@@ -101,10 +101,10 @@ class _FavoriteprodState extends State<Favoriteprod> {
           } else if (!snapshot.hasData) {
             return const Center(child: Text('Cargando datos...'));
           } else if (snapshot.data!.isEmpty) {
-            return Center(
+            return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   AnimatedOpacity(
                     opacity: 1.0,
                     duration: Duration(milliseconds: 500),
@@ -218,8 +218,8 @@ class _FavoriteprodState extends State<Favoriteprod> {
                                     softWrap: false,
                                   ),
                                   const SizedBox(height: 4),
-                                  Row(
-                                    children: const [
+                                  const Row(
+                                    children: [
                                       Icon(Icons.star,
                                           color: Colors.yellow, size: 16),
                                       Icon(Icons.star,

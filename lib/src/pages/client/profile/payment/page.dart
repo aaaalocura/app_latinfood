@@ -48,9 +48,9 @@ class PaymentMethodsPage extends StatelessWidget {
             future: fetchCustomerData(customerId),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return  CupertinoAlertDialog(
+                return  const CupertinoAlertDialog(
                   content: Column(
-                    children: const [
+                    children: [
                       CupertinoActivityIndicator(),
                       SizedBox(height: 8),
                       Text('Cargando datos...'),
@@ -58,10 +58,10 @@ class PaymentMethodsPage extends StatelessWidget {
                   ),
                 );
               } else if (snapshot.hasError) {
-                 return  Center(
+                 return  const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     AnimatedOpacity(
                       opacity: 1.0,
                       duration: Duration(milliseconds: 500),
@@ -141,11 +141,11 @@ class PaymentMethodsPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          child:  Padding(
-                            padding: const EdgeInsets.all(20.0),
+                          child:  const Padding(
+                            padding: EdgeInsets.all(20.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'Credit and Debit Card:',
                                   style: TextStyle(
@@ -180,11 +180,11 @@ class PaymentMethodsPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          child:  Padding(
-                            padding: const EdgeInsets.all(20.0),
+                          child:  const Padding(
+                            padding: EdgeInsets.all(20.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
                                   'PayPal',
                                   style: TextStyle(

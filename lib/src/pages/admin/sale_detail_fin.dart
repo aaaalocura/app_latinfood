@@ -107,8 +107,8 @@ class SaleDetailPageFin extends StatelessWidget {
                     const SizedBox(
                       height: 16.0,
                     ),
-                    Row(
-                      children: const [
+                    const Row(
+                      children: [
                         Icon(
                           Icons.shopping_basket,
                           size: 24.0,

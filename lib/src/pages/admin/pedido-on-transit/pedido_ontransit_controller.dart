@@ -21,9 +21,9 @@ class QRScannerController extends GetxController {
         title: const Text('Cargando...'),
         content: Container(
           padding: const EdgeInsets.all(16.0),
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               CircularProgressIndicator(),
               SizedBox(width: 16.0),
               Text(

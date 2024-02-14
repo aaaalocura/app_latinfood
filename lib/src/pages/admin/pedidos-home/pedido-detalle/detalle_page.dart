@@ -201,6 +201,7 @@ class SaleDetailPageNew extends StatelessWidget {
   }
 
 // Función para mostrar el BottomSheet de edición de cantidad
+  // ignore: unused_element
   void _showEditQuantityBottomSheet(BuildContext context, SaleDetail detail) {
     int currentQuantity = detail.quantity; // Obtener la cantidad actual
 

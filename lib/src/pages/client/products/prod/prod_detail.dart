@@ -188,9 +188,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                         ),
-                        Row(
+                        const Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
+                          children: [
                             Icon(Icons.star, color: Colors.amber),
                             Text(
                               '5',

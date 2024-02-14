@@ -46,10 +46,10 @@ class ClientSettingsPage extends StatelessWidget {
                 onTap: () {
                   //Get.to(ClientDatosPage());
                 },
-                child:  Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child:  const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(
                         Icons.person,
                         size: 16,

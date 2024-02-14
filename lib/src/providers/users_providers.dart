@@ -24,9 +24,9 @@ class UsersProviders extends GetConnect {
         title: const Text('Loading...'),
         content: Container(
           padding: const EdgeInsets.all(16.0),
-          child:  Row(
+          child:  const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               CircularProgressIndicator(),
               SizedBox(width: 16.0),
               Text(
@@ -59,9 +59,9 @@ class UsersProviders extends GetConnect {
         title: const Text('Loading...'),
         content: Container(
           padding: const EdgeInsets.all(16.0),
-          child:  Row(
+          child:  const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               CircularProgressIndicator(),
               SizedBox(width: 16.0),
               Text(

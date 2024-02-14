@@ -29,10 +29,10 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return  AlertDialog(
+        return  const AlertDialog(
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               CircularProgressIndicator(),
               SizedBox(height: 16),
               Text('Cargando...'),
@@ -280,10 +280,10 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                               Text('Precio: \$${detail.price}'),
                               Text('Cantidad: ${detail.quantity}'),
                               const SizedBox(height: 16.0),
-                               Row(
+                               const Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: const [
+                                children: [
                                   Icon(
                                     Icons.check_circle_outline_outlined,
                                     size: 24.0,

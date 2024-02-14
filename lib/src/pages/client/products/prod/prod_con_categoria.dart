@@ -77,18 +77,18 @@ class ProdCategoria extends StatelessWidget {
         future: ProductController().fetchProductsByCategory(categoryId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return  CupertinoAlertDialog(
+            return  const CupertinoAlertDialog(
               content: Column(
-                children: const [
+                children: [
                   CupertinoActivityIndicator(),
                 ],
               ),
             );
           } else if (snapshot.hasError) {
-            return  Center(
+            return  const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   AnimatedOpacity(
                     opacity: 1.0,
                     duration: Duration(milliseconds: 500),
