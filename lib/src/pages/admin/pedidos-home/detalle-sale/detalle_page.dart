@@ -482,7 +482,7 @@ class QuantityInputModal extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            productName,
+            'Agregar: $productName',
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
