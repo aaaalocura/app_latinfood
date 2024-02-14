@@ -1,3 +1,4 @@
+import 'package:app_latin_food/src/pages/admin/pedidos-home/detalle-sale/detalle_page.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos-home/pedido-detalle/detalle_page.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos-home/pedidos_home_controller.dart';
 
@@ -63,14 +64,15 @@ class HomePedidosView extends StatelessWidget {
                     child: InkWell(
                       onTap: () {
                         // Navega a la página de detalles cuando se hace clic.
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => SaleDetailPageNew(
-                              sale: sale,
-                              saleDetails: sale.salesDetails,
-                            ),
-                          ),
-                        );
+                        Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => Detalle_Venta(
+      saleId: sale.id,
+    ),
+  ),
+);
+
                       },
                       child: Container(
                         padding: const EdgeInsets.all(16.0),
