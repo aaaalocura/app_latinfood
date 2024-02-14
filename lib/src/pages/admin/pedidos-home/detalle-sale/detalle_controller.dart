@@ -139,7 +139,7 @@ class SaleController extends GetxController {
       isLoading(false);
     }
   }
-  void addProductsToSale(Map<int, Product> selectedProducts, idSale) {
+  void addProductsToSale1(Map<int, Product> selectedProducts, idSale) {
     // Itera sobre los productos seleccionados y llama a la función addProductToSale
     selectedProducts.forEach((productId, product) async {
       await addProductToSale(
@@ -182,7 +182,7 @@ class SaleController extends GetxController {
         // Actualiza la lista de detalles de venta
       } else {
         if (kDebugMode) {
-          print(response.statusCode);
+          print(response.body);
         }
         Get.snackbar(
           'Accion No Completada',

@@ -142,10 +142,8 @@ class Detalle_Venta extends StatelessWidget {
                                                 return QuantityInputModal(
                                                   productName:
                                                       product.name ?? '',
-                                                      productID:
-                                                      product.barcode!,
-                                                      saleID:
-                                                      product.id!,
+                                                  productID: product.barcode!,
+                                                  saleID: saleId,
                                                   onConfirm: (Map<int, Product>
                                                       products) {
                                                     // Agregar productos al mapa
@@ -313,11 +311,11 @@ class QuantityInputModal extends StatelessWidget {
   final String productID;
   final int saleID;
   final Function(Map<int, Product>) onConfirm;
-
-  const QuantityInputModal({
+  final SaleController saleController = Get.put(SaleController());
+  QuantityInputModal({
     Key? key,
     required this.productName,
-    required this.onConfirm, 
+    required this.onConfirm,
     required this.productID,
     required this.saleID,
   }) : super(key: key);
@@ -362,21 +360,18 @@ class QuantityInputModal extends StatelessWidget {
                   final int quantity = int.parse(quantityController.text);
                   if (quantity > 0) {
                     // Lógica para agregar el producto al mapa
-                    final Product product = Product(
-                      barcode: productID, 
-                      name: productName,
-                      selectedQuantity: quantity,
-                    );
-                    if (kDebugMode) {
-                      print(productID);
-                      print(quantity);
-                      print(productName);
-                    }
-                    onConfirm({product.id!: product});
-                    Navigator.of(context).pop();
+                    saleController
+                        .addProductToSale(
+                            saleId: saleID, barcode: productID, quantity: quantity)
+                        .then((_) {
+                      Navigator.of(context).pop();
+                      saleController.isLoading.value =
+                          true; // Mostrar CircularProgressIndicator
+                      saleController.fetchSaleDetails(saleID);
+                    });
                   }
                 },
-                child: const Text('Confirmar'),
+                child: const Text('Agregar producto'),
               ),
             ],
           ),
