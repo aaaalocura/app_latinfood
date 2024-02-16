@@ -204,7 +204,7 @@ class ProductsListPage extends StatelessWidget {
                     ),
                     Tab(
                       icon: Icon(Icons
-                          .fire_extinguisher_sharp), // Ícono para el estado "Precocido"
+                          .breakfast_dining_outlined), // Ícono para el estado "Precocido"
                       text: 'Precocido', // Pestaña para productos precocidos
                     ),
                   ],
@@ -934,7 +934,7 @@ class ProductsListPage extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'Items: $totalProducts',
+                  'Items: ${cartController.cartItemCount}',
                   style: const TextStyle(
                     fontSize: 16,
                     height: 1,
@@ -977,7 +977,7 @@ class ProductsListPage extends StatelessWidget {
           final categories = snapshot.data!;
           if (categories.isNotEmpty) {
             selectedCategoryController.setSelectedCategory(categories.first.id);
-            // con.getProductsByCategoryPreCocidos(categories.first.name);
+            con.getProductsByCategoryPreCocidos(categories.first.name);
             con.getProductsByCategoryCrudos(categories.first.name);
           }
           return SingleChildScrollView(

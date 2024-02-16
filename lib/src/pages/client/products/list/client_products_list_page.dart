@@ -56,7 +56,7 @@ class ClientProductsListPage extends StatelessWidget {
         items: [
           BottomNavyBarItem(
             icon: Image.network(
-              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+              'https://firebasestorage.googleapis.com/v0/b/kd-latinfood.appspot.com/o/K%26D%20blanco.png?alt=media&token=12348d16-6a5c-46ed-917d-6d1a35f6cdb3',
               width: 33,
               height: 33,
             ),

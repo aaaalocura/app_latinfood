@@ -93,43 +93,37 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
         ),
         actions: [
-          Stack(
-            children: [
-              IconButton(
-                  onPressed: () {},
-                  icon: Stack(
-                    children: [
-                      const Positioned(
-                        left: 0,
-                        top: 4,
-                        child: Icon(
-                          Icons.shopping_cart,
-                          size: 32,
-                        ),
-                      ),
-                      if (cartController.cartItemCount > 0)
-                        Positioned(
-                          right: -1,
-                          top: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.red,
-                            ),
-                            child: Text(
-                              '${cartController.cartItemCount}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  )),
-            ],
+          IconButton(
+  onPressed: () {},
+  icon: Stack(
+    children: [
+      Icon(
+        Icons.shopping_cart,
+        size: 32,
+      ),
+      if (cartController.cartItemCount > 0)
+        Positioned(
+          right: -1,
+          top: 0,
+          child: Container(
+            padding: const EdgeInsets.all(4),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.red,
+            ),
+            child: Text(
+              '${cartController.cartItemCount}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
+        ),
+    ],
+  ),
+),
+
           IconButton(
             onPressed: () {
               _favoriteController.toggleFavorite(id_prod, userId!);
@@ -381,9 +375,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   cartController.addToCart(widget.product,
                                       userId!, counter, selectedSizeMultiplier);
                                   cartController.update();
-                                  if (Navigator.canPop(context)) {
+                                  /*if (Navigator.canPop(context)) {
                                     Navigator.pop(context);
-                                  }
+                                  }*/
                                 }
                               : null, // Deshabilitar el botón si no se ha seleccionado un tamaño
                           style: ElevatedButton.styleFrom(
