@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, duplicate_ignore
 
+
 class Sale {
   final int id;
   final String total;

@@ -1,4 +1,5 @@
 import 'package:app_latin_food/src/pages/admin/firma_sale.dart';
+import 'package:app_latin_food/src/pages/admin/pedido-on-transit/test.dart';
 import 'package:app_latin_food/src/pages/admin/pedidos_controller.dart';
 import 'package:app_latin_food/src/pages/admin/sale_detail_fin.dart';
 
@@ -305,9 +306,9 @@ class SalesSection extends StatelessWidget {
                       // Navega a la página de detalles cuando se hace clic.
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => SaleDetailPageN(
-                            sale: sale,
-                            saleDetails: sale.salesDetails,
+                          builder: (context) => ScanQRPage(
+                            saleId: sale.id,
+                           
                           ),
                         ),
                       );

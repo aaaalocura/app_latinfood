@@ -3,89 +3,82 @@
 import 'package:app_latin_food/src/models/sale_model.dart';
 import 'package:app_latin_food/src/pages/admin/pedido-on-transit/pedido_ontransit_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SaleDetailItem extends StatefulWidget {
+class SaleDetailItem extends StatelessWidget {
   final SaleDetail detail;
 
-  // ignore: prefer_const_constructors_in_immutables
-  SaleDetailItem({required this.detail, Key? key}) : super(key: key);
+  const SaleDetailItem({required this.detail, Key? key}) : super(key: key);
 
   @override
-  _SaleDetailItemState createState() => _SaleDetailItemState();
-}
+  Widget build(BuildContext context) {
+    QRScannerController qrScannerController = Get.put(QRScannerController());
 
-class _SaleDetailItemState extends State<SaleDetailItem> {
-  late QRScannerController
-      _qrScannerController; // Asegúrate de importar QrScannerController
-
-  @override
-  void initState() {
-    super.initState();
-    _qrScannerController =
-        QRScannerController(); // Reemplaza QrScannerController con tu lógica de inicialización real
-  }
-
-  @override
-Widget build(BuildContext context) {
     return Card(
       elevation: 2.0,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
       ),
-      child: ListTile(
-        leading: IconButton(
-          icon: const Icon(Icons.qr_code),
-          onPressed: () {
-            _scanQRCode();
-          },
-        ),
-        title: Text(widget.detail.product.name!),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('SKU: ${widget.detail.product.barcode}'),
-            Text('Precio: \$${widget.detail.price}'),
-            Text('Cantidad: ${widget.detail.quantity}'),
-            Text('Id: ${widget.detail.product.id}'),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Icon(
-                  Icons.check_circle_outline_outlined,
-                  size: 24.0,
-                  color: widget.detail.scanned == 1
-                      ? Colors.green
-                      : Colors.grey, // Icono de verificación en verde
-                ),
-                Text(
-                  widget.detail.scanned == 1
-                      ? 'Producto Escaneado'
-                      : 'Producto sin escanear',
-                  style: const TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.black,
+      child: Obx(() {
+        return ListTile(
+          leading: IconButton(
+            icon: const Icon(Icons.qr_code),
+            onPressed: () {
+              qrScannerController.scanQR(
+                context,
+                detail.product.KeyProduct!,
+                detail.productID,
+                detail.saleID,
+                detail.id,
+                detail.scanned,
+              );
+            },
+          ),
+          title: Text(detail.product.name!),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('SKU: ${detail.product.barcode}'),
+              Text('Precio: \$${detail.price}'),
+              Text('Cantidad: ${detail.scanned}'),
+              Text('Id: ${detail.product.id}'),
+              const SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Usar el valor observable scanned para determinar el color del icono
+                  qrScannerController.scanned.value == 0
+                      ? const CircularProgressIndicator()
+                      : Icon(
+                          Icons.check_circle_outline_outlined,
+                          size: 24.0,
+                          color: qrScannerController.scanned.value == 1
+                              ? Colors.green
+                              : Colors.grey,
+                        ),
+                  Text(
+                    qrScannerController.scanned.value == 0
+                        ? 'No escaneado'
+                        // ignore: unrelated_type_equality_checks
+                        : qrScannerController.scanned == 1
+                            ? 'Producto Escaneado'
+                            : 'Producto sin escanear',
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _scanQRCode() {
-    _qrScannerController.scanQR(
-      context,
-      widget.detail.product.KeyProduct!,
-      widget.detail.productID,
-      widget.detail.saleID,
-      widget.detail.id,
+                ],
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }
+
 
 class SaleDetailPageN extends StatefulWidget {
   final Sale sale;
@@ -99,7 +92,6 @@ class SaleDetailPageN extends StatefulWidget {
 }
 
 class _SaleDetailPageState extends State<SaleDetailPageN> {
-
   @override
   void initState() {
     super.initState();

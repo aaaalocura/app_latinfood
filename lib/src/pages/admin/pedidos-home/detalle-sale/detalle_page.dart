@@ -55,7 +55,7 @@ class Detalle_Venta extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Obx(() {
         if (saleController.isLoading.value) {
-          return  Center(
+          return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
@@ -354,7 +354,7 @@ class Detalle_Venta extends StatelessWidget {
                               ),
                             ),
                             subtitle: Text(
-                              'Cantidad: ${detail.quantity}, Precio: ${detail.price}',
+                              'Cantidad: ${detail.quantity}\nSKU: ${detail.product.barcode}',
                               style: TextStyle(
                                 color: Colors.grey[700],
                               ),

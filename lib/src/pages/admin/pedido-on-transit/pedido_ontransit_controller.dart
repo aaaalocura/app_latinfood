@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:app_latin_food/src/models/admin/sales/sale_detalle.dart';
+import 'package:app_latin_food/src/pages/admin/pedidos-home/detalle-sale/detalle_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,20 +12,42 @@ import 'package:http/http.dart' as http;
 class QRScannerController extends GetxController {
   var getResult = 'QR Code Result';
   RxInt scanned = 0.obs;
+  Rx<Sale?> sale = Rx<Sale?>(null);
+  final SaleController saleController = Get.put(SaleController());
+  final RxBool isLoading = false.obs;
   void _updateScreen() {
     update();
   }
 
-  Future<void> sendQRCodeToAPI(BuildContext context,String qrCode, String keyProduct, int productID,
-      int saleID, int? id) async {
+  void fetchSaleDetails(int id) async {
+    isLoading.value = true;
+    try {
+      final response = await http.get(
+          Uri.parse('https://kdlatinfood.com/intranet/public/api/sales/$id'));
+      if (response.statusCode == 200) {
+        sale.value = Sale.fromJson(json.decode(response.body)['data']);
+      } else {
+        throw Exception('Failed to load sale details');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> sendQRCodeToAPI(BuildContext context, String qrCode,
+      String keyProduct, int productID, int saleID, int? id) async {
     Get.dialog(
       CupertinoAlertDialog(
         title: const Text('Cargando...'),
         content: Container(
           padding: const EdgeInsets.all(16.0),
-          child:  Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               CircularProgressIndicator(),
               SizedBox(width: 16.0),
               Text(
@@ -61,24 +85,13 @@ class QRScannerController extends GetxController {
           final message = jsonResponse['message'];
 
           if (message == 'Pase al siguiente producto.') {
+            _updateSale();
             _updateScreen();
             _showAlertDialog(message);
           } else if (message == 'Todos los códigos QR han sido escaneados.') {
             // ignore: use_build_context_synchronously
-            _showAllScannedDialog(context,message);
-
-            // Hacer el segundo POST a la nueva ruta
-            final secondResponse = await http.post(
-              Uri.parse(
-                  'https://kdlatinfood.com/intranet/public/api/updateActualSales'),
-              // Aquí coloca los datos que deseas enviar en el segundo POST
-              // {'key': 'value'},
-            );
-
-            // Imprimir la respuesta del segundo POST
-            if (kDebugMode) {
-              print('Respuesta del segundo POST: ${secondResponse.body}');
-            }
+            _showAllScannedDialog(context, message);
+            _updateSale();
           } else {
             _showSnackbar(message);
           }
@@ -100,6 +113,18 @@ class QRScannerController extends GetxController {
       if (kDebugMode) {
         print('Error de conexión: $e');
       }
+    }
+  }
+
+  void _updateSale() async {
+    final secondResponse = await http.post(
+      Uri.parse(
+          'https://kdlatinfood.com/intranet/public/api/updateActualSales'),
+    );
+
+    // Imprimir la respuesta del segundo POST
+    if (kDebugMode) {
+      print('Respuesta del segundo POST: ${secondResponse.body}');
     }
   }
 
@@ -142,7 +167,7 @@ class QRScannerController extends GetxController {
   }
 
   void _showAllScannedDialog(BuildContext context, String message) {
-  Get.dialog(
+    Get.dialog(
       CupertinoAlertDialog(
         title: const Text('Finzalizado'),
         content: Text(message),
@@ -156,17 +181,17 @@ class QRScannerController extends GetxController {
         ],
       ),
     );
-}
-
+  }
 
   void scanQR(BuildContext context, String keyProduct, int productID,
-      int saleID, int? id) async {
+      int saleID, int? id, int scannedValue) async {
     if (kDebugMode) {
       print('Valor de keyProduct: $keyProduct');
       print('Valor de productID: $productID');
       print('Valor de saleID: $saleID');
       print('Valor de Saleid_detalle: $id');
       print('Valor del código QR: $getResult');
+      print('Scan: $scannedValue');
     }
 
     try {
@@ -191,7 +216,13 @@ class QRScannerController extends GetxController {
 
         // Llamar a la función sendQRCodeToAPI con los valores recibidos
         // ignore: use_build_context_synchronously
-        sendQRCodeToAPI(context,getResult, keyProduct, productID, saleID, id);
+        sendQRCodeToAPI(context, getResult, keyProduct, productID, saleID, id)
+            .then((_) {
+          saleController.fetchSaleDetails(saleID);
+        });
+        if (kDebugMode) {
+          print(scannedValue);
+        }
       }
     } catch (e) {
       _showErrorDialog('Error al escanear el código QR: $e');
