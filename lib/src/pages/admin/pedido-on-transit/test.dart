@@ -77,62 +77,27 @@ class ScanQRPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Datos del Cliente:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10), // Separación entre elementos
-                    Text(
-                      'Nombre: ${saleController.sale.value?.customer.name}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 5), // Separación entre elementos
-                    Text(
-                      'Email: ${saleController.sale.value?.customer.email}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 5), // Separación entre elementos
-                    Text(
-                      'Teléfono: ${saleController.sale.value?.customer.phone}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 20), // Separación entre elementos
-                    const Text(
-                      'Datos de la Venta:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10), // Separación entre elementos
-                    Text(
-                      'ID de Venta: ${saleController.sale.value?.id}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 5), // Separación entre elementos
-                    Text(
-                      'Total: ${saleController.sale.value?.total}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                    const SizedBox(height: 5), // Separación entre elementos
-                    Text(
-                      'Número de Items: ${saleController.sale.value?.items}',
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                    _buildSectionTitle('Datos del Cliente'),
+                    _buildInfoRow(Icons.person, 'Nombre',
+                        '${saleController.sale.value?.customer.name}'),
+                    _buildInfoRow(Icons.email, 'Email',
+                        '${saleController.sale.value?.customer.email}'),
+                    _buildInfoRow(Icons.phone, 'Teléfono',
+                        '${saleController.sale.value?.customer.phone}'),
+                    const SizedBox(height: 20), // Separación entre secciones
+                    _buildSectionTitle('Datos de la Venta'),
+                    _buildInfoRow(Icons.confirmation_number, 'ID de Venta',
+                        '${saleController.sale.value?.id}'),
+                    _buildInfoRow(Icons.attach_money, 'Total',
+                        '${saleController.sale.value?.total}'),
+                    _buildInfoRow(Icons.shopping_basket, 'Número de Items',
+                        '${saleController.sale.value?.items}'),
                   ],
                 ),
               ),
 
-              // Más detalles del cliente si es necesario...
-
-              // Botón para agregar producto
-              const SizedBox(height: 20),
-
               // Lista de detalles de la venta
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               const Padding(
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
@@ -201,10 +166,8 @@ class ScanQRPage extends StatelessWidget {
                                       color: Colors.grey[700],
                                     ),
                                   ),
-                                  trailing: IconButton(
-                                    icon: const Icon(Icons.qr_code),
-                                    color: Colors.red,
-                                    onPressed: () {
+                                  trailing: InkWell(
+                                    onTap: () {
                                       qrScannerController.scanQR(
                                         context,
                                         detail.product.KeyProduct!,
@@ -214,6 +177,17 @@ class ScanQRPage extends StatelessWidget {
                                         detail.scanned,
                                       );
                                     },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Color(0xE5FF5100),
+                                      ),
+                                      child: const Icon(
+                                        Icons.qr_code,
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -394,4 +368,35 @@ class QuantityInputModal extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildSectionTitle(String title) {
+  return Text(
+    title,
+    style: const TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    ),
+  );
+}
+
+Widget _buildInfoRow(IconData icon, String label, String value) {
+  return Row(
+    children: [
+      Icon(icon, size: 18),
+      const SizedBox(width: 10),
+      Text(
+        '$label:',
+        style: const TextStyle(fontSize: 16),
+      ),
+      const SizedBox(width: 5),
+      Flexible(
+        child: Text(
+          value,
+          style: const TextStyle(fontSize: 16),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    ],
+  );
 }
