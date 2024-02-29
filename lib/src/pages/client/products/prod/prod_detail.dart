@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'dart:ui';
-
 import 'package:app_latin_food/main.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/favorite_controller.dart';
@@ -94,36 +93,35 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         ),
         actions: [
           IconButton(
-  onPressed: () {},
-  icon: Stack(
-    children: [
-      Icon(
-        Icons.shopping_cart,
-        size: 32,
-      ),
-      if (cartController.cartItemCount > 0)
-        Positioned(
-          right: -1,
-          top: 0,
-          child: Container(
-            padding: const EdgeInsets.all(4),
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.red,
-            ),
-            child: Text(
-              '${cartController.cartItemCount}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+            onPressed: () {},
+            icon: Stack(
+              children: [
+                const Icon(
+                  Icons.shopping_cart,
+                  size: 32,
+                ),
+                if (cartController.cartItemCount > 0)
+                  Positioned(
+                    right: -1,
+                    top: 0,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                      child: Text(
+                        '${cartController.cartItemCount}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
-        ),
-    ],
-  ),
-),
-
           IconButton(
             onPressed: () {
               _favoriteController.toggleFavorite(id_prod, userId!);
@@ -152,12 +150,34 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 children: [
                   Container(
                     height: 300,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(widget.product.image ?? ''),
-                        fit: BoxFit.cover,
-                      ),
+                    decoration: const BoxDecoration(
+                      color: Colors.grey,
                     ),
+                    child: widget.product.image != null
+                        ? Image.network(
+                            widget.product.image!,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (BuildContext context, Widget child,
+                                ImageChunkEvent? loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              } else {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                );
+                              }
+                            },
+                            cacheHeight:
+                                300, // ajusta la altura de caché de la imagen
+                          )
+                        : const Placeholder(), // Widget a mostrar si no hay imagen
                   ),
                 ],
               ),
@@ -182,9 +202,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             ),
                           ),
                         ),
-                         Row(
+                        const Row(
                           mainAxisSize: MainAxisSize.min,
-                          children:const [
+                          children: [
                             Icon(Icons.star, color: Colors.amber),
                             Text(
                               '5',
@@ -280,7 +300,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           ),
                         if (widget.product.tam1 !=
                             widget.product.tam2) // Verifica si son diferentes
-                          const SizedBox(width:0),
+                          const SizedBox(width: 0),
                         RawMaterialButton(
                           onPressed: () {
                             setState(() {
@@ -326,17 +346,19 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
 // Contador
                     Container(
-  alignment: Alignment.center, // Centra el contenido del contenedor
-  padding: const EdgeInsets.symmetric(vertical: 10.0), // Añade un espacio vertical alrededor del contador
-  child: Text(
-    counter.toString(),
-    style: const TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
-),
-
+                      alignment: Alignment
+                          .center, // Centra el contenido del contenedor
+                      padding: const EdgeInsets.symmetric(
+                          vertical:
+                              10.0), // Añade un espacio vertical alrededor del contador
+                      child: Text(
+                        counter.toString(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
 
                     const SizedBox(height: 60),
                     // Precio del producto

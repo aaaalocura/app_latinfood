@@ -5,6 +5,7 @@ import 'package:app_latin_food/src/pages/admin/sale_detail_fin.dart';
 
 import 'package:flutter/material.dart';
 import '../../models/sale_model.dart';
+// ignore: unused_import
 import 'pedido-on-transit/pedido_ontransit_page.dart';
 
 class SalesListPage extends StatefulWidget {
