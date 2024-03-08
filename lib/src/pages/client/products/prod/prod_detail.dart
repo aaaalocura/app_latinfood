@@ -4,6 +4,7 @@ import 'package:app_latin_food/main.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/favorite_controller.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app_latin_food/src/models/product.dart';
@@ -11,6 +12,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
+//import 'package:flutter_image_compress/flutter_image_compress.dart';
+//import 'dart:typed_data';
 // ignore: must_be_immutable
 class ProductDetailsPage extends StatefulWidget {
   final Product product;
@@ -153,31 +156,16 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     decoration: const BoxDecoration(
                       color: Colors.grey,
                     ),
-                    child: widget.product.image != null
-                        ? Image.network(
-                            widget.product.image!,
-                            fit: BoxFit.cover,
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent? loadingProgress) {
-                              if (loadingProgress == null) {
-                                return child;
-                              } else {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    value: loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                .cumulativeBytesLoaded /
-                                            loadingProgress.expectedTotalBytes!
-                                        : null,
-                                  ),
-                                );
-                              }
-                            },
-                            cacheHeight:
-                                300, // ajusta la altura de caché de la imagen
-                          )
-                        : const Placeholder(), // Widget a mostrar si no hay imagen
+                    child: CachedNetworkImage(
+                      imageUrl: widget.product.image!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      errorWidget: (context, url, error) => const Center(
+                        child: Icon(Icons.error),
+                      ),
+                    ), // Widget a mostrar si no hay imagen
                   ),
                 ],
               ),
