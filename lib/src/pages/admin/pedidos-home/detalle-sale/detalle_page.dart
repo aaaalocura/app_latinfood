@@ -55,10 +55,10 @@ class Detalle_Venta extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Obx(() {
         if (saleController.isLoading.value) {
-          return Center(
+          return const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 CupertinoActivityIndicator(), // Estilo similar a iOS
 
                 SizedBox(height: 10),
@@ -492,9 +492,22 @@ class QuantityInputModal extends StatelessWidget {
           TextField(
             controller: quantityController,
             keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: 'Cantidad',
+              labelStyle: const TextStyle(
+                color: Colors.black, // Color del texto de la etiqueta
+              ),
+              hintStyle: const TextStyle(color: Colors.black),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.black),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.black),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
             ),
+            autofocus: true,
           ),
           const SizedBox(height: 20),
           Row(
@@ -519,20 +532,64 @@ class QuantityInputModal extends StatelessWidget {
               const SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
-                  final int quantity = int.parse(quantityController.text);
-                  if (quantity > 0) {
-                    // Lógica para agregar el producto al mapa
-                    saleController
-                        .addProductToSale(
-                            saleId: saleID,
-                            barcode: productID,
-                            quantity: quantity)
-                        .then((_) {
-                      Navigator.of(context).pop();
-                      saleController.isLoading.value =
-                          true; // Mostrar CircularProgressIndicator
-                      saleController.fetchSaleDetails(saleID);
-                    });
+                  final String quantityText = quantityController.text.trim();
+                  if (quantityText.isNotEmpty) {
+                    final int? quantity = int.tryParse(quantityText);
+                    if (quantity != null && quantity > 0) {
+                      // Lógica para agregar el producto al mapa
+                      saleController
+                          .addProductToSale(
+                              saleId: saleID,
+                              barcode: productID,
+                              quantity: quantity)
+                          .then((_) {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                        saleController.isLoading.value =
+                            true; // Mostrar CircularProgressIndicator
+                        saleController.fetchSaleDetails(saleID);
+                      });
+                    } else {
+                      // Mostrar alerta de cantidad inválida
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text("Cantidad Inválida"),
+                          content: const Text(
+                              "Por favor ingrese una cantidad válida mayor que cero."),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("OK"),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                  } else {
+                    // Mostrar alerta de cantidad vacía
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Cantidad Vacía"),
+                        content: const Text("Por favor ingrese una cantidad."),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("OK",
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 8, 8,
+                                      8), // Cambia el color del texto a blanco
+                                  fontSize: 14.0,
+                                )),
+                          ),
+                        ],
+                      ),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
