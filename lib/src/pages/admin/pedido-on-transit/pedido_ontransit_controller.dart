@@ -123,6 +123,20 @@ class QRScannerController extends GetxController {
     );
 
     // Imprimir la respuesta del segundo POST
+      Get.dialog(
+      CupertinoAlertDialog(
+        title: const Text('Finzalizado'),
+        content: const Text('Todos los códigos QR han sido escaneados.'),
+        actions: [
+          CupertinoDialogAction(
+            child: const Text('OK'),
+            onPressed: () {
+              Get.back();
+            },
+          ),
+        ],
+      ),
+    );
     if (kDebugMode) {
       print('Respuesta del segundo POST: ${secondResponse.body}');
     }
