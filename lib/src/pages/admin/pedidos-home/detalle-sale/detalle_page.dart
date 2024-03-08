@@ -125,9 +125,6 @@ class Detalle_Venta extends StatelessWidget {
                 ),
               ),
 
-              // Más detalles del cliente si es necesario...
-
-              // Botón para agregar producto
               const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -136,7 +133,7 @@ class Detalle_Venta extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        saleController.fetchProducts();
+                       // saleController.fetchProducts();
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
