@@ -89,7 +89,7 @@ class ProductsListController extends GetxController {
     update();
   }
 
-  void getProductsByCategory(String categoryName) async {
+  void getProductsByCategory(String categoryName ) async {
     try {
       final url =
           Uri.parse('https://kdlatinfood.com/intranet/public/api/products');
@@ -121,7 +121,7 @@ class ProductsListController extends GetxController {
     }
   }
 
-  void getProductsByCategoryCrudos(String categoryName) async {
+  void getProductsByCategoryCrudos(String categoryName , int id) async {
     try {
       final url =
           Uri.parse('https://kdlatinfood.com/intranet/public/api/products/crudos');
@@ -153,7 +153,7 @@ class ProductsListController extends GetxController {
     }
   }
 
-  void getProductsByCategoryPreCocidos(String categoryName) async {
+  void getProductsByCategoryPreCocidos(String categoryName, int id) async {
     try {
       final url =
           Uri.parse('https://kdlatinfood.com/intranet/public/api/products/precocidos');

@@ -6,6 +6,7 @@ import 'package:app_latin_food/src/pages/client/products/prod/favorite_controlle
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:app_latin_food/src/models/product.dart';
 import 'dart:convert';
@@ -49,7 +50,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     double updatedPrice = widget.product.price * selectedSizeMultiplier;
     final int? userId =
         con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
-
+    if (kDebugMode) {
+      print(widget.product.is_favorite);
+    }
     final tamDefecto = widget.product.tam1!;
     // ignore: unused_element
     void updateQuantity() {
@@ -66,7 +69,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
     // ignore: non_ant_identifier_names, non_constant_identifier_names
     final int id_prod = widget.product.id;
     // ignore: unused_local_variable
-    final RxBool isFavorite = false.obs;
+    // final RxBool isFavorite = false.obs;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -96,48 +99,15 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: Stack(
-              children: [
-                const Icon(
-                  Icons.shopping_cart,
-                  size: 32,
-                ),
-                if (cartController.cartItemCount > 0)
-                  Positioned(
-                    right: -1,
-                    top: 0,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red,
-                      ),
-                      child: Text(
-                        '${cartController.cartItemCount}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          IconButton(
             onPressed: () {
               _favoriteController.toggleFavorite(id_prod, userId!);
             },
-            icon: Obx(() => Stack(
-                  children: [
-                    Icon(
-                      _favoriteController.isFavorite.value
-                          ? Icons.favorite
-                          : Icons.favorite_border_sharp,
-                    ),
-                  ],
-                )),
+           icon: Icon(
+  widget.product.is_favorite == 1
+      ? Icons.favorite
+      : Icons.favorite_border_sharp,
+),
+
           ),
         ],
       ),
