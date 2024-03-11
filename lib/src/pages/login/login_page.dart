@@ -1,4 +1,5 @@
 import 'package:app_latin_food/src/pages/login/login_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,34 +12,29 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-  
-  bottomNavigationBar: SizedBox(
-    height: 100,
-    child: _textOyarce(),
-  ),
-  backgroundColor: Colors.white,
-  body: Stack(
-    children: [
-      _fondo(),
-      SingleChildScrollView(
-        
-        child: Column(
-          children: [
-            _imageCover(),
-            const SizedBox(height: 20),
-            _boxForm(context),
-            const SizedBox(height: 20),
-            
-            _LoginAdmin(),
-          ],
-        ),
+    return Scaffold(
+      bottomNavigationBar: SizedBox(
+        height: 100,
+        child: _textOyarce(),
       ),
-    ],
-  ),
-);
-
-
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          _fondo(),
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                _imageCover(),
+                const SizedBox(height: 20),
+                _boxForm(context),
+                const SizedBox(height: 20),
+                _LoginAdmin(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -52,16 +48,22 @@ Widget _fondo() {
 
 Widget _imageCover() {
   return SafeArea(
-   child: Container(
-  margin: const EdgeInsets.only(top: 40),
-  alignment: Alignment.center,
-  child: Image.network(
-    'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-    width: 160,
-    height: 160,
-  ),
-),
-
+    child: Container(
+      margin: const EdgeInsets.only(top: 40),
+      alignment: Alignment.center,
+      child: CachedNetworkImage(
+        imageUrl:
+            'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+        width: 160,
+        height: 160,
+        placeholder: (context, url) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        errorWidget: (context, url, error) => const Center(
+          child: Icon(Icons.error),
+        ),
+      ),
+    ),
   );
 }
 
@@ -107,7 +109,6 @@ Widget _boxForm(BuildContext context) {
     ),
   );
 }
-
 
 Widget _textFieldEmail() {
   LoginController con = Get.put(LoginController());
@@ -198,7 +199,6 @@ Widget _buttonLogin() {
   );
 }
 
-
 // ignore: non_constant_identifier_names
 Widget _LoginAdmin() {
   LoginController conex = Get.put(LoginController());
@@ -243,9 +243,9 @@ Widget _textOyarce() {
       borderRadius: BorderRadius.circular(20),
     ),
     alignment: Alignment.center, // Centrar el texto dentro del contenedor
-    child:   Row(
+    child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children:const [
+      children: const [
         Text(
           'Design by ',
           style: TextStyle(

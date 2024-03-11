@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:app_latin_food/src/pages/client/products/list/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/check_out.dart';
 import 'package:flutter/material.dart';
@@ -16,11 +17,22 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   final CartController cartController = Get.find();
-
+final ClientProductsListController con5 =
+      Get.put(ClientProductsListController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).textTheme.bodyLarge!.color,
+          ),
+          
+          onPressed: () {
+                con5.changeTab(0);
+              },
+        ),
         title: const Text(
           'My Cart',
         ),

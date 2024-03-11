@@ -104,6 +104,7 @@ class Product {
   final String? barcode;
   final String? KeyProduct;
   final String? image;
+  final int? tam;
    bool? isSelected;
    int selectedQuantity;
   Product({
@@ -112,6 +113,7 @@ class Product {
     this.barcode,
     this.KeyProduct,
     this.image,
+    this.tam,
      this.isSelected = false,
       this.selectedQuantity = 0,
   });
@@ -120,6 +122,7 @@ class Product {
       id: json['id'],
       name: json['name'],
       barcode: json['barcode'],
+      tam:json['tam'],
       KeyProduct: json['KeyProduct'],
       image: json['image'],
     );

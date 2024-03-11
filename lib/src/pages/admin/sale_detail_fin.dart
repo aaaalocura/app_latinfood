@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../models/sale_model.dart';
 
@@ -107,7 +108,7 @@ class SaleDetailPageFin extends StatelessWidget {
                     const SizedBox(
                       height: 16.0,
                     ),
-                     Row(
+                    Row(
                       children: const [
                         Icon(
                           Icons.shopping_basket,
@@ -140,15 +141,20 @@ class SaleDetailPageFin extends StatelessWidget {
                         ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(16.0),
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              "https://kdlatinfood.com/intranet/public/storage/products/${detail.product.image ?? ""}",
-                              width:
-                                  80.0, // Ajusta el ancho de la imagen según sea necesario
-                              height:
-                                  80.0, // Ajusta la altura de la imagen según sea necesario
+                          leading: SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  "https://kdlatinfood.com/intranet/public/storage/products/${detail.product.image ?? ""}",
                               fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Center(
+                                child: Icon(Icons.error),
+                              ),
                             ),
                           ),
                           title: Text(

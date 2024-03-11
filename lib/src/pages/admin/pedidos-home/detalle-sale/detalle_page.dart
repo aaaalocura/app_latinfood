@@ -1,6 +1,7 @@
 import 'package:app_latin_food/src/pages/admin/pedidos-home/detalle-sale/detalle_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:app_latin_food/src/models/sale_model.dart';
@@ -158,6 +159,11 @@ class Detalle_Venta extends StatelessWidget {
                                           itemBuilder: (context, index) {
                                             final Product product =
                                                 controller.products[index];
+                                                int t=product.tam!;
+                                                if (kDebugMode) {
+                                                  print(product.tam!);
+                                                  print(t);
+                                                }
                                             return ListTile(
                                               leading: CachedNetworkImage(
                                                 imageUrl:
@@ -191,6 +197,8 @@ class Detalle_Venta extends StatelessWidget {
                                                         selectedProducts
                                                             .addAll(products);
                                                       },
+                                                      tam:t
+                                                      
                                                     );
                                                   },
                                                 );
@@ -323,6 +331,15 @@ class Detalle_Venta extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final detail =
                               saleController.sale.value!.salesDetails[index];
+                               var product = saleController.products[index];
+                              var resultado =detail.quantity /product.tam!;
+                              var nombre=product.name;
+                                if (kDebugMode) {
+                                  print('total cajas $resultado');
+                                  print(nombre);
+                                  print(product.tam!);
+                                  print(detail.quantity);
+                                }
 
                           return ListTile(
                             contentPadding: const EdgeInsets.symmetric(
@@ -351,7 +368,7 @@ class Detalle_Venta extends StatelessWidget {
                               ),
                             ),
                             subtitle: Text(
-                              'Cantidad: ${detail.quantity}\nSKU: ${detail.product.barcode}',
+                              'Cantidad: $resultado cajas\nSKU: ${detail.product.barcode}',
                               style: TextStyle(
                                 color: Colors.grey[700],
                               ),
@@ -459,6 +476,7 @@ class QuantityInputModal extends StatelessWidget {
   final String productName;
   final String productID;
   final int saleID;
+  final int tam;
   final Function(Map<int, Product>) onConfirm;
   final SaleController saleController = Get.put(SaleController());
   QuantityInputModal({
@@ -467,6 +485,7 @@ class QuantityInputModal extends StatelessWidget {
     required this.onConfirm,
     required this.productID,
     required this.saleID,
+    required this.tam,
   }) : super(key: key);
 
   @override
@@ -534,11 +553,15 @@ class QuantityInputModal extends StatelessWidget {
                     final int? quantity = int.tryParse(quantityText);
                     if (quantity != null && quantity > 0) {
                       // Lógica para agregar el producto al mapa
+                      int t=quantity*tam;
+                      if (kDebugMode) {
+                        print(' tamano total $t');
+                      }
                       saleController
                           .addProductToSale(
                               saleId: saleID,
                               barcode: productID,
-                              quantity: quantity)
+                              quantity: t)
                           .then((_) {
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
