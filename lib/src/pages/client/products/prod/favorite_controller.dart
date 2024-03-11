@@ -46,6 +46,22 @@ class FavoritesController extends GetxController {
     throw Exception('Error durante la solicitud HTTP: $e');
   }
 }
+Future<bool> checkFavorite(int productId, int clientId) async {
+  try {
+    final response = await http.get(
+      Uri.parse('https://kdlatinfood.com/intranet/public/api/favoritos/check/$productId/$clientId'),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return jsonData['is_favorite'];
+    } else {
+      throw Exception('Error al verificar si el producto es favorito');
+    }
+  } catch (e) {
+    throw Exception('Error durante la solicitud HTTP: $e');
+  }
+}
 
 
 
@@ -62,7 +78,9 @@ class FavoritesController extends GetxController {
     }
   }
 
-
+  bool isProductInFavorites(int productId) {
+    return favoritesItems.any((product) => product.id == productId);
+  }
   // Función para obtener los productos favoritos de un cliente
 Future<List<ProductFavorite>> getFavoriteProducts(int clientId) async {
   try {

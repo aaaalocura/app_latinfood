@@ -18,6 +18,7 @@ class Product {
   final int? userId;
   final int? tam1;
   final int? tam2;
+  final int? is_favorite;
 
 
   Product({
@@ -40,6 +41,8 @@ class Product {
     required this.userId,
     required this.tam1,
     required this.tam2,
+    // ignore: non_constant_identifier_names
+    required this.is_favorite
    
   });
 
@@ -64,6 +67,7 @@ class Product {
       userId: json['user_id'],
       tam1: json['tam1'],
       tam2: json['tam2'],
+      is_favorite:json['is_favorite']
       
     );
   }

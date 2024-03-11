@@ -954,7 +954,7 @@ class ProductsListPage extends StatelessWidget {
   Widget buildCategoriesList() {
     final selectedCategoryId =
         selectedCategoryController.selectedCategoryId.obs;
-
+ User user = User.fromJson(GetStorage().read('user') ?? {});
     final categoryIcons = {
       "04-Tequeños": Icons.abc_sharp,
       "03-Cachitos": Icons.access_alarm,
@@ -977,8 +977,8 @@ class ProductsListPage extends StatelessWidget {
           final categories = snapshot.data!;
           if (categories.isNotEmpty) {
             selectedCategoryController.setSelectedCategory(categories.first.id);
-            con.getProductsByCategoryPreCocidos(categories.first.name);
-            con.getProductsByCategoryCrudos(categories.first.name);
+            con.getProductsByCategoryPreCocidos(categories.first.name,user.id!);
+            con.getProductsByCategoryCrudos(categories.first.name,user.id!);
           }
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -993,8 +993,8 @@ class ProductsListPage extends StatelessWidget {
                 return GestureDetector(
                   onTap: () async {
                     selectedCategoryController.setSelectedCategory(category.id);
-                    con.getProductsByCategoryPreCocidos(category.name);
-                    con.getProductsByCategoryCrudos(category.name);
+                    con.getProductsByCategoryPreCocidos(category.name,user.id!);
+                    con.getProductsByCategoryCrudos(category.name,user.id!);
                   },
                   child: SizedBox(
                     width: 80,

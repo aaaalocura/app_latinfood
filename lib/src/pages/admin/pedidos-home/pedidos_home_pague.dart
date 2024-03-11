@@ -50,7 +50,6 @@ class HomePedidosView extends StatelessWidget {
             return ListView.builder(
               itemCount: controller.sales.length,
               itemBuilder: (context, index) {
-                
                 Sale sale = controller.sales[index];
                 return Card(
                   elevation: 4.0,
@@ -64,14 +63,13 @@ class HomePedidosView extends StatelessWidget {
                       onTap: () {
                         // Navega a la página de detalles cuando se hace clic.
                         Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => Detalle_Venta(
-      saleId: sale.id,
-    ),
-  ),
-);
-
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Detalle_Venta(
+                              saleId: sale.id,
+                            ),
+                          ),
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.all(16.0),
@@ -156,26 +154,26 @@ class HomePedidosView extends StatelessWidget {
       ),
       floatingActionButton: Obx(
         () => FloatingActionButton(
-          onPressed: () async {
-            if (!isRefreshing.value) {
-              isRefreshing.value = true;
-              try {
-                await controller.fetchSales();
-              } finally {
-                isRefreshing.value = false;
+            onPressed: () async {
+              if (!isRefreshing.value) {
+                isRefreshing.value = true;
+                try {
+                  await controller.fetchSales();
+                } finally {
+                  isRefreshing.value = false;
+                }
               }
-            }
-          },
-          backgroundColor: const Color(0xE5FF5100),
-          child: isRefreshing.value
-              ? const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                )
-              : const  Icon(
-                  Icons.refresh_rounded,
-                  color: Colors.white, // Establece el color del icono en blanco
-                )
-        ),
+            },
+            backgroundColor: const Color(0xE5FF5100),
+            child: isRefreshing.value
+                ? const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  )
+                : const Icon(
+                    Icons.refresh_rounded,
+                    color:
+                        Colors.white, // Establece el color del icono en blanco
+                  )),
       ),
     );
   }
