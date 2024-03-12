@@ -161,7 +161,7 @@ class ScanQRPage extends StatelessWidget {
                                     ),
                                   ),
                                   subtitle: Text(
-                                    'Cantidad: ${detail.quantity}\nSKU: ${detail.product.barcode}',
+                                    'Cantidad: ${detail.cajas} cajas \nSKU: ${detail.product.barcode}',
                                     style: TextStyle(
                                       color: Colors.grey[700],
                                     ),

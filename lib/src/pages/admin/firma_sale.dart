@@ -195,7 +195,7 @@ class _SaleDetailPageFirmaState extends State<SaleDetailPageFirma> {
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               Text(
-                                'Amount: ${detail.quantity} items',
+                                'Amount: ${detail.cajas} cajas',
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               // Agrega más detalles del producto si es necesario.

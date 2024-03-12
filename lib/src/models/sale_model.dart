@@ -11,6 +11,7 @@ class Sale {
   final DateTime createdAt;
   final DateTime updatedAt;
   final String statusEnvio;
+
   // ignore: non_constant_identifier_names
   final int? CustomerID;
 
@@ -27,6 +28,7 @@ class Sale {
     required this.createdAt,
     required this.updatedAt,
     required this.statusEnvio,
+  
     // ignore: non_constant_identifier_names
     required this.CustomerID,
     required this.salesDetails,
@@ -42,6 +44,7 @@ class Sale {
       status: json['status'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
+   
       statusEnvio: json['status_envio'],
       CustomerID: json['customer_id'],
       salesDetails: (json['sales_details'] as List<dynamic>)
@@ -64,6 +67,7 @@ class SaleDetail {
   final int lotID;
   final int scanned;
   final Product product;
+    final int? cajas;
   
 
   SaleDetail({
@@ -78,6 +82,7 @@ class SaleDetail {
     required this.lotID,
     required this.scanned,
     required this.product,
+      required this.cajas,
     
   });
   factory SaleDetail.fromJson(Map<String, dynamic> json) {
@@ -94,6 +99,7 @@ class SaleDetail {
       lotID: json['lot_id'] ?? 0, // Asigna 0 si 'lot_id' es null
       scanned: json['scanned'] ?? 0, // Asigna 0 si 'scanned' es null
       product: Product.fromJson(json['product']),
+         cajas:json['cajas'],
     );
   }
 }

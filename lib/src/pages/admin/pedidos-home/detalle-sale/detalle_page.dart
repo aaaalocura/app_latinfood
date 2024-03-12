@@ -331,15 +331,7 @@ class Detalle_Venta extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final detail =
                               saleController.sale.value!.salesDetails[index];
-                               var product = saleController.products[index];
-                              var resultado =detail.quantity /product.tam!;
-                              var nombre=product.name;
-                                if (kDebugMode) {
-                                  print('total cajas $resultado');
-                                  print(nombre);
-                                  print(product.tam!);
-                                  print(detail.quantity);
-                                }
+                               
 
                           return ListTile(
                             contentPadding: const EdgeInsets.symmetric(
@@ -368,7 +360,7 @@ class Detalle_Venta extends StatelessWidget {
                               ),
                             ),
                             subtitle: Text(
-                              'Cantidad: $resultado cajas\nSKU: ${detail.product.barcode}',
+                              'Cantidad: ${detail.cajas} cajas\nSKU: ${detail.product.barcode}',
                               style: TextStyle(
                                 color: Colors.grey[700],
                               ),
@@ -552,16 +544,12 @@ class QuantityInputModal extends StatelessWidget {
                   if (quantityText.isNotEmpty) {
                     final int? quantity = int.tryParse(quantityText);
                     if (quantity != null && quantity > 0) {
-                      // Lógica para agregar el producto al mapa
-                      int t=quantity*tam;
-                      if (kDebugMode) {
-                        print(' tamano total $t');
-                      }
+                     
                       saleController
                           .addProductToSale(
                               saleId: saleID,
                               barcode: productID,
-                              quantity: t)
+                              quantity: quantity)
                           .then((_) {
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();

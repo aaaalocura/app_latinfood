@@ -172,7 +172,7 @@ class SaleDetailPageFin extends StatelessWidget {
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               Text(
-                                'Cantidad: ${detail.quantity}',
+                                'Cantidad: ${detail.cajas} cajas',
                                 style: const TextStyle(fontSize: 16.0),
                               ),
                               // Agrega más detalles del producto si es necesario.
