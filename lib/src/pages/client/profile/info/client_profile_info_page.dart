@@ -40,7 +40,7 @@ class ClientProfileInfoPage extends StatelessWidget {
         automaticallyImplyLeading: false,
         actions: [
           Padding(
-            padding:  const EdgeInsets.only(
+            padding: const EdgeInsets.only(
                 right: 10.0), // Ajusta el valor según tu preferencia
             child: Image.network(
               'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
@@ -52,7 +52,7 @@ class ClientProfileInfoPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding:  const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           child: FutureBuilder<FindCustomer>(
             future: con.lastFetchedCustomerData != null
                 ? Future.value(con.lastFetchedCustomerData)
@@ -61,9 +61,9 @@ class ClientProfileInfoPage extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 // Muestra un indicador de carga mientras se obtienen los datos
-                return   CupertinoAlertDialog(
+                return CupertinoAlertDialog(
                   content: Column(
-                    children:const [
+                    children: const [
                       CupertinoActivityIndicator(),
                       SizedBox(height: 8),
                       Text('Loading data...'),
@@ -72,10 +72,10 @@ class ClientProfileInfoPage extends StatelessWidget {
                 );
               } else if (snapshot.hasError) {
                 // Muestra un mensaje de error si ocurre un error al obtener los datos
-                return   Center(
+                return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const[
+                    children: const [
                       AnimatedOpacity(
                         opacity: 1.0,
                         duration: Duration(milliseconds: 500),
@@ -104,25 +104,30 @@ class ClientProfileInfoPage extends StatelessWidget {
               } else {
                 // Si se obtuvieron los datos exitosamente, muestra la información del cliente
                 final customer = snapshot.data!;
-                 const SizedBox(height: 3);
+                const SizedBox(height: 3);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Align(
-                      alignment:
-                          Alignment.center, // Centra el Avatar horizontalmente
+                      alignment: Alignment.center,
                       child: CircleAvatar(
-                          radius:
-                              40, // Tamaño del avatar (puedes ajustarlo según tus necesidades)
-                          backgroundImage:
-                              CachedNetworkImageProvider('${customer.image}')),
+                        radius: 40,
+                        // Usamos CachedNetworkImage con la URL de la imagen y especificamos el errorWidget
+                        child: CachedNetworkImage(
+                          imageUrl: '${customer.image}',
+                          errorWidget: (context, url, error) => Image.network(
+                            'https://firebasestorage.googleapis.com/v0/b/miigrup.appspot.com/o/descarga.png?alt=media&token=cfa75f40-0d8b-4f94-a68c-2bee39a150d6',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
-                     const SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Align(
                       alignment: Alignment.center,
                       child: Text(
                         '${customer.name} ${customer.lastName}',
-                        style:  const TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
@@ -130,12 +135,12 @@ class ClientProfileInfoPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                     const SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Align(
                       alignment: Alignment.center,
                       child: Text(
                         '${customer.phone}',
-                        style:  const TextStyle(
+                        style: const TextStyle(
                           fontSize: 10,
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.w400,
@@ -143,41 +148,41 @@ class ClientProfileInfoPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                     const SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Align(
                       alignment: Alignment.center,
                       child: ElevatedButton(
                         onPressed: () => con1.singOut(),
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
-                          backgroundColor:  const Color(0xE5FF5100),
+                          backgroundColor: const Color(0xE5FF5100),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                          textStyle:  const TextStyle(
+                          textStyle: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
                           ),
-                          minimumSize:  const Size(40, 30),
+                          minimumSize: const Size(40, 30),
                         ),
-                        child:  const Text('Sign off'),
+                        child: const Text('Sign off'),
                       ),
                     ),
-                     const SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     _buildSectionHeader('Account'),
-                     const SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     _buildSubSectionItem('Saved Address', Icons.home_outlined,
                         onTap: () {
                       Get.to(ClientAddress());
                     }),
                     _divider(),
-                     const SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     _buildSubSectionItem(
                         'My Reward', Icons.wallet_giftcard_outlined, onTap: () {
-                      Get.to( const ClientMyRewardPage());
+                      Get.to(const ClientMyRewardPage());
                     }),
                     _divider(),
-                     const SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     _buildSubSectionItem(
                         'My Favorites', Icons.favorite_border_outlined,
                         onTap: () {
@@ -186,7 +191,7 @@ class ClientProfileInfoPage extends StatelessWidget {
                       ));
                     }),
                     _divider(),
-                     const SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     _buildSubSectionItem('Method of Payment',
                         Icons.account_balance_wallet_outlined, onTap: () {
                       Get.to(PaymentMethodsPage(
@@ -194,33 +199,33 @@ class ClientProfileInfoPage extends StatelessWidget {
                       ));
                     }),
                     _divider(),
-                     const SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     _buildSectionHeader('General'),
-                     const SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     _buildSubSectionItem(
                         'Settings', Icons.settings_accessibility_outlined,
                         onTap: () {
                       Get.to(ClientSettings(customerId: customerId));
                     }),
                     _divider(),
-                     const SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     _buildSubSectionItem(
                         'Help and Support', Icons.message_outlined, onTap: () {
-                      Get.to( const ClientHelp());
+                      Get.to(const ClientHelp());
                     }),
                     _divider(),
-                     const SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     _buildSubSectionItem(
                         'Terms and Conditions', Icons.pages_outlined,
                         onTap: () {
-                      Get.to( const ClientTerms());
+                      Get.to(const ClientTerms());
                     }),
                     _divider(),
-                     const SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     _buildSubSectionItem(
                         'Privacy Policy', Icons.privacy_tip_outlined,
                         onTap: () {
-                      Get.to( const ClientPrivacy());
+                      Get.to(const ClientPrivacy());
                     }),
                     _divider(),
                     Expanded(child: Container()),
@@ -235,7 +240,7 @@ class ClientProfileInfoPage extends StatelessWidget {
   }
 
   Widget _divider() {
-    return  const Divider(
+    return const Divider(
       // Agrega la línea divisora después del ListTile
       color: Colors.grey, // Puedes personalizar el color si lo deseas
       height: 1, // Ajusta el grosor de la línea como desees
@@ -245,7 +250,7 @@ class ClientProfileInfoPage extends StatelessWidget {
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
-      style:  const TextStyle(
+      style: const TextStyle(
         fontSize: 14,
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w500,
@@ -259,28 +264,28 @@ class ClientProfileInfoPage extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding:  const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(
           children: [
             Icon(
               iconData,
               size: 16,
-              color:  const Color(0xE5FF5100),
+              color: const Color(0xE5FF5100),
             ),
-             const SizedBox(width: 20),
+            const SizedBox(width: 20),
             Expanded(
               child: Text(
                 title,
-                style:  const TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
                 ),
               ),
             ),
-             const SizedBox(
+            const SizedBox(
               width: 20,
             ),
-             const Icon(
+            const Icon(
               Icons.arrow_forward_ios,
               size: 16,
               color: Color(0xE5FF5100),

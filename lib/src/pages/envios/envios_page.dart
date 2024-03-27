@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:app_latin_food/src/models/pedidos.dart';
+import 'package:app_latin_food/src/pages/client/products/list/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
 import 'package:app_latin_food/src/pages/envios/envio_detalle.dart';
 import 'package:app_latin_food/src/pages/envios/envios_controller.dart';
@@ -13,6 +14,8 @@ class ClientOrdersPage extends StatelessWidget {
   final int customerId;
   final ClientProfileInfoController con1 =
       Get.put(ClientProfileInfoController());
+      final ClientProductsListController con5 =
+      Get.put(ClientProductsListController());
   ClientOrdersPage({super.key, required this.customerId});
 
   @override
@@ -33,14 +36,20 @@ class ClientOrdersPage extends StatelessWidget {
           ),
         ),
         automaticallyImplyLeading: false,
-        actions: [
+       actions: [
           Padding(
-            padding: const EdgeInsets.only(
-                right: 10.0), // Ajusta el valor según tu preferencia
-            child: Image.network(
-              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-              width: 50, // Ajusta el ancho de la imagen según tus necesidades
-              height: 50, // Ajusta el alto de la imagen según tus necesidades
+            padding: const EdgeInsets.only(right: 10.0),
+            child: GestureDetector(
+              onTap: () {
+                // Acción que deseas realizar cuando se presiona la imagen
+                con5.changeTab(0);
+                // Agrega aquí la lógica para la acción que deseas realizar
+              },
+              child: Image.network(
+                'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+                width: 50,
+                height: 50,
+              ),
             ),
           ),
         ],

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:app_latin_food/src/pages/client/products/list/client_products_list_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/cart_controller.dart';
 import 'package:app_latin_food/src/pages/client/products/prod/check_out.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
@@ -17,7 +18,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   final CartController cartController = Get.find();
-final ClientProductsListController con5 =
+  final ClientProductsListController con5 =
       Get.put(ClientProductsListController());
   @override
   Widget build(BuildContext context) {
@@ -28,10 +29,9 @@ final ClientProductsListController con5 =
             Icons.arrow_back_ios,
             color: Theme.of(context).textTheme.bodyLarge!.color,
           ),
-          
           onPressed: () {
-                con5.changeTab(0);
-              },
+            con5.changeTab(0);
+          },
         ),
         title: const Text(
           'My Cart',
@@ -43,10 +43,17 @@ final ClientProductsListController con5 =
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
-            child: Image.network(
-              'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
-              width: 50,
-              height: 50,
+            child: GestureDetector(
+              onTap: () {
+                // Acción que deseas realizar cuando se presiona la imagen
+                con5.changeTab(0);
+                // Agrega aquí la lógica para la acción que deseas realizar
+              },
+              child: Image.network(
+                'https://firebasestorage.googleapis.com/v0/b/latin-food-8635c.appspot.com/o/splash%2FlogoAnimadoNaranjaLoop.gif?alt=media&token=0f2cb2ee-718b-492c-8448-359705b01923',
+                width: 50,
+                height: 50,
+              ),
             ),
           ),
         ],
@@ -128,9 +135,13 @@ final ClientProductsListController con5 =
                           height: 80,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(0),
-                            child: Image.network(
-                              cartItem.product.image ?? '',
+                            child: CachedNetworkImage(
+                              imageUrl: cartItem.product.image ?? '',
                               fit: BoxFit.cover,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                         ),

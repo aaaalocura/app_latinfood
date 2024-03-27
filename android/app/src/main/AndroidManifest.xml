@@ -7,7 +7,7 @@
 
 
    <application
-        android:label="KD LatinFood"
+        android:label="K&amp;D Latin Food"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"

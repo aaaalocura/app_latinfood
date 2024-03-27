@@ -221,7 +221,7 @@ Widget _LoginAdmin() {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('Are you and Admin?'),
+        const Text('Are you an admin?'),
         const SizedBox(width: 7),
         GestureDetector(
           onTap: () => conex.goToAdmin(),

@@ -47,7 +47,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
     final _favoriteController = Get.put(FavoritesController());
-    double updatedPrice = widget.product.price * selectedSizeMultiplier;
+    double updatedPrice = widget.product.price * widget.product.tam1!;
     final int? userId =
         con1.user.id != null ? int.tryParse('${con1.user.id}') : null;
     if (kDebugMode) {
@@ -112,7 +112,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         ],
       ),
       backgroundColor: Colors.white,
-      body: ScrollConfiguration(
+      body: GestureDetector(
+  onHorizontalDragEnd: (details) {
+    if (details.primaryVelocity! > 0) {
+      Navigator.of(context).pop();
+    }
+  },
+  child:ScrollConfiguration(
         behavior: const ScrollBehavior(),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -355,9 +361,9 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   cartController.addToCart(widget.product,
                                       userId!, counter, selectedSizeMultiplier);
                                   cartController.update();
-                                  /*if (Navigator.canPop(context)) {
+                                  if (Navigator.canPop(context)) {
                                     Navigator.pop(context);
-                                  }*/
+                                  }
                                 }
                               : null, // Deshabilitar el botón si no se ha seleccionado un tamaño
                           style: ElevatedButton.styleFrom(
@@ -509,7 +515,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Future<List<Product>> getProductsWithSameFlavor(String flavorId) async {
