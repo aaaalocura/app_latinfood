@@ -1,49 +1,54 @@
-import 'package:app_latin_food/src/pages/login/login_controller.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-// ignore: must_be_immutable
+import 'login_controller.dart';
+
 class LoginPageAdmin extends StatelessWidget {
-  LoginController conex = Get.put(LoginController());
+  final LoginController conex = Get.put(LoginController());
 
-  LoginPageAdmin({super.key});
+  LoginPageAdmin({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: Theme.of(context).textTheme.bodyLarge!.color,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-      bottomNavigationBar: SizedBox(
-        height: 100,
-        child: _textOyarce(),
-      ),
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          _fondo(),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                _imageCover(),
-                const SizedBox(height: 20),
-                _boxForm(context),
-                const SizedBox(height: 20),
-              ],
+    return GestureDetector(
+      onTap: () {
+        // Cerrar el teclado cuando se toca fuera de los campos de entrada
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-        ],
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
+        bottomNavigationBar: SizedBox(
+          height: 100,
+          child: _textOyarce(),
+        ),
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            _fondo(),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  _imageCover(),
+                  const SizedBox(height: 20),
+                  _boxForm(context),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -82,10 +87,10 @@ Widget _textInfo() {
   return const Text(
     'Welcome To Intranet',
     style: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-        fontSize: 25,
-        fontFamily: AutofillHints.url),
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontSize: 25,
+    ),
   );
 }
 
@@ -110,9 +115,9 @@ Widget _boxForm(BuildContext context) {
         children: [
           _textInfo(), // Mover el texto "Welcome" aquí para que esté arriba del formulario
           const SizedBox(height: 20),
-          _textFieldEmail(),
+          _textFieldEmail(context), // Pasar el contexto
           const SizedBox(height: 20),
-          _textFieldPassword(),
+          _textFieldPassword(context), // Pasar el contexto
           const SizedBox(height: 20),
           _buttonLogin(),
         ],
@@ -121,9 +126,13 @@ Widget _boxForm(BuildContext context) {
   );
 }
 
-Widget _textFieldEmail() {
-  LoginController con = Get.put(LoginController());
+Widget _textFieldEmail(BuildContext context) { // Agregar el contexto como parámetro
+  final LoginController con = Get.put(LoginController());
   return TextField(
+    onTap: () {
+      // Cerrar el teclado si se toca fuera del campo de entrada
+      FocusScope.of(context).unfocus();
+    },
     controller: con.emailController,
     keyboardType: TextInputType.emailAddress,
     decoration: InputDecoration(
@@ -148,9 +157,13 @@ Widget _textFieldEmail() {
   );
 }
 
-Widget _textFieldPassword() {
-  LoginController con = Get.put(LoginController());
+Widget _textFieldPassword(BuildContext context) { // Agregar el contexto como parámetro
+  final LoginController con = Get.put(LoginController());
   return TextField(
+    onTap: () {
+      // Cerrar el teclado si se toca fuera del campo de entrada
+      FocusScope.of(context).unfocus();
+    },
     controller: con.passwordController,
     keyboardType: TextInputType.text,
     obscureText: true,
@@ -176,7 +189,7 @@ Widget _textFieldPassword() {
 }
 
 Widget _buttonLogin() {
-  LoginController con = Get.put(LoginController());
+  final LoginController con = Get.put(LoginController());
   return Container(
     width: double.infinity,
     height: 50,
@@ -209,7 +222,6 @@ Widget _buttonLogin() {
     ),
   );
 }
-
 // ignore: non_constant_identifier_names
 
 Widget _textOyarce() {

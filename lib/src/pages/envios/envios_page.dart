@@ -1,3 +1,4 @@
+// ignore_for_file: prefer_const_constructors
 
 import 'package:app_latin_food/src/models/pedidos.dart';
 import 'package:app_latin_food/src/pages/client/profile/info/client_profile_info_controller.dart';
@@ -21,14 +22,13 @@ class ClientOrdersPage extends StatelessWidget {
         title: const Text('Ongoing Transaction'),
         backgroundColor: Colors.white,
         elevation: 0.5,
-        flexibleSpace:  FlexibleSpaceBar(
+        flexibleSpace: FlexibleSpaceBar(
           background: Stack(
             fit: StackFit.expand,
-            children: const[
+            children: const [
               // Coloca aquí la imagen o cualquier otro contenido que desees tener detrás del AppBar
 
               // BackdropFilter para aplicar el efecto de difuminado
-             
             ],
           ),
         ),
@@ -52,9 +52,9 @@ class ClientOrdersPage extends StatelessWidget {
           future: con.fetchClientOrders(customerId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return   CupertinoAlertDialog(
+              return const CupertinoAlertDialog(
                 content: Column(
-                  children: const[
+                  children: [
                     CupertinoActivityIndicator(),
                     SizedBox(height: 8),
                     Text('Cargando datos...'),
@@ -62,10 +62,10 @@ class ClientOrdersPage extends StatelessWidget {
                 ),
               );
             } else if (snapshot.hasError) {
-              return   Center(
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:const[
+                  children: const [
                     AnimatedOpacity(
                       opacity: 1.0,
                       duration: Duration(milliseconds: 500),
@@ -92,10 +92,10 @@ class ClientOrdersPage extends StatelessWidget {
                 ),
               );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return   Center(
+              return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const[
+                  children: const [
                     AnimatedOpacity(
                       opacity: 1.0,
                       duration: Duration(milliseconds: 500),
@@ -123,7 +123,6 @@ class ClientOrdersPage extends StatelessWidget {
             } else {
               final orders = snapshot.data!;
               return ListView.builder(
-                
                 physics: const BouncingScrollPhysics(),
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
@@ -201,7 +200,24 @@ class ClientOrdersPage extends StatelessWidget {
                                         ),
                                       ),
                                       Text(
-                                        '${order.status}',
+                                        (() {
+                                          if (order.statusEnvio == "FIN") {
+                                            return "Complete";
+                                          } else if (order.statusEnvio ==
+                                                  "PENDIENTE" &&
+                                              order.status == "PENDING") {
+                                            return "Ordered";
+                                          } else if (order.statusEnvio ==
+                                                  "PENDIENTE" &&
+                                              order.status == "PAID") {
+                                            return "Confirmed";
+                                          } else if (order.status == "PAID" &&
+                                              order.statusEnvio == "ACTUAL") {
+                                            return "On Transit";
+                                          } else {
+                                            return ""; // Manejo de caso por defecto
+                                          }
+                                        })(),
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight:
